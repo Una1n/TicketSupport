@@ -1,0 +1,8 @@
+.git/
+src/node_modules/
+src/vendor/
+
+.dockerignore
+src/_ide_helper.php
+src/.env*
+!.env.example

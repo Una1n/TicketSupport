@@ -1,0 +1,156 @@
+version: '3.8'
+name: projectname
+
+networks:
+  laravel:
+    driver: bridge
+
+services:
+  # Nginx Service
+  nginx:
+    build:
+      context: ./.docker/nginx
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www/html:delegated
+    depends_on:
+      - php
+    networks:
+      - laravel
+
+  # PHP Service
+  php: &php-service
+    build:
+      context: ./.docker/php
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    working_dir: /var/www/html
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - laravel
+
+  # Composer Service
+  composer:
+    <<: *php-service
+    profiles: ['composer']
+    ports: []
+    depends_on: []
+    entrypoint: [ 'composer' ]
+
+  # Artisan Service
+  artisan:
+    <<: *php-service
+    profiles: ['artisan']
+    ports: []
+    volumes:
+      - ./:/var/www/html:delegated
+    entrypoint: [ 'php', '/var/www/html/artisan' ]
+
+  # Pest Service
+  pest:
+    <<: *php-service
+    profiles: ['pest']
+    ports: []
+    volumes:
+      - ./:/var/www/html:delegated
+    entrypoint: [ './vendor/bin/pest' ]
+
+  # PHPStan Service
+  phpstan:
+    <<: *php-service
+    profiles: ['phpstan']
+    ports: []
+    volumes:
+      - ./:/var/www/html:delegated
+    entrypoint: [ './vendor/bin/phpstan' ]
+
+  # Pint Service
+  pint:
+    <<: *php-service
+    profiles: ['pint']
+    ports: []
+    volumes:
+      - ./:/var/www/html:delegated
+    depends_on: []
+    entrypoint: [ './vendor/bin/pint' ]
+
+  # NPM Service
+  npm:
+    image: node:current-alpine
+    profiles: ['npm']
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: [ 'npm' ]
+    networks:
+      - laravel
+
+  # NPM Running Service
+  npm-run:
+    image: node:current-alpine
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    command: npm run dev
+    ports:
+      - "5173:5173"
+    networks:
+      - laravel
+
+  # Mysql Service
+  mysql:
+    image: mysql/mysql-server:8.0
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "4306:3306"
+    volumes:
+      - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
+      - mysqldata:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: travelDB
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=root
+      interval: 5s
+      retries: 10
+    networks:
+      - laravel
+
+  # Mailpit Service
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - mailpitdata:/opt
+    ports:
+      - "8025:8025" # Web interface
+      - "1025:1025" # SMTP
+    environment:
+      - MP_DATA_FILE=/opt/mailpit.db
+      - MP_MAX_MESSAGES=100
+      - TZ=Europe/Amsterdam
+      - MP_SMTP_AUTH_ACCEPT_ANY
+      - MP_VERBOSE
+      - MP_SMTP_AUTH_ALLOW_INSECURE
+    networks:
+      - laravel
+
+volumes:
+  mysqldata:
+    driver: local
+  mailpitdata:
+    driver: local
