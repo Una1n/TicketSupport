@@ -1,0 +1,24 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Pest File Test",
+            "type": "shell",
+            "linux": {
+                "command": "~/code/projectname/dock pest ${command:extension.commandvariable.file.relativeFileDirname1Up}/${command:extension.commandvariable.file.fileDirBasename}/${fileBasename}"
+            },
+            "runOptions": {
+                "reevaluateOnRerun": false
+            },
+            "presentation": {
+                "focus": true,
+                "panel": "new"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+    ]
+}

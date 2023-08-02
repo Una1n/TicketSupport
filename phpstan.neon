@@ -1,0 +1,14 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+    #ignoreErrors:
+    #    - '#with no value type specified in iterable type array\.#'
+    #    - '#return type has no value type specified in iterable type array\.#'
+
+    paths:
+        - app/
+
+    # Level 9 is the highest level
+    level: 6
+    checkGenericClassInNonGenericObjectType: false

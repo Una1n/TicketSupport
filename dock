@@ -1,0 +1,144 @@
+#!/bin/bash
+
+#######################################
+# FUNCTIONS
+#######################################
+
+# Run an Artisan command
+artisan () {
+    docker compose run --rm artisan "${@:1}"
+}
+
+# Build all of the images or the specified one
+build () {
+    docker compose build "${@:1}"
+}
+
+# Run a Composer command
+composer () {
+    docker compose run --rm composer "${@:1}"
+}
+
+# Run a NPM Command
+npm () {
+    docker compose run --rm --service-ports npm "${@:1}"
+}
+
+# Run a Pest Command
+pest () {
+    docker compose run --rm pest "${@:1}"
+}
+
+# Run a Pint Command
+pint () {
+    docker compose run --rm pint "${@:1}"
+}
+
+# Run PHPStan Command
+phpstan () {
+    docker compose run --rm phpstan analyse --memory-limit=2G "${@:1}"
+}
+
+# Remove the entire Docker environment
+destroy () {
+    read -p "This will delete containers, volumes and images. Are you sure? [y/N]: " -r
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then exit; fi
+    docker compose down -v --rmi all --remove-orphans
+}
+
+# Stop and destroy all containers
+down () {
+    docker compose down "${@:1}"
+}
+
+# Display and tail the logs of all containers or the specified one's
+logs () {
+    docker compose logs -f "${@:1}"
+}
+
+# Restart the containers
+restart () {
+    stop && start
+}
+
+# Start the containers
+start () {
+    docker compose up
+}
+
+# Stop the containers
+stop () {
+    docker compose stop
+}
+
+case "$1" in
+    artisan)
+        artisan "${@:2}"
+        ;;
+    build)
+        build "${@:2}"
+        ;;
+    composer)
+        composer "${@:2}"
+        ;;
+    npm)
+        npm "${@:2}"
+        ;;
+    pest)
+        pest "${@:2}"
+        ;;
+    pint)
+        pint "${@:2}"
+        ;;
+    phpstan)
+        phpstan "${@:2}"
+        ;;
+    destroy)
+        destroy
+        ;;
+    down)
+        down "${@:2}"
+        ;;
+    logs)
+        logs "${@:2}"
+        ;;
+    restart)
+        restart
+        ;;
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    *)
+        cat << EOF
+
+Command line interface for the Docker-based web development environment.
+
+Usage:
+    dock <command> [options] [arguments]
+
+Available commands:
+    artisan ................................... Run an Artisan command
+    build [image] ............................. Build all of the images or the specified one
+    composer .................................. Run a Composer command
+    pest ...................................... Run Pest
+    npm ....................................... Run NPM
+    pint ...................................... Run Pint
+    phpstan ................................... Run Phpstan
+    destroy ................................... Remove the entire Docker environment
+    down [-v] ................................. Stop and destroy all containers
+                                                Options:
+                                                    -v .................... Destroy the volumes as well
+    init ...................................... Initialise the Docker environment and the application
+    logs [container] .......................... Display and tail the logs of all containers or the specified one's
+    restart ................................... Restart the containers
+    start ..................................... Start the containers
+    stop ...................................... Stop the containers
+    update .................................... Update the Docker environment
+
+EOF
+        exit 1
+        ;;
+esac
