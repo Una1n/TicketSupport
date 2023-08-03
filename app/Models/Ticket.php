@@ -25,6 +25,11 @@ class Ticket extends Model
         return $this->belongsToMany(Category::class);
     }
 
+    public function labels(): BelongsToMany
+    {
+        return $this->belongsToMany(Label::class);
+    }
+
     public function scopeOpen(Builder $query): void
     {
         $query->where('status', '=', 'open');
