@@ -107,7 +107,7 @@
 
         </div>
         <div class="w-full bg-gray-200 px-4 py-2 lg:w-full">
-            <div class="container mx-10 mt-12">
+            <div class="container mt-12 pl-10">
                 {{ $slot }}
             </div>
         </div>
