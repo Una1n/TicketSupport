@@ -12,7 +12,7 @@
                 </div>
                 <div>
                     <h3 class="text-lg font-medium text-gray-500">Open Tickets</h3>
-                    <p class="mt-1 text-2xl font-bold text-red-600">3</p>
+                    <p class="mt-1 text-2xl font-bold text-red-600">{{ $openTickets }}</p>
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
                 </div>
                 <div>
                     <h3 class="text-lg font-medium text-gray-500">Closed Tickets</h3>
-                    <p class="mt-1 text-2xl font-bold text-green-600">10</p>
+                    <p class="mt-1 text-2xl font-bold text-green-600">{{ $closedTickets }}</p>
                 </div>
             </div>
         </div>
