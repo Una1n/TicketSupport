@@ -1,66 +1,89 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Ticket Support System Example Project using Laravel 10 + Livewire 3
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This is an example project for a Ticket Support System.
+Laravel 10 is used as framework with Livewire 3 for the front-end.
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Glossary
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+A system to manage support tickets. Customers register as users and can create tickets,
+then admins assign them to agents, and all parties can view ticket statuses.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Database structure
 
-## Learning Laravel
+### Every ticket needs to have:
+- title (required)
+- text description (required)
+- multiple files attached (optional)
+- priority (choose from a few options)
+- status (choose from a few options like open/closed)
+- assigned user agent (foreign key to users table)
+- multiple categories (belongsToMany relationship with categories table)
+- multiple labels (belongsToMany relationship with labels table)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Auth
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+There should be login and register functionality, they may come from starter kit like Laravel Breeze or other one of your choice.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Every user needs to have one of three roles:
+- Regular user (default)
+- Agent
+- Administrator
 
-## Laravel Sponsors
+New users can register and they are assigned Regular articles role.
+There should be one Administration user created with database seeds.
+After registration or login, users get inside the system which would look like a typical adminpanel to manage data: menus, tables, CRUDs for administrator.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Regular users: manage THEIR tickets
 
-### Premium Partners
+After registration/login, user sees the only menu item "Tickets" with a table of tickets only created by themselves.
+Table of tickets needs to have dropdown filters: by status, priority and category.
+They can add a new ticket, but can't edit/delete tickets.
+They can click the ticket title in the table to open the page to see more details and ticket activity log and comments, also may add a comment there (more on that later).
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+### Agent users: manage THEIR tickets
 
-## Contributing
+Similar to regular users, agents see only tickets, and only their tickets, but "their" has different meaning - not that they created the tickets, but are assigned to them (by admin, more on that later).
+They can edit tickets and add comments.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Admin users: manage everything
 
-## Code of Conduct
+Admins see not only tickets table, but also can view more menu items:
+- Dashboard with the amount of tickets per status (total / open / closed, etc.)
+- Manage Labels, Categories, Priorities and Users, in CRUD way
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+When editing the ticket, admins can assign Agent user to it - other users shouldn't see that field.
+Also, admins should see the menu item called "Logs" which lists all changes that happened to all tickets, like history: who created/updated the ticket and when.
 
-## Security Vulnerabilities
+## Ticket Comments
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+After clicking on ticket, any user can get to its page, and there should be a form to add a comment, and that page shows the list of comments, like on a typical blogpost page.
 
-## License
+## Email Notifications
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+When the new ticket is created, admin should get an email with the link to the Edit form of the ticket.
+
+- - - - -
+
+## How to use without Docker/WSL
+
+- Clone the repository with `git clone`
+- Copy `.env.example` file to `.env` and edit database credentials there
+- Run `composer install`
+- Run `npm install`
+- Run `php artisan key:generate`
+- Run `php artisan migrate --seed` (it has some seeded data for your testing)
+- Launch `http://localhost:8000/` in your browser
+- You can login as admin to manage data with default credentials `admin@example.com` - `password`
+
+## How to use with Docker + WSL
+
+- Clone the repository with `git clone` in a WSL directory
+- Copy `.env.example` file to `.env`
+- Run `./dock composer install`
+- Run `./dock npm install`
+- Run `./dock artisan key:generate`
+- Run `./dock artisan migrate --seed` (it has some seeded data for your testing)
+- Run `./dock start`
+- Launch `http://localhost:8000/` in your browser
+- You can login as admin to manage data with default credentials `admin@example.com` - `password`
