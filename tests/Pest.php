@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\User;
+use function Pest\Laravel\actingAs;
 use Tests\TestCase;
 
 /*
@@ -14,7 +15,9 @@ use Tests\TestCase;
 |
 */
 
-uses(TestCase::class, RefreshDatabase::class)->in('Feature');
+uses(TestCase::class,
+    Illuminate\Foundation\Testing\LazilyRefreshDatabase::class
+)->in('Feature');
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +45,12 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function login($user = null): void
 {
-    // ..
+    if (! $user) {
+        $user = User::factory()->create(['name' => 'Jerry']);
+        // $user->assignRole(AdminRoles::SUPER_ADMIN->value);
+    }
+
+    actingAs($user);
 }
