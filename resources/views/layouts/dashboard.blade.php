@@ -14,7 +14,7 @@
                         'mb-2 rounded hover:bg-gray-800 hover:shadow',
                         'bg-gray-800 shadow' => request()->routeIs('dashboard'),
                     ])>
-                        <a href="{{ route('dashboard') }}"
+                        <a href="{{ route('dashboard') }}" wire:navigate
                             class="inline-block h-full w-full px-3 py-2 font-bold text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 mr-2 inline-block h-6 w-6"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -28,7 +28,8 @@
                         'mb-2 rounded hover:bg-gray-800 hover:shadow',
                         'bg-gray-800 shadow' => request()->is('tickets'),
                     ])>
-                        <a href="#" class="inline-block h-full w-full px-3 py-2 font-bold text-white">
+                        <a href="#" wire:navigate
+                            class="inline-block h-full w-full px-3 py-2 font-bold text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor" class="-mt-1 mr-2 inline-block h-6 w-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -41,7 +42,8 @@
                         'mb-2 rounded hover:bg-gray-800 hover:shadow',
                         'bg-gray-800 shadow' => request()->is('users'),
                     ])>
-                        <a href="#" class="inline-block h-full w-full px-3 py-2 font-bold text-white">
+                        <a href="#" wire:navigate
+                            class="inline-block h-full w-full px-3 py-2 font-bold text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" class="-mt-1 mr-2 inline-block h-6 w-6">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -64,7 +66,7 @@
                         'mb-2 rounded hover:bg-gray-800 hover:shadow',
                         'bg-gray-800 shadow' => request()->is('categories'),
                     ])>
-                        <a href="{{ route('categories.index') }}"
+                        <a href="{{ route('categories.index') }}" wire:navigate
                             class="inline-block h-full w-full px-3 py-2 font-bold text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" class="-mt-1 mr-2 inline-block h-6 w-6">
@@ -78,7 +80,8 @@
                         'mb-2 rounded hover:bg-gray-800 hover:shadow',
                         'bg-gray-800 shadow' => request()->is('labels'),
                     ])>
-                        <a href="#" class="inline-block h-full w-full px-3 py-2 font-bold text-white">
+                        <a href="#" wire:navigate
+                            class="inline-block h-full w-full px-3 py-2 font-bold text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" class="-mt-1 mr-2 inline-block h-6 w-6">
                                 <path stroke-linecap="round" stroke-linejoin="round"
