@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Livewire\Categories\CreateCategory;
 use App\Livewire\Categories\ListCategory;
 use App\Livewire\DashboardHome;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', DashboardHome::class)->name('dashboard');
 
     Route::get('/categories', ListCategory::class)->name('categories.index');
+    Route::get('/categories/create', CreateCategory::class)->name('categories.create');
 });
 
 Route::middleware('auth')->group(function () {
