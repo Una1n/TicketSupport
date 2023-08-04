@@ -14,7 +14,8 @@
                         'mb-2 rounded hover:bg-gray-800 hover:shadow',
                         'bg-gray-800 shadow' => request()->routeIs('dashboard'),
                     ])>
-                        <a href="#" class="inline-block h-full w-full px-3 py-2 font-bold text-white">
+                        <a href="{{ route('dashboard') }}"
+                            class="inline-block h-full w-full px-3 py-2 font-bold text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 mr-2 inline-block h-6 w-6"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -25,7 +26,7 @@
                     </li>
                     <li @class([
                         'mb-2 rounded hover:bg-gray-800 hover:shadow',
-                        'bg-gray-800 shadow' => request()->routeIs('tickets'),
+                        'bg-gray-800 shadow' => request()->is('tickets'),
                     ])>
                         <a href="#" class="inline-block h-full w-full px-3 py-2 font-bold text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -38,7 +39,7 @@
                     </li>
                     <li @class([
                         'mb-2 rounded hover:bg-gray-800 hover:shadow',
-                        'bg-gray-800 shadow' => request()->routeIs('users'),
+                        'bg-gray-800 shadow' => request()->is('users'),
                     ])>
                         <a href="#" class="inline-block h-full w-full px-3 py-2 font-bold text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
@@ -61,9 +62,10 @@
                     </li> --}}
                     <li @class([
                         'mb-2 rounded hover:bg-gray-800 hover:shadow',
-                        'bg-gray-800 shadow' => request()->routeIs('categories'),
+                        'bg-gray-800 shadow' => request()->is('categories'),
                     ])>
-                        <a href="#" class="inline-block h-full w-full px-3 py-2 font-bold text-white">
+                        <a href="{{ route('categories.index') }}"
+                            class="inline-block h-full w-full px-3 py-2 font-bold text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" class="-mt-1 mr-2 inline-block h-6 w-6">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -74,7 +76,7 @@
                     </li>
                     <li @class([
                         'mb-2 rounded hover:bg-gray-800 hover:shadow',
-                        'bg-gray-800 shadow' => request()->routeIs('labels'),
+                        'bg-gray-800 shadow' => request()->is('labels'),
                     ])>
                         <a href="#" class="inline-block h-full w-full px-3 py-2 font-bold text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
@@ -107,7 +109,7 @@
 
         </div>
         <div class="w-full bg-gray-200 px-4 py-2 lg:w-full">
-            <div class="container mt-12 pl-10">
+            <div class="container mt-12 px-10">
                 {{ $slot }}
             </div>
         </div>
