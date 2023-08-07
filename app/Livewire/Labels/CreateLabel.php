@@ -15,7 +15,7 @@ class CreateLabel extends Component
 
     public function save()
     {
-        if (! Auth::user()->can('manage', Category::class)) {
+        if (! Auth::user()->can('manage', Label::class)) {
             abort(403);
         }
 

@@ -42,7 +42,7 @@
                         'mb-2 rounded hover:bg-gray-800 hover:shadow',
                         'bg-gray-800 shadow' => request()->routeIs('users.*'),
                     ])>
-                        <a href="#" wire:navigate
+                        <a href="{{ route('users.index') }}" wire:navigate
                             class="inline-block h-full w-full px-3 py-2 font-bold text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" class="-mt-1 mr-2 inline-block h-6 w-6">
@@ -52,7 +52,10 @@
                             Users
                         </a>
                     </li>
-                    {{-- <li class="mb-2 rounded hover:bg-gray-800 hover:shadow">
+                    <li @class([
+                        'mb-2 rounded hover:bg-gray-800 hover:shadow',
+                        'bg-gray-800 shadow' => request()->routeIs('logs.*'),
+                    ])>
                         <a href="#" class="inline-block h-full w-full px-3 py-2 font-bold text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" class="-mt-1 mr-2 inline-block h-6 w-6"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -61,7 +64,7 @@
                             </svg>
                             Ticket Logs
                         </a>
-                    </li> --}}
+                    </li>
                     <li @class([
                         'mb-2 rounded hover:bg-gray-800 hover:shadow',
                         'bg-gray-800 shadow' => request()->routeIs('categories.*'),
