@@ -5,7 +5,11 @@ use App\Livewire\Categories\CreateCategory;
 use App\Livewire\Categories\EditCategory;
 use App\Livewire\Categories\ListCategory;
 use App\Livewire\DashboardHome;
+use App\Livewire\Labels\CreateLabel;
+use App\Livewire\Labels\EditLabel;
+use App\Livewire\Labels\ListLabel;
 use App\Models\Category;
+use App\Models\Label;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,6 +34,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/categories', ListCategory::class)->name('categories.index');
         Route::get('/categories/create', CreateCategory::class)->name('categories.create');
         Route::get('/categories/{category}/edit', EditCategory::class)->name('categories.edit');
+    });
+
+    Route::middleware('can:manage,' . Label::class)->group(function () {
+        Route::get('/labels', ListLabel::class)->name('labels.index');
+        Route::get('/labels/create', CreateLabel::class)->name('labels.create');
+        Route::get('/labels/{label}/edit', EditLabel::class)->name('labels.edit');
     });
 });
 
