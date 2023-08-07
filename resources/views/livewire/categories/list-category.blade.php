@@ -36,10 +36,11 @@
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4 font-medium text-gray-900">{{ $category->name }}</td>
                         <td class="flex justify-end gap-4 px-6 py-4 font-medium">
-                            <a href=""
+                            <a href="{{ route('categories.edit', $category) }}"
                                 class="rounded-full bg-blue-400 px-4 py-1 text-blue-800 hover:bg-blue-500 hover:text-white">Edit</a>
-                            <a href=""
-                                class="rounded-full bg-red-400 px-4 py-1 text-red-800 hover:bg-red-500 hover:text-white">Delete</a>
+                            <button onclick="confirm('Are you sure?') || event.stopImmediatePropagation()"
+                                wire:click="deleteCategory({{ $category }})"
+                                class="rounded-full bg-red-400 px-4 py-1 text-red-800 hover:bg-red-500 hover:text-white">Delete</button>
                         </td>
                     </tr>
                 @endforeach
