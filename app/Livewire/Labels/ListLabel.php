@@ -4,18 +4,13 @@ namespace App\Livewire\Labels;
 
 use App\Models\Label;
 use Auth;
-use Illuminate\Support\Collection;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ListLabel extends Component
 {
-    public Collection $labels;
-
-    public function mount(): void
-    {
-        $this->updateLabels();
-    }
+    use WithPagination;
 
     public function deleteLabel(Label $label): void
     {
@@ -27,19 +22,14 @@ class ListLabel extends Component
 
         $label->delete();
 
-        $this->updateLabels();
-
-        session()->flash('status', 'Category ' . $name . ' Deleted!');
-    }
-
-    private function updateLabels(): void
-    {
-        $this->labels = Label::orderBy('name')->get();
+        session()->flash('status', 'Label ' . $name . ' Deleted!');
     }
 
     #[Layout('layouts.dashboard')]
     public function render()
     {
-        return view('livewire.labels.list-label');
+        return view('livewire.labels.list-label', [
+            'labels' => Label::orderBy('name')->paginate(6),
+        ]);
     }
 }
