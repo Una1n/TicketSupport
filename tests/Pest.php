@@ -49,7 +49,7 @@ function login($user = null): void
 {
     if (! $user) {
         $user = User::factory()->create(['name' => 'Jerry']);
-        // $user->assignRole(AdminRoles::SUPER_ADMIN->value);
+        $user->assignRole('Admin');
     }
 
     actingAs($user);
