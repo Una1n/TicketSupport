@@ -28,7 +28,7 @@
                         'mb-2 rounded hover:bg-gray-800 hover:shadow',
                         'bg-gray-800 shadow' => request()->routeIs('tickets.*'),
                     ])>
-                        <a href="#" wire:navigate
+                        <a href="{{ route('tickets.index') }}" wire:navigate
                             class="inline-block h-full w-full px-3 py-2 font-bold text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor" class="-mt-1 mr-2 inline-block h-6 w-6">

@@ -37,6 +37,11 @@ class Ticket extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function agent(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'agent_id');
+    }
+
     public function scopeOpen(Builder $query): void
     {
         $query->where('status', '=', 'open');
@@ -55,5 +60,21 @@ class Ticket extends Model
     public function scopeByUser(Builder $query, User $user): void
     {
         $query->where('user_id', '=', $user->id);
+    }
+
+    public function scopeSearch(Builder $query, string $search): void
+    {
+        $query->where('title', 'like', '%' . $search . '%')
+            ->orWhere('priority', 'like', '%' . $search . '%')
+            ->orWhere('status', 'like', '%' . $search . '%')
+            ->orWhereHas('user', function (Builder $query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('categories', function (Builder $query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('labels', function (Builder $query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            });
     }
 }

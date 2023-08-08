@@ -8,11 +8,13 @@ use App\Livewire\DashboardHome;
 use App\Livewire\Labels\CreateLabel;
 use App\Livewire\Labels\EditLabel;
 use App\Livewire\Labels\ListLabel;
+use App\Livewire\Tickets\ListTicket;
 use App\Livewire\Users\CreateUser;
 use App\Livewire\Users\EditUser;
 use App\Livewire\Users\ListUser;
 use App\Models\Category;
 use App\Models\Label;
+use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -51,6 +53,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/users/create', CreateUser::class)->name('users.create');
         Route::get('/users/{user}/edit', EditUser::class)->name('users.edit');
     });
+
+    Route::get('/tickets', ListTicket::class)->name('tickets.index')
+        ->can('viewList', Ticket::class);
+
+    // Route::get('/tickets/create', CreateTicket::class)->name('tickets.create');
+    // Route::get('/tickets/{ticket}/edit', EditTicket::class)->name('tickets.edit');
 });
 
 Route::middleware('auth')->group(function () {
