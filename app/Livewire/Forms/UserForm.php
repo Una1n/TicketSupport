@@ -4,7 +4,6 @@ namespace App\Livewire\Forms;
 
 use App\Models\User;
 use Auth;
-use Illuminate\Validation\Rule as ValidationRule;
 use Livewire\Attributes\Rule;
 use Livewire\Form;
 
@@ -14,23 +13,12 @@ class UserForm extends Form
 
     #[Rule(['required', 'min:3', 'max:255'])]
     public string $name = '';
+
+    #[Rule(['required', 'email', 'max:255'])]
     public string $email = '';
 
     #[Rule(['required', 'min:8', 'max:255'])]
     public string $password = '';
-
-    public function rules()
-    {
-        return [
-            'email' => [
-                'required',
-                // TODO: Find a fix for this
-                // ValidationRule::unique('users', 'email')->ignore(optional($this->user)->id),
-                'min:3',
-                'max:255',
-            ],
-        ];
-    }
 
     public function setUser(User $user): void
     {
