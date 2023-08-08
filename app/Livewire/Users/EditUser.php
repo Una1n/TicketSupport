@@ -2,35 +2,44 @@
 
 namespace App\Livewire\Users;
 
-use App\Livewire\Forms\UserForm;
 use App\Models\User;
-use Illuminate\Validation\Rule;
+use Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class EditUser extends Component
 {
-    public UserForm $form;
+    public User $user;
+    public string $name = '';
+    public string $email = '';
+    public string $password = '';
+
+    protected function rules(): array
+    {
+        return [
+            'name' => ['required', 'min:3', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $this->user->id],
+            'password' => ['sometimes', 'min:8', 'max:255'],
+        ];
+    }
 
     public function mount(User $user): void
     {
-        $this->form->setUser($user);
+        $this->user = $user;
+        $this->name = $user->name;
+        $this->email = $user->email;
     }
 
     public function save()
     {
-        $this->validateOnly('form.email', [
-            'form.email' => [
-                // TODO: This doesn't work in Livewire/Form,
-                // because the user doesn't get set before the rules are set
-                Rule::unique('users', 'email')->ignore($this->form->user->id),
-            ],
-        ], [], ['form.email' => 'email']);
+        if (! Auth::user()->can('manage', User::class)) {
+            abort(403);
+        }
 
-        $this->form->update();
+        $this->user->update($this->validate());
 
         return redirect()->route('users.index')
-            ->with('status', 'User ' . $this->form->name . ' updated.');
+            ->with('status', 'User ' . $this->name . ' updated.');
     }
 
     #[Layout('layouts.dashboard')]
