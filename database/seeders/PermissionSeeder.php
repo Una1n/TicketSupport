@@ -32,5 +32,11 @@ class PermissionSeeder extends Seeder
             'email' => 'admin@admin.com',
         ]);
         $admin->assignRole($adminRole);
+
+        $agentRole = Role::create(['name' => 'Agent']);
+        $agentRole->givePermissionTo([
+            Permission::create(['name' => 'edit tickets']),
+            Permission::create(['name' => 'add comments']),
+        ]);
     }
 }
