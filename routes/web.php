@@ -8,6 +8,7 @@ use App\Livewire\DashboardHome;
 use App\Livewire\Labels\CreateLabel;
 use App\Livewire\Labels\EditLabel;
 use App\Livewire\Labels\ListLabel;
+use App\Livewire\Tickets\CreateTicket;
 use App\Livewire\Tickets\ListTicket;
 use App\Livewire\Tickets\ShowTicket;
 use App\Livewire\Users\CreateUser;
@@ -37,32 +38,45 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', DashboardHome::class)->name('dashboard');
 
-    Route::middleware('can:manage,' . Category::class)->group(function () {
-        Route::get('/categories', ListCategory::class)->name('categories.index');
-        Route::get('/categories/create', CreateCategory::class)->name('categories.create');
-        Route::get('/categories/{category}/edit', EditCategory::class)->name('categories.edit');
+    Route::middleware('can:manage,' . Category::class)
+        ->prefix('categories')
+        ->as('categories.')
+        ->group(function () {
+            Route::get('/', ListCategory::class)->name('index');
+            Route::get('/create', CreateCategory::class)->name('create');
+            Route::get('/{category}/edit', EditCategory::class)->name('edit');
+        });
+
+    Route::middleware('can:manage,' . Label::class)
+        ->prefix('labels')
+        ->as('labels.')
+        ->group(function () {
+            Route::get('/', ListLabel::class)->name('index');
+            Route::get('/create', CreateLabel::class)->name('create');
+            Route::get('/{label}/edit', EditLabel::class)->name('edit');
+        });
+
+    Route::middleware('can:manage,' . User::class)
+        ->prefix('users')
+        ->as('users.')
+        ->group(function () {
+            Route::get('/', ListUser::class)->name('index');
+            Route::get('/create', CreateUser::class)->name('create');
+            Route::get('/{user}/edit', EditUser::class)->name('edit');
+        });
+
+    Route::prefix('tickets')->as('tickets.')->group(function () {
+        Route::get('/', ListTicket::class)->name('index')
+            ->can('viewList', Ticket::class);
+
+        Route::get('/{ticket}/show', ShowTicket::class)->name('show')
+            ->can('view', Ticket::class);
+
+        Route::get('/create', CreateTicket::class)->name('create')
+            ->can('create', Ticket::class);
+
+        // Route::get('/tickets/{ticket}/edit', EditTicket::class)->name('tickets.edit');
     });
-
-    Route::middleware('can:manage,' . Label::class)->group(function () {
-        Route::get('/labels', ListLabel::class)->name('labels.index');
-        Route::get('/labels/create', CreateLabel::class)->name('labels.create');
-        Route::get('/labels/{label}/edit', EditLabel::class)->name('labels.edit');
-    });
-
-    Route::middleware('can:manage,' . User::class)->group(function () {
-        Route::get('/users', ListUser::class)->name('users.index');
-        Route::get('/users/create', CreateUser::class)->name('users.create');
-        Route::get('/users/{user}/edit', EditUser::class)->name('users.edit');
-    });
-
-    Route::get('/tickets', ListTicket::class)->name('tickets.index')
-        ->can('viewList', Ticket::class);
-
-    Route::get('/tickets/{ticket}/show', ShowTicket::class)->name('tickets.show')
-        ->can('view', Ticket::class);
-
-    // Route::get('/tickets/create', CreateTicket::class)->name('tickets.create');
-    // Route::get('/tickets/{ticket}/edit', EditTicket::class)->name('tickets.edit');
 });
 
 Route::middleware('auth')->group(function () {
