@@ -18,8 +18,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        $seeder = new LabelSeeder();
-        $seeder->run();
+        activity()->withoutLogs(function () {
+            $seeder = new LabelSeeder();
+            $seeder->run();
+        });
     }
 
     /**

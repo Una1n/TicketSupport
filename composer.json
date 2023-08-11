@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.2.5",
         "laravel/tinker": "^2.8.1",
         "livewire/livewire": "^3.0@beta",
+        "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-permission": "^5.10.2"
     },
     "require-dev": {

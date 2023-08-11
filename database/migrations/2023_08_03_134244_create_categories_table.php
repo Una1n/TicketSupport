@@ -15,8 +15,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        $seeder = new CategorySeeder();
-        $seeder->run();
+        activity()->withoutLogs(function () {
+            $seeder = new CategorySeeder();
+            $seeder->run();
+        });
     }
 
     public function down(): void

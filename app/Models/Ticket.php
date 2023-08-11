@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Ticket extends Model
 {
     use HasFactory;
+    use LogsActivity;
 
     /** Fillables */
     protected $fillable = [
@@ -76,5 +79,10 @@ class Ticket extends Model
             ->orWhereHas('labels', function (Builder $query) use ($search) {
                 $query->where('name', 'like', '%' . $search . '%');
             });
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->logFillable();
     }
 }
