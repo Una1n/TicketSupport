@@ -1,7 +1,7 @@
 <div>
     <x-status />
     <div class="mb-5 text-2xl font-bold">Users</div>
-    <div class="max-w-2xl overflow-hidden rounded-lg border border-gray-200 shadow-md">
+    <div class="max-w-5xl overflow-hidden rounded-lg border border-gray-200 shadow-md">
         <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
             <thead class="bg-gray-50">
                 <tr>
