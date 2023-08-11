@@ -38,19 +38,20 @@ class ListTicket extends Component
     #[Layout('layouts.dashboard')]
     public function render()
     {
+        $filteredTickets = Ticket::with(['user', 'categories', 'labels', 'agent'])
+            ->search($this->search)
+            ->when(! empty($this->categoryFilter), function ($query) {
+                $query->whereRelation('categories', 'id', $this->categoryFilter);
+            })
+            ->when(! empty($this->statusFilter), function ($query) {
+                $query->where('status', '=', $this->statusFilter);
+            })
+            ->when(! empty($this->priorityFilter), function ($query) {
+                $query->where('priority', '=', $this->priorityFilter);
+            });
+
         return view('livewire.tickets.list-ticket', [
-            'tickets' => Ticket::with(['user', 'categories', 'labels', 'agent'])
-                ->search($this->search)
-                ->when(! empty($this->categoryFilter), function ($query) {
-                    $query->whereRelation('categories', 'id', $this->categoryFilter);
-                })
-                ->when(! empty($this->statusFilter), function ($query) {
-                    $query->where('status', '=', $this->statusFilter);
-                })
-                ->when(! empty($this->priorityFilter), function ($query) {
-                    $query->where('priority', '=', $this->priorityFilter);
-                })
-                ->paginate(8),
+            'tickets' => $filteredTickets->paginate(8),
             'categories' => Category::all(),
         ]);
     }
