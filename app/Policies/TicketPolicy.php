@@ -21,6 +21,12 @@ class TicketPolicy
         return true;
     }
 
+    public function view(User $user, Ticket $ticket): bool
+    {
+        // TODO: Only allowed to show your own assigned ticket if agent user
+        return true;
+    }
+
     public function create(User $user): bool
     {
         return false;

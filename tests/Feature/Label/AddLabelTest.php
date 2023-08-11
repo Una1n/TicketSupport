@@ -43,7 +43,7 @@ it('validates name is unique', function () {
 it('is only allowed to reach this endpoint when logged in as admin', function () {
     login(User::factory()->create());
 
-    // TODO: Not working yet on livewire 3 beta 7
+    // TODO: Not working yet on livewire 3 beta 8
     // Livewire::test(CreateLabel::class)
     //     ->set('name', 'test')
     //     ->call('save')

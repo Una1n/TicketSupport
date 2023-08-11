@@ -53,7 +53,11 @@
             <tbody class="divide-y divide-gray-100 border-t border-gray-100">
                 @foreach ($tickets as $ticket)
                     <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 font-medium text-gray-900">{{ $ticket->title }}</td>
+                        <td class="px-6 py-4 font-medium text-gray-900">
+                            <a href="{{ route('tickets.show', $ticket) }}" class="text-blue-700 hover:text-blue-900">
+                                {{ $ticket->title }}
+                            </a>
+                        </td>
                         <td class="px-6 py-4 font-medium text-gray-900">{{ $ticket->user->name }}</td>
                         <td class="px-6 py-4 font-medium text-gray-900">
                             <span @class([
