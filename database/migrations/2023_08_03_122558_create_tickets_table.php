@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('description');
             $table->enum('priority', ['low', 'medium', 'high'])->default('low');
             $table->enum('status', ['open', 'closed'])->default('open');
-            $table->foreignId('agent_id')->constrained('users');
+            $table->foreignId('agent_id')->nullable()->constrained('users');
             $table->timestamps();
         });
     }
