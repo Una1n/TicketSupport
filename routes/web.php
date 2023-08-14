@@ -9,6 +9,7 @@ use App\Livewire\Labels\CreateLabel;
 use App\Livewire\Labels\EditLabel;
 use App\Livewire\Labels\ListLabel;
 use App\Livewire\Tickets\CreateTicket;
+use App\Livewire\Tickets\EditTicket;
 use App\Livewire\Tickets\ListTicket;
 use App\Livewire\Tickets\ShowTicket;
 use App\Livewire\Users\CreateUser;
@@ -75,7 +76,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/create', CreateTicket::class)->name('create')
             ->can('create', Ticket::class);
 
-        // Route::get('/tickets/{ticket}/edit', EditTicket::class)->name('tickets.edit');
+        Route::get('/{ticket}/edit', EditTicket::class)->name('edit')
+            ->can('update', Ticket::class);
     });
 });
 

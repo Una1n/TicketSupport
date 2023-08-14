@@ -92,8 +92,8 @@
                             @endforeach
                         </td>
                         <td class="flex justify-end gap-4 px-6 py-4 font-medium">
-                            {{-- <a href="{{ route('tickets.edit', $ticket) }}"
-                                class="rounded-full bg-blue-400 px-4 py-1 text-blue-800 hover:bg-blue-500 hover:text-white">Edit</a> --}}
+                            <a href="{{ route('tickets.edit', $ticket) }}"
+                                class="rounded-full bg-blue-400 px-4 py-1 text-blue-800 hover:bg-blue-500 hover:text-white">Edit</a>
                             <button onclick="confirm('Are you sure?') || event.stopImmediatePropagation()"
                                 wire:click="deleteTicket({{ $ticket }})"
                                 class="rounded-full bg-red-400 px-4 py-1 text-red-800 hover:bg-red-500 hover:text-white">Delete</button>
