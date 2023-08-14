@@ -6,7 +6,6 @@ use App\Livewire\Forms\TicketForm;
 use App\Models\Category;
 use App\Models\Label;
 use App\Models\Ticket;
-use Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -35,7 +34,6 @@ class EditTicket extends Component
         $this->form->validate();
 
         $properties = $this->form->only(['title', 'status', 'description', 'priority']);
-        $properties += ['user_id' => Auth::user()->id];
 
         $this->ticket->update($properties);
         $this->ticket->categories()->sync($this->form->selectedCategories);
