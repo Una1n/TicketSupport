@@ -6,6 +6,8 @@ use App\Livewire\Forms\TicketForm;
 use App\Models\Category;
 use App\Models\Label;
 use App\Models\Ticket;
+use App\Models\User;
+use Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -21,6 +23,7 @@ class EditTicket extends Component
         $this->form->description = $ticket->description;
         $this->form->status = $ticket->status;
         $this->form->priority = $ticket->priority;
+        $this->form->agentAssigned = $ticket->agent_id;
 
         $this->form->selectedCategories = $ticket->categories()->pluck('id')->toArray();
         $this->form->selectedLabels = $ticket->labels()->pluck('id')->toArray();
@@ -34,6 +37,9 @@ class EditTicket extends Component
         $this->form->validate();
 
         $properties = $this->form->only(['title', 'status', 'description', 'priority']);
+        if (! empty($this->form->agentAssigned) && Auth::user()->hasRole('Admin')) {
+            $properties += ['agent_id' => $this->form->agentAssigned];
+        }
 
         $this->ticket->update($properties);
         $this->ticket->categories()->sync($this->form->selectedCategories);
@@ -51,6 +57,7 @@ class EditTicket extends Component
         return view('livewire.tickets.edit-ticket', [
             'categories' => Category::all(),
             'labels' => Label::all(),
+            'agents' => User::role('Agent')->get(),
         ]);
     }
 }

@@ -69,6 +69,17 @@
                 @endforeach
             </div>
         </div>
+        @can('manage tickets')
+            <div>
+                <label for="agents" class="mb-1 block text-sm font-medium text-gray-700">Assigned Agent</label>
+                <select wire:model.live="form.agentAssigned"
+                    class="focus:border-primary-300 focus:ring-primary-200 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50">
+                    @foreach ($agents as $agent)
+                        <option value="{{ $agent->id }}">{{ $agent->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        @endcan
         <button type="submit"
             class="rounded-lg border border-green-500 bg-green-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-green-700 hover:bg-green-700 focus:ring focus:ring-green-200 disabled:cursor-not-allowed disabled:border-green-300 disabled:bg-green-300">
             Submit

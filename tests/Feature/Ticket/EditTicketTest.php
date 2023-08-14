@@ -108,3 +108,17 @@ it('is not allowed to reach this endpoint as agent when not assigned to the tick
     get(route('tickets.edit', $ticket))
         ->assertForbidden();
 });
+
+it('can assign an agent to the ticket as admin', function () {
+    $user = User::factory()->create();
+    $user->assignRole('Agent');
+    $ticket = Ticket::factory()->create();
+
+    Livewire::test(EditTicket::class, ['ticket' => $ticket])
+        ->set('form.agentAssigned', $user->id)
+        ->call('save');
+
+    $ticket->refresh();
+
+    expect($ticket->agent->name)->toEqual($user->name);
+});
