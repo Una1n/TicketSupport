@@ -1,7 +1,7 @@
 # Ticket Support System Example Project using Laravel 10 + Livewire 3
 
 This is an example project for a Ticket Support System.
-Laravel 10 is used as framework with Livewire 3 for the front-end.
+Laravel 10 is used as framework with Livewire 3 (Beta) for the front-end.
 
 
 ## Glossary
@@ -43,7 +43,7 @@ They can click the ticket title in the table to open the page to see more detail
 
 ### Agent users: manage THEIR tickets
 
-Similar to regular users, agents see only tickets, and only their tickets, but "their" has different meaning - not that they created the tickets, but are assigned to them (by admin, more on that later).
+Similar to regular users, agents see only their tickets, but "their" has a different meaning - not that they created the tickets, but are assigned to them (by admin, more on that later).
 They can edit tickets and add comments.
 
 ### Admin users: manage everything
