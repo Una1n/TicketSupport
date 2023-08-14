@@ -3,7 +3,6 @@
 namespace App\Livewire\Users;
 
 use App\Models\User;
-use Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -14,9 +13,7 @@ class ListUser extends Component
 
     public function deleteUser(User $user): void
     {
-        if (! Auth::user()->can('manage', User::class)) {
-            abort(403);
-        }
+        $this->authorize('manage', $user);
 
         $name = $user->name;
 

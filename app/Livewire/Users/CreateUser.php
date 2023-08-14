@@ -3,7 +3,6 @@
 namespace App\Livewire\Users;
 
 use App\Models\User;
-use Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
@@ -21,9 +20,7 @@ class CreateUser extends Component
 
     public function save()
     {
-        if (! Auth::user()->can('manage', User::class)) {
-            abort(403);
-        }
+        $this->authorize('manage', User::class);
 
         // Still needed even though the docs say it runs automatically
         $this->validate();

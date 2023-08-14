@@ -3,7 +3,6 @@
 namespace App\Livewire\Users;
 
 use App\Models\User;
-use Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -32,9 +31,7 @@ class EditUser extends Component
 
     public function save()
     {
-        if (! Auth::user()->can('manage', User::class)) {
-            abort(403);
-        }
+        $this->authorize('manage', $this->user);
 
         $this->user->update($this->validate());
 

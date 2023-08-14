@@ -3,7 +3,6 @@
 namespace App\Livewire\Labels;
 
 use App\Models\Label;
-use Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -33,9 +32,7 @@ class EditLabel extends Component
 
     public function save()
     {
-        if (! Auth::user()->can('manage', Label::class)) {
-            abort(403);
-        }
+        $this->authorize('manage', $this->label);
 
         // Still needed even though the docs say it runs automatically
         $this->validate();

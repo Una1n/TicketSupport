@@ -10,9 +10,9 @@ beforeEach(function () {
 });
 
 it('has component on edit page', function () {
-    $category = Label::factory()->create();
+    $label = Label::factory()->create();
 
-    get(route('labels.edit', $category))
+    get(route('labels.edit', $label))
         ->assertSeeLivewire(EditLabel::class)
         ->assertOk();
 });

@@ -24,9 +24,7 @@ class ListTicket extends Component
 
     public function deleteTicket(Ticket $ticket): void
     {
-        if (! Auth::user()->can('manage', Ticket::class)) {
-            abort(403);
-        }
+        $this->authorize('manage', $ticket);
 
         $title = $ticket->title;
 
@@ -48,6 +46,9 @@ class ListTicket extends Component
             })
             ->when(! empty($this->priorityFilter), function ($query) {
                 $query->where('priority', '=', $this->priorityFilter);
+            })
+            ->when(Auth::user()->hasRole('Agent'), function ($query) {
+                $query->assignedToAgent(Auth::user());
             });
 
         return view('livewire.tickets.list-ticket', [

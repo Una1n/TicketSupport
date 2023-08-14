@@ -3,7 +3,6 @@
 namespace App\Livewire\Categories;
 
 use App\Models\Category;
-use Auth;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
@@ -16,9 +15,7 @@ class CreateCategory extends Component
 
     public function save()
     {
-        if (! Auth::user()->can('manage', Category::class)) {
-            abort(403);
-        }
+        $this->authorize('manage', Category::class);
 
         // Still needed even though the docs say it runs automatically
         $this->validate();

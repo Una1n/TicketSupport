@@ -13,6 +13,8 @@ class ShowTicket extends Component
     #[Layout('layouts.dashboard')]
     public function render()
     {
+        $this->authorize('view', $this->ticket);
+
         return view('livewire.tickets.show-ticket');
     }
 }

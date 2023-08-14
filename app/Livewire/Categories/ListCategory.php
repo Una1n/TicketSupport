@@ -3,7 +3,6 @@
 namespace App\Livewire\Categories;
 
 use App\Models\Category;
-use Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -14,9 +13,7 @@ class ListCategory extends Component
 
     public function deleteCategory(Category $category): void
     {
-        if (! Auth::user()->can('manage', Category::class)) {
-            abort(403);
-        }
+        $this->authorize('manage', $category);
 
         $name = $category->name;
 

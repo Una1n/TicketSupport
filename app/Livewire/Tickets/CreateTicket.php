@@ -16,9 +16,7 @@ class CreateTicket extends Component
 
     public function save()
     {
-        if (! Auth::user()->can('create', Ticket::class)) {
-            abort(403);
-        }
+        $this->authorize('create', Ticket::class);
 
         // Default to open status
         $this->form->status = 'open';

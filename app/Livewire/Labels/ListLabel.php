@@ -3,7 +3,6 @@
 namespace App\Livewire\Labels;
 
 use App\Models\Label;
-use Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -14,9 +13,7 @@ class ListLabel extends Component
 
     public function deleteLabel(Label $label): void
     {
-        if (! Auth::user()->can('manage', Label::class)) {
-            abort(403);
-        }
+        $this->authorize('manage', $label);
 
         $name = $label->name;
 

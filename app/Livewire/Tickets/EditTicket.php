@@ -29,9 +29,7 @@ class EditTicket extends Component
 
     public function save()
     {
-        if (! Auth::user()->can('update', Ticket::class)) {
-            abort(403);
-        }
+        $this->authorize('update', $this->ticket);
 
         // Still needed even though the docs say it runs automatically
         $this->form->validate();
@@ -50,6 +48,8 @@ class EditTicket extends Component
     #[Layout('layouts.dashboard')]
     public function render()
     {
+        $this->authorize('update', $this->ticket);
+
         return view('livewire.tickets.edit-ticket', [
             'categories' => Category::all(),
             'labels' => Label::all(),
