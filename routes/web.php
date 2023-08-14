@@ -68,16 +68,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('tickets')->as('tickets.')->group(function () {
         Route::get('/', ListTicket::class)->name('index')
-            ->can('viewList', Ticket::class);
-
-        Route::get('/{ticket}/show', ShowTicket::class)->name('show')
-            ->can('view', Ticket::class);
+            ->can('viewAny', Ticket::class);
 
         Route::get('/create', CreateTicket::class)->name('create')
             ->can('create', Ticket::class);
 
-        Route::get('/{ticket}/edit', EditTicket::class)->name('edit')
-            ->can('update', Ticket::class);
+        // Authorization handled in livewire components, because
+        // route model binding doesn't work through middleware (ex. ->can('update', 'ticket'))
+        Route::get('/{ticket}/show', ShowTicket::class)->name('show');
+        Route::get('/{ticket}/edit', EditTicket::class)->name('edit');
     });
 });
 
