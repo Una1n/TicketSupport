@@ -55,7 +55,7 @@ class Ticket extends Model
         $query->where('status', '=', 'closed');
     }
 
-    public function scopeAgent(Builder $query, User $user): void
+    public function scopeAssignedToAgent(Builder $query, User $user): void
     {
         $query->where('agent_id', '=', $user->id);
     }

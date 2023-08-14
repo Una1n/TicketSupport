@@ -22,8 +22,8 @@ class DashboardHome extends Component
             $this->closedTickets = Ticket::closed()->count();
             $this->openTickets = Ticket::open()->count();
         } elseif ($user->hasRole('Agent')) {
-            $this->closedTickets = Ticket::agent($user)->closed()->count();
-            $this->openTickets = Ticket::agent($user)->open()->count();
+            $this->closedTickets = Ticket::assignedToAgent($user)->closed()->count();
+            $this->openTickets = Ticket::assignedToAgent($user)->open()->count();
         } else {
             $this->closedTickets = Ticket::byUser($user)->closed()->count();
             $this->openTickets = Ticket::byUser($user)->open()->count();
