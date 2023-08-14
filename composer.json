@@ -26,6 +26,7 @@
         "pestphp/pest": "^2.13",
         "pestphp/pest-plugin-laravel": "^2.2",
         "pestphp/pest-plugin-livewire": "^2.1",
+        "pestphp/pest-plugin-type-coverage": "^2.0",
         "spatie/laravel-ignition": "^2.2"
     },
     "autoload": {
