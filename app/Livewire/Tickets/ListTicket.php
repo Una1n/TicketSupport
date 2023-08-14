@@ -49,6 +49,9 @@ class ListTicket extends Component
             })
             ->when(Auth::user()->hasRole('Agent'), function ($query) {
                 $query->assignedToAgent(Auth::user());
+            })
+            ->when(! Auth::user()->hasAnyRole('Admin', 'Agent'), function ($query) {
+                $query->byUser(Auth::user());
             });
 
         return view('livewire.tickets.list-ticket', [
