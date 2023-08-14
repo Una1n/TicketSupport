@@ -92,7 +92,7 @@
                             @endforeach
                         </td>
                         <td class="flex justify-end gap-4 px-6 py-4 font-medium">
-                            @canany('manage tickets', 'edit tickets')
+                            @canany(['manage tickets', 'edit tickets'])
                                 <a href="{{ route('tickets.edit', $ticket) }}"
                                     class="rounded-full bg-blue-400 px-4 py-1 text-blue-800 hover:bg-blue-500 hover:text-white">Edit</a>
                             @endcan
