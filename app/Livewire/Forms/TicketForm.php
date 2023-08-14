@@ -25,6 +25,6 @@ class TicketForm extends Form
     #[Rule(['sometimes', 'exists:labels,id'])]
     public array $selectedLabels = [];
 
-    #[Rule(['sometimes', 'exists:users,id'])]
-    public $agentAssigned;
+    #[Rule(['nullable', 'exists:users,id'])]
+    public $agentAssigned = null;
 }
