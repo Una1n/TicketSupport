@@ -2,29 +2,17 @@
 
 namespace App\Livewire\Tickets;
 
+use App\Livewire\Forms\TicketForm;
 use App\Models\Category;
 use App\Models\Label;
 use App\Models\Ticket;
 use Auth;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Rule;
 use Livewire\Component;
 
 class CreateTicket extends Component
 {
-    #[Rule(['required', 'unique:labels,name', 'min:3', 'max:255'])]
-    public string $title = '';
-
-    // TODO: Status should be automatically set to open on creation,
-    // but editable to only allow open/closed
-    #[Rule(['required', 'min:3', 'max:255'])]
-    public string $status = '';
-
-    #[Rule(['required', 'string', 'in:low,medium,high'])]
-    public string $priority = '';
-
-    #[Rule(['required', 'string', 'min:20'])]
-    public string $description = '';
+    public TicketForm $form;
 
     public function save()
     {
@@ -33,17 +21,17 @@ class CreateTicket extends Component
         }
 
         // Default to open status
-        $this->status = 'open';
+        $this->form->status = 'open';
 
         // Still needed even though the docs say it runs automatically
-        $this->validate();
+        $this->form->validate();
 
-        $properties = $this->only(['title', 'status', 'description', 'priority']);
+        $properties = $this->form->only(['title', 'status', 'description', 'priority']);
         $properties += ['user_id' => Auth::user()->id];
 
-        dd($properties);
-
         $ticket = Ticket::create($properties);
+        $ticket->categories()->sync($this->form->selectedCategories);
+        $ticket->labels()->sync($this->form->selectedLabels);
 
         return redirect()->route('tickets.show', $ticket)
             ->with('status', 'Ticket created.');
