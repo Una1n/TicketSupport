@@ -80,7 +80,7 @@
                                 </span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 font-medium text-gray-900">{{ $ticket->agent->name }}</td>
+                        <td class="px-6 py-4 font-medium text-gray-900">{{ $ticket->agent->name ?? '' }}</td>
                         <td class="px-6 py-4 font-medium text-gray-900">
                             @foreach ($ticket->categories as $category)
                                 <span class="rounded-full bg-blue-400 px-2 py-1 text-xs">{{ $category->name }}</span>

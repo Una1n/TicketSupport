@@ -52,7 +52,7 @@
             <div class="font-bold">Created By</div>
             <div class="col-span-5">{{ $ticket->user->name }}</div>
             <div class="font-bold">Agent Assigned</div>
-            <div class="col-span-5">{{ $ticket->agent->name }}</div>
+            <div class="col-span-5">{{ $ticket->agent->name ?? '' }}</div>
         </div>
     </div>
 </div>
