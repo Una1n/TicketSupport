@@ -24,6 +24,8 @@ class PermissionSeeder extends Seeder
         $permissions[] = Permission::create(['name' => 'manage users']);
         $permissions[] = Permission::create(['name' => 'manage categories']);
         $permissions[] = Permission::create(['name' => 'manage labels']);
+        $addCommentsPermission = Permission::create(['name' => 'add comments']);
+        $permissions[] = $addCommentsPermission;
 
         $adminRole = Role::create(['name' => 'Admin']);
         $adminRole->givePermissionTo($permissions);
@@ -36,7 +38,7 @@ class PermissionSeeder extends Seeder
         $agentRole = Role::create(['name' => 'Agent']);
         $agentRole->givePermissionTo([
             Permission::create(['name' => 'edit tickets']),
-            Permission::create(['name' => 'add comments']),
+            $addCommentsPermission,
         ]);
     }
 }
