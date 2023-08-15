@@ -2,6 +2,7 @@
 
 use App\Livewire\Users\CreateUser;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use function Pest\Laravel\get;
 
 beforeEach(function () {
@@ -50,14 +51,13 @@ it('validates email is unique', function () {
 it('is only allowed to reach this endpoint when logged in as admin', function () {
     login(User::factory()->create());
 
-    // TODO: Not working yet on livewire 3 beta 7
-    // Livewire::test(CreateUser::class)
-    //     ->set('name', 'Henk Stubbe')
-    //     ->set('email', 'henk@stubbe.nl')
-    //     ->set('password', 'password')
-    //     ->call('save')
-    //     ->assertForbidden();
-
     get(route('users.create'))
         ->assertForbidden();
-});
+
+    Livewire::test(CreateUser::class)
+        ->set('name', 'Henk Stubbe')
+        ->set('email', 'henk@stubbe.nl')
+        ->set('password', 'password')
+        ->call('save');
+
+})->throws(AuthorizationException::class, 'This action is unauthorized.');

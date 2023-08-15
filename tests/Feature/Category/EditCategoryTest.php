@@ -1,9 +1,9 @@
 <?php
 
-use App\Livewire\Categories\CreateCategory;
 use App\Livewire\Categories\EditCategory;
 use App\Models\Category;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use function Pest\Laravel\get;
 
 beforeEach(function () {
@@ -54,12 +54,11 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
 
     $category = Category::factory()->create();
 
-    // TODO: Not working yet on livewire 3 beta 7
-    // Livewire::test(CreateCategory::class, ['category' => $category])
-    //     ->set('name', 'test')
-    //     ->call('save')
-    //     ->assertForbidden();
-
     get(route('categories.edit', $category))
         ->assertForbidden();
-});
+
+    Livewire::test(EditCategory::class, ['category' => $category])
+        ->set('name', 'test')
+        ->call('save');
+
+})->throws(AuthorizationException::class, 'This action is unauthorized.');

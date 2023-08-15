@@ -5,6 +5,7 @@ use App\Models\Category;
 use App\Models\Label;
 use App\Models\Ticket;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use function Pest\Laravel\get;
 
 beforeEach(function () {
@@ -75,14 +76,13 @@ it('is not allowed to reach this endpoint when logged in as default user', funct
 
     $ticket = Ticket::factory()->create();
 
-    // TODO: Not working yet on livewire 3 beta 7
-    // Livewire::test(CreateTicket::class, ['label' => $ticket])
-    //     ->set('name', 'test')
-    //     ->call('save')
-    //     ->assertForbidden();
-
     get(route('tickets.edit', $ticket))
         ->assertForbidden();
+
+    // TODO: Not working for some reason
+    // Livewire::test(EditTicket::class, ['ticket' => $ticket])
+    //     ->call('save');
+    // })->throws(AuthorizationException::class, 'This action is unauthorized.');
 });
 
 it('is allowed to reach this endpoint as agent when assigned to the ticket', function () {

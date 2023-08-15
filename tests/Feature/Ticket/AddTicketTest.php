@@ -2,6 +2,7 @@
 
 use App\Livewire\Tickets\CreateTicket;
 use App\Models\Ticket;
+use Illuminate\Auth\Access\AuthorizationException;
 use function Pest\Laravel\get;
 
 beforeEach(function () {
@@ -43,14 +44,13 @@ it('validates required fields', function (string $name, string $value) {
 it('is only allowed to reach this endpoint when logged in', function () {
     Auth::logout();
 
-    // TODO: Not working yet on livewire 3 beta 8
-    // Livewire::test(CreateTicket::class)
-    //     ->set('form.title', 'Test Title')
-    //     ->set('form.priority', 'low')
-    //     ->set('form.description', 'This is a test description for ticket')
-    //     ->call('save');
-    //     ->assertForbidden();
-
     get(route('tickets.create'))
         ->assertRedirectToRoute('login');
-});
+
+    Livewire::test(CreateTicket::class)
+        ->set('form.title', 'Test Title')
+        ->set('form.priority', 'low')
+        ->set('form.description', 'This is a test description for ticket')
+        ->call('save');
+
+})->throws(AuthorizationException::class, 'This action is unauthorized.');

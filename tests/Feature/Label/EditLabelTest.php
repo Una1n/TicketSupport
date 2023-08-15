@@ -3,6 +3,7 @@
 use App\Livewire\Labels\EditLabel;
 use App\Models\Label;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use function Pest\Laravel\get;
 
 beforeEach(function () {
@@ -53,12 +54,11 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
 
     $label = Label::factory()->create();
 
-    // TODO: Not working yet on livewire 3 beta 7
-    // Livewire::test(CreateLabel::class, ['label' => $label])
-    //     ->set('name', 'test')
-    //     ->call('save')
-    //     ->assertForbidden();
-
     get(route('labels.edit', $label))
         ->assertForbidden();
-});
+
+    Livewire::test(EditLabel::class, ['label' => $label])
+        ->set('name', 'test')
+        ->call('save');
+
+})->throws(AuthorizationException::class, 'This action is unauthorized.');
