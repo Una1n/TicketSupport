@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="flex h-screen">
+    <div class="flex min-h-screen">
         <div class="bg-indigo-600 px-4 py-2 lg:w-1/4">
             <svg xmlns="http://www.w3.org/2000/svg" class="inline h-8 w-8 text-white lg:hidden" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor">
