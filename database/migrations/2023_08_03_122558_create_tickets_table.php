@@ -7,9 +7,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('tickets', function (Blueprint $table) {
@@ -24,13 +21,10 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('tickets', function (Blueprint $table) {
-            $table->dropForeignIdFor(User::class, 'agent_id');
+            $table->dropConstrainedForeignIdFor(User::class, 'agent_id');
         });
 
         Schema::dropIfExists('tickets');
