@@ -83,6 +83,9 @@ class Ticket extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults()->logFillable();
+        return LogOptions::defaults()
+            ->logOnly(['title', 'priority', 'status', 'agent.name'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

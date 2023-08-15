@@ -1,4 +1,4 @@
-<div>
+<div x-data="{ isShowingLogs: false, isShowingComments: true }">
     <x-status />
     <div class="mb-5 text-2xl font-bold">Ticket Information</div>
     <div class="rounded-lg border border-gray-200 bg-white shadow-md">
@@ -54,5 +54,17 @@
             <div class="font-bold">Agent Assigned</div>
             <div class="col-span-5">{{ $ticket->agent->name ?? '' }}</div>
         </div>
+    </div>
+    <div class="flex gap-5">
+        <button @click="isShowingLogs = !isShowingLogs" x-text="isShowingLogs ? 'Hide Logs' : 'Show Logs'"
+            class="mt-4 rounded-lg border border-green-500 bg-green-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-green-700 hover:bg-green-700 focus:ring focus:ring-green-200 disabled:cursor-not-allowed disabled:border-green-300 disabled:bg-green-300">
+        </button>
+        <button @click="isShowingComments = !isShowingComments"
+            x-text="isShowingComments ? 'Hide Comments' : 'Show Comments'"
+            class="mt-4 rounded-lg border border-green-500 bg-green-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-green-700 hover:bg-green-700 focus:ring focus:ring-green-200 disabled:cursor-not-allowed disabled:border-green-300 disabled:bg-green-300">
+        </button>
+    </div>
+    <div x-show="isShowingLogs">
+        <livewire:activity-logs.show-logs :ticket="$ticket" />
     </div>
 </div>
