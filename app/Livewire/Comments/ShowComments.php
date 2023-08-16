@@ -5,7 +5,6 @@ namespace App\Livewire\Comments;
 use App\Models\Comment;
 use App\Models\Ticket;
 use Auth;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
@@ -33,7 +32,6 @@ class ShowComments extends Component
             ->with('status', 'Comment created.');
     }
 
-    #[Layout('layouts.dashboard')]
     public function render()
     {
         $comments = Comment::query()

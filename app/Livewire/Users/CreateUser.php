@@ -3,7 +3,6 @@
 namespace App\Livewire\Users;
 
 use App\Models\User;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
@@ -33,7 +32,6 @@ class CreateUser extends Component
             ->with('status', 'User ' . $this->name . ' created.');
     }
 
-    #[Layout('layouts.dashboard')]
     public function render()
     {
         return view('livewire.users.create-user');

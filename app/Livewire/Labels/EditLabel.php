@@ -3,7 +3,6 @@
 namespace App\Livewire\Labels;
 
 use App\Models\Label;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class EditLabel extends Component
@@ -45,7 +44,6 @@ class EditLabel extends Component
             ->with('status', 'Label ' . $this->name . ' updated.');
     }
 
-    #[Layout('layouts.dashboard')]
     public function render()
     {
         return view('livewire.labels.edit-label');

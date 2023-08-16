@@ -5,7 +5,6 @@ namespace App\Livewire;
 use App\Models\Ticket;
 use Auth;
 use Illuminate\Contracts\View\View;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class DashboardHome extends Component
@@ -32,7 +31,6 @@ class DashboardHome extends Component
         $this->totalTickets = $this->closedTickets + $this->openTickets;
     }
 
-    #[Layout('layouts.dashboard')]
     public function render(): View
     {
         return view('livewire.dashboard-home');

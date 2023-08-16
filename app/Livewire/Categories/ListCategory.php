@@ -3,7 +3,6 @@
 namespace App\Livewire\Categories;
 
 use App\Models\Category;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -22,7 +21,6 @@ class ListCategory extends Component
         session()->flash('status', 'Category ' . $name . ' Deleted!');
     }
 
-    #[Layout('layouts.dashboard')]
     public function render()
     {
         return view('livewire.categories.list-category', [

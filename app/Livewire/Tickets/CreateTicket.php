@@ -7,7 +7,6 @@ use App\Models\Category;
 use App\Models\Label;
 use App\Models\Ticket;
 use Auth;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class CreateTicket extends Component
@@ -35,7 +34,6 @@ class CreateTicket extends Component
             ->with('status', 'Ticket created.');
     }
 
-    #[Layout('layouts.dashboard')]
     public function render()
     {
         return view('livewire.tickets.create-ticket', [

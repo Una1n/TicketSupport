@@ -3,7 +3,6 @@
 namespace App\Livewire\Labels;
 
 use App\Models\Label;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -22,7 +21,6 @@ class ListLabel extends Component
         session()->flash('status', 'Label ' . $name . ' Deleted!');
     }
 
-    #[Layout('layouts.dashboard')]
     public function render()
     {
         return view('livewire.labels.list-label', [

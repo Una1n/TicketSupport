@@ -4,7 +4,6 @@ namespace App\Livewire\Categories;
 
 use App\Models\Category;
 use Illuminate\Contracts\View\View;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
@@ -28,7 +27,6 @@ class CreateCategory extends Component
             ->with('status', 'Category ' . $this->name . ' created.');
     }
 
-    #[Layout('layouts.dashboard')]
     public function render(): View
     {
         return view('livewire.categories.create-category');

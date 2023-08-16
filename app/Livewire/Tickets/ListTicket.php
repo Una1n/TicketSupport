@@ -5,7 +5,6 @@ namespace App\Livewire\Tickets;
 use App\Models\Category;
 use App\Models\Ticket;
 use Auth;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -33,7 +32,6 @@ class ListTicket extends Component
         session()->flash('status', 'Ticket ' . $title . ' Deleted!');
     }
 
-    #[Layout('layouts.dashboard')]
     public function render()
     {
         $filteredTickets = Ticket::with(['user', 'categories', 'labels', 'agent'])

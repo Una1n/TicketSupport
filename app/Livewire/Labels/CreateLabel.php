@@ -3,7 +3,6 @@
 namespace App\Livewire\Labels;
 
 use App\Models\Label;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
@@ -27,7 +26,6 @@ class CreateLabel extends Component
             ->with('status', 'Label ' . $this->name . ' created.');
     }
 
-    #[Layout('layouts.dashboard')]
     public function render()
     {
         return view('livewire.labels.create-label');

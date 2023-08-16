@@ -3,7 +3,6 @@
 namespace App\Livewire\Users;
 
 use App\Models\User;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -22,7 +21,6 @@ class ListUser extends Component
         session()->flash('status', 'User ' . $name . ' Deleted!');
     }
 
-    #[Layout('layouts.dashboard')]
     public function render()
     {
         return view('livewire.users.list-user', [

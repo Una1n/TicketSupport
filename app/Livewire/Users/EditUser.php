@@ -3,7 +3,6 @@
 namespace App\Livewire\Users;
 
 use App\Models\User;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class EditUser extends Component
@@ -39,7 +38,6 @@ class EditUser extends Component
             ->with('status', 'User ' . $this->name . ' updated.');
     }
 
-    #[Layout('layouts.dashboard')]
     public function render()
     {
         return view('livewire.users.edit-user');

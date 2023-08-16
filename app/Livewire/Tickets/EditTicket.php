@@ -8,7 +8,6 @@ use App\Models\Label;
 use App\Models\Ticket;
 use App\Models\User;
 use Auth;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class EditTicket extends Component
@@ -49,7 +48,6 @@ class EditTicket extends Component
             ->with('status', 'Ticket updated.');
     }
 
-    #[Layout('layouts.dashboard')]
     public function render()
     {
         $this->authorize('update', $this->ticket);

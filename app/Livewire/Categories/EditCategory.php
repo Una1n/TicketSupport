@@ -3,7 +3,6 @@
 namespace App\Livewire\Categories;
 
 use App\Models\Category;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class EditCategory extends Component
@@ -45,7 +44,6 @@ class EditCategory extends Component
             ->with('status', 'Category ' . $this->name . ' updated.');
     }
 
-    #[Layout('layouts.dashboard')]
     public function render()
     {
         return view('livewire.categories.edit-category');
