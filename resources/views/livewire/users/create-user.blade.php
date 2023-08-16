@@ -2,6 +2,16 @@
     <div class="mb-5 text-2xl font-bold">Create User</div>
     <form wire:submit="save" class="space-y-5">
         <div>
+            <label for="role"
+                class="mb-1 block text-sm font-medium text-gray-700 after:ml-0.5 after:text-red-500 after:content-['*']">Role</label>
+            <select wire:model.live="role"
+                class="focus:border-primary-300 focus:ring-primary-200 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50">
+                @foreach ($roles as $roleFound)
+                    <option value="{{ $roleFound->id }}">{{ $roleFound->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div>
             <label for="name"
                 class="mb-1 block text-sm font-medium text-gray-700 after:ml-0.5 after:text-red-500 after:content-['*']">Name</label>
             <input type="text" id="name" wire:model="name" @class([

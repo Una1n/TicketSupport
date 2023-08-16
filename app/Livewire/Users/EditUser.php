@@ -4,6 +4,7 @@ namespace App\Livewire\Users;
 
 use App\Models\User;
 use Livewire\Component;
+use Spatie\Permission\Models\Role;
 
 class EditUser extends Component
 {
@@ -11,6 +12,7 @@ class EditUser extends Component
     public string $name = '';
     public string $email = '';
     public string $password = '';
+    public string $role = '';
 
     protected function rules(): array
     {
@@ -18,6 +20,7 @@ class EditUser extends Component
             'name' => ['required', 'min:3', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $this->user->id],
             'password' => ['sometimes', 'min:8', 'max:255'],
+            'role' => ['required', 'exists:roles,id'],
         ];
     }
 
@@ -26,13 +29,20 @@ class EditUser extends Component
         $this->user = $user;
         $this->name = $user->name;
         $this->email = $user->email;
+        $this->role = $user->roles()->first()->id;
     }
 
     public function save()
     {
         $this->authorize('manage', $this->user);
 
-        $this->user->update($this->validate());
+        $validated = $this->validate();
+        if (! empty($validated['role'])) {
+            $this->user->roles()->sync([$validated['role']]);
+            unset($validated['role']);
+        }
+
+        $this->user->update($validated);
 
         return redirect()->route('users.index')
             ->with('status', 'User ' . $this->name . ' updated.');
@@ -40,6 +50,8 @@ class EditUser extends Component
 
     public function render()
     {
-        return view('livewire.users.edit-user');
+        return view('livewire.users.edit-user', [
+            'roles' => Role::all(),
+        ]);
     }
 }

@@ -4,6 +4,7 @@ use App\Livewire\Users\EditUser;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use function Pest\Laravel\get;
+use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
     login();
@@ -18,15 +19,19 @@ it('has component on edit page', function () {
 });
 
 it('can edit a user', function () {
+    $agentRole = Role::whereName('Agent')->first();
     $user = User::factory()->create();
 
     Livewire::test(EditUser::class, ['user' => $user])
         ->set('name', 'New Name')
+        ->set('role', $agentRole->id)
         ->call('save');
 
     $user->refresh();
 
     expect($user->name)->toEqual('New Name');
+    expect($user->roles)->toHaveCount(1);
+    expect($user->roles[0]->name)->toEqual('Agent');
 });
 
 it('validates required fields', function (string $name, string $value) {
@@ -39,6 +44,7 @@ it('validates required fields', function (string $name, string $value) {
 })->with([
     'name' => ['name', ''],
     'email' => ['email', ''],
+    'role' => ['role', ''],
 ]);
 
 it('validates email is unique', function () {

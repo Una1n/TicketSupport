@@ -4,6 +4,7 @@ use App\Livewire\Users\CreateUser;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use function Pest\Laravel\get;
+use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
     login();
@@ -15,15 +16,19 @@ it('has component on create page', function () {
         ->assertOk();
 });
 
-it('can create a new user', function () {
+it('can create a new regular user', function () {
+    $role = Role::whereName('Regular')->first();
+
     Livewire::test(CreateUser::class)
         ->set('name', 'Henk Stubbe')
         ->set('email', 'henk@stubbe.nl')
         ->set('password', 'password')
+        ->set('role', $role->id)
         ->call('save');
 
     $user = User::whereName('Henk Stubbe')->first();
     expect($user)->not->toBeNull();
+    expect($user->roles)->toHaveCount(1);
 });
 
 it('validates required fields', function (string $name, string $value) {
@@ -35,6 +40,7 @@ it('validates required fields', function (string $name, string $value) {
     'name' => ['name', ''],
     'email' => ['email', ''],
     'password' => ['password', ''],
+    'role' => ['role', ''],
 ]);
 
 it('validates email is unique', function () {

@@ -5,6 +5,7 @@ namespace App\Livewire\Users;
 use App\Models\User;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
+use Spatie\Permission\Models\Role;
 
 class CreateUser extends Component
 {
@@ -17,6 +18,9 @@ class CreateUser extends Component
     #[Rule(['required', 'min:8', 'max:255'])]
     public string $password = '';
 
+    #[Rule(['required', 'exists:roles,id'])]
+    public string $role = '';
+
     public function save()
     {
         $this->authorize('manage', User::class);
@@ -24,9 +28,12 @@ class CreateUser extends Component
         // Still needed even though the docs say it runs automatically
         $this->validate();
 
-        User::create(
+        $user = User::create(
             $this->only(['name', 'email', 'password'])
         );
+
+        $role = Role::whereId($this->role)->first();
+        $user->assignRole($role);
 
         return redirect()->route('users.index')
             ->with('status', 'User ' . $this->name . ' created.');
@@ -34,6 +41,8 @@ class CreateUser extends Component
 
     public function render()
     {
-        return view('livewire.users.create-user');
+        return view('livewire.users.create-user', [
+            'roles' => Role::all(),
+        ]);
     }
 }
