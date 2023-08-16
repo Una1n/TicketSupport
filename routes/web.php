@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Livewire\ActivityLogs\ListLog;
+use App\Livewire\ActivityLogs\ShowLog;
 use App\Livewire\Categories\CreateCategory;
 use App\Livewire\Categories\EditCategory;
 use App\Livewire\Categories\ListCategory;
@@ -78,6 +80,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{ticket}/show', ShowTicket::class)->name('show');
         Route::get('/{ticket}/edit', EditTicket::class)->name('edit');
     });
+
+    Route::middleware('can:access logs')
+        ->prefix('logs')
+        ->as('logs.')
+        ->group(function () {
+            Route::get('/', ListLog::class)->name('index');
+            Route::get('/{log}/show', ShowLog::class)->name('show');
+        });
 });
 
 Route::middleware('auth')->group(function () {
