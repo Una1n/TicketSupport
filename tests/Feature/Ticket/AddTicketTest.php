@@ -2,6 +2,7 @@
 
 use App\Livewire\Tickets\CreateTicket;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use function Pest\Laravel\get;
 
@@ -41,7 +42,7 @@ it('validates required fields', function (string $name, string $value) {
     'description' => ['form.description', ''],
 ]);
 
-it('is only allowed to reach this endpoint when logged in', function () {
+it('is not allowed to reach this endpoint when not logged in', function () {
     Auth::logout();
 
     get(route('tickets.create'))
@@ -54,3 +55,17 @@ it('is only allowed to reach this endpoint when logged in', function () {
         ->call('save');
 
 })->throws(AuthorizationException::class, 'This action is unauthorized.');
+
+it('is allowed to reach this endpoint when logged in', function () {
+    login(User::factory()->create());
+
+    get(route('tickets.create'))
+        ->assertOk();
+
+    Livewire::test(CreateTicket::class)
+        ->set('form.title', 'Test Title')
+        ->set('form.priority', 'low')
+        ->set('form.description', 'This is a test description for ticket')
+        ->call('save');
+
+});

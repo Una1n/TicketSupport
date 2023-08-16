@@ -1,8 +1,11 @@
 <?php
 
 use App\Livewire\Comments\ShowComments;
+use App\Models\Comment;
 use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
+use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
     login();
@@ -32,7 +35,7 @@ it('validates required message field', function () {
         ->assertHasErrors('newComment');
 });
 
-it('is only allowed to add comments when logged in', function () {
+it('is not allowed to add comments when not logged in', function () {
     Auth::logout();
 
     $ticket = Ticket::factory()->create();
@@ -44,3 +47,23 @@ it('is only allowed to add comments when logged in', function () {
         ->call('save');
 
 })->throws(AuthorizationException::class, 'This action is unauthorized.');
+
+it('is allowed to add comments when logged in as regular user', function () {
+    $user = User::factory()->create();
+    $role = Role::whereName('Regular')->first();
+    $user->assignRole($role);
+    login($user);
+
+    $ticket = Ticket::factory()->create();
+
+    // TODO: ->assertUnauthorized()/->assertForbidden()/->assertStatus()
+    // these functions don't work, but we can get around it by catching it with pest
+    Livewire::test(ShowComments::class, ['ticket' => $ticket])
+        ->set('newComment', 'Test Message for comment')
+        ->call('save')
+        ->assertStatus(200);
+
+    $comment = Comment::whereTicketId($ticket->id)->first();
+    expect($comment)->not->toBeNull();
+    expect($comment->message)->toEqual('Test Message for comment');
+});
