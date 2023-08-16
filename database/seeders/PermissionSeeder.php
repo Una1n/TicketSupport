@@ -18,7 +18,6 @@ class PermissionSeeder extends Seeder
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $permissions[] = Permission::create(['name' => 'access dashboard']);
         $permissions[] = Permission::create(['name' => 'access logs']);
         $permissions[] = Permission::create(['name' => 'manage tickets']);
         $permissions[] = Permission::create(['name' => 'manage users']);
@@ -38,6 +37,11 @@ class PermissionSeeder extends Seeder
         $agentRole = Role::create(['name' => 'Agent']);
         $agentRole->givePermissionTo([
             Permission::create(['name' => 'edit tickets']),
+            $addCommentsPermission,
+        ]);
+
+        $regularRole = Role::create(['name' => 'Regular']);
+        $regularRole->givePermissionTo([
             $addCommentsPermission,
         ]);
     }
