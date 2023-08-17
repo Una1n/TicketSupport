@@ -24,7 +24,7 @@ class ListCategory extends Component
     public function render()
     {
         return view('livewire.categories.list-category', [
-            'categories' => Category::orderBy('name')->paginate(6),
+            'categories' => Category::orderBy('name')->paginate(10),
         ]);
     }
 }

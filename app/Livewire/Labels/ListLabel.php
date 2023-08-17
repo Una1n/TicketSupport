@@ -24,7 +24,7 @@ class ListLabel extends Component
     public function render()
     {
         return view('livewire.labels.list-label', [
-            'labels' => Label::orderBy('name')->paginate(6),
+            'labels' => Label::orderBy('name')->paginate(10),
         ]);
     }
 }
