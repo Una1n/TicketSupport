@@ -76,7 +76,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->can('create', Ticket::class);
 
         // Authorization handled in livewire components, because
-        // route model binding doesn't work through middleware (ex. ->can('update', 'ticket'))
+        // route model binding doesn't work here through middleware
+        // (ex. ->can('update', 'ticket'))
         Route::get('/{ticket}/show', ShowTicket::class)->name('show');
         Route::get('/{ticket}/edit', EditTicket::class)->name('edit');
     });
