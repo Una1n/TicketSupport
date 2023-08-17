@@ -7,10 +7,10 @@ use App\Models\Category;
 use App\Models\Label;
 use App\Models\Ticket;
 use App\Models\User;
-use Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
+use Livewire\Features\SupportRedirects\Redirector;
 
 class EditTicket extends Component
 {
@@ -30,7 +30,7 @@ class EditTicket extends Component
         $this->form->selectedLabels = $ticket->labels()->pluck('id')->toArray();
     }
 
-    public function save(): RedirectResponse
+    public function save(): Redirector|RedirectResponse
     {
         $this->authorize('update', $this->ticket);
 
@@ -38,7 +38,7 @@ class EditTicket extends Component
         $this->form->validate();
 
         $properties = $this->form->only(['title', 'status', 'description', 'priority']);
-        if (! empty($this->form->agentAssigned) && Auth::user()->hasRole('Admin')) {
+        if (! empty($this->form->agentAssigned) && auth()->user()->hasRole('Admin')) {
             $properties += ['agent_id' => $this->form->agentAssigned];
         }
 

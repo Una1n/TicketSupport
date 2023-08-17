@@ -7,13 +7,14 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
+use Livewire\Features\SupportRedirects\Redirector;
 
 class CreateLabel extends Component
 {
     #[Rule(['required', 'unique:labels,name', 'min:3', 'max:255'])]
     public string $name = '';
 
-    public function save(): RedirectResponse
+    public function save(): Redirector|RedirectResponse
     {
         $this->authorize('manage', Label::class);
 

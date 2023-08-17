@@ -9,12 +9,13 @@ use App\Models\Ticket;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
+use Livewire\Features\SupportRedirects\Redirector;
 
 class CreateTicket extends Component
 {
     public TicketForm $form;
 
-    public function save(): RedirectResponse
+    public function save(): Redirector|RedirectResponse
     {
         $this->authorize('create', Ticket::class);
 

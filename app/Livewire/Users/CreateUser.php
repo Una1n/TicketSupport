@@ -7,6 +7,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
+use Livewire\Features\SupportRedirects\Redirector;
 use Spatie\Permission\Models\Role;
 
 class CreateUser extends Component
@@ -23,7 +24,7 @@ class CreateUser extends Component
     #[Rule(['required', 'exists:roles,id'])]
     public string $role = '';
 
-    public function save(): RedirectResponse
+    public function save(): Redirector|RedirectResponse
     {
         $this->authorize('manage', User::class);
 

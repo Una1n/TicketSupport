@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
+use Livewire\Features\SupportRedirects\Redirector;
 
 class ShowComments extends Component
 {
@@ -16,7 +17,7 @@ class ShowComments extends Component
     #[Rule(['required', 'string', 'min:3', 'max:512'], as: 'message')]
     public string $newComment;
 
-    public function save(): RedirectResponse
+    public function save(): Redirector|RedirectResponse
     {
         $this->authorize('add comments', Comment::class);
 

@@ -4,7 +4,6 @@ namespace App\Livewire\Tickets;
 
 use App\Models\Category;
 use App\Models\Ticket;
-use Auth;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -46,10 +45,10 @@ class ListTicket extends Component
             ->when(! empty($this->priorityFilter), function ($query) {
                 $query->where('priority', '=', $this->priorityFilter);
             })
-            ->when(Auth::user()->hasRole('Agent'), function ($query) {
+            ->when(auth()->user()->hasRole('Agent'), function ($query) {
                 $query->assignedToAgent(auth()->user());
             })
-            ->when(! Auth::user()->hasAnyRole('Admin', 'Agent'), function ($query) {
+            ->when(! auth()->user()->hasAnyRole('Admin', 'Agent'), function ($query) {
                 $query->byUser(auth()->user());
             });
 

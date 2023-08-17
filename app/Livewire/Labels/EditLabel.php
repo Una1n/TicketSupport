@@ -6,6 +6,7 @@ use App\Models\Label;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
+use Livewire\Features\SupportRedirects\Redirector;
 
 class EditLabel extends Component
 {
@@ -34,7 +35,7 @@ class EditLabel extends Component
         ];
     }
 
-    public function save(): RedirectResponse
+    public function save(): Redirector|RedirectResponse
     {
         $this->authorize('manage', $this->label);
 
