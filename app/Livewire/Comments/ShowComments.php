@@ -4,7 +4,8 @@ namespace App\Livewire\Comments;
 
 use App\Models\Comment;
 use App\Models\Ticket;
-use Auth;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
@@ -15,7 +16,7 @@ class ShowComments extends Component
     #[Rule(['required', 'string', 'min:3', 'max:512'], as: 'message')]
     public string $newComment;
 
-    public function save()
+    public function save(): RedirectResponse
     {
         $this->authorize('add comments', Comment::class);
 
@@ -24,7 +25,7 @@ class ShowComments extends Component
 
         Comment::create([
             'ticket_id' => $this->ticket->id,
-            'user_id' => Auth::user()->id,
+            'user_id' => auth()->user()->id,
             'message' => $this->newComment,
         ]);
 
@@ -32,7 +33,7 @@ class ShowComments extends Component
             ->with('status', 'Comment created.');
     }
 
-    public function render()
+    public function render(): View
     {
         $comments = Comment::query()
             ->with('user')

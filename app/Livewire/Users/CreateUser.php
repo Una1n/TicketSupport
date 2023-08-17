@@ -3,6 +3,8 @@
 namespace App\Livewire\Users;
 
 use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
@@ -21,7 +23,7 @@ class CreateUser extends Component
     #[Rule(['required', 'exists:roles,id'])]
     public string $role = '';
 
-    public function save()
+    public function save(): RedirectResponse
     {
         $this->authorize('manage', User::class);
 
@@ -39,7 +41,7 @@ class CreateUser extends Component
             ->with('status', 'User ' . $this->name . ' created.');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.users.create-user', [
             'roles' => Role::all(),

@@ -3,6 +3,8 @@
 namespace App\Livewire\Labels;
 
 use App\Models\Label;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
@@ -11,7 +13,7 @@ class CreateLabel extends Component
     #[Rule(['required', 'unique:labels,name', 'min:3', 'max:255'])]
     public string $name = '';
 
-    public function save()
+    public function save(): RedirectResponse
     {
         $this->authorize('manage', Label::class);
 
@@ -26,7 +28,7 @@ class CreateLabel extends Component
             ->with('status', 'Label ' . $this->name . ' created.');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.labels.create-label');
     }

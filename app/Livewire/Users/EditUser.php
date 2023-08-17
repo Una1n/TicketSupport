@@ -3,6 +3,8 @@
 namespace App\Livewire\Users;
 
 use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
 
@@ -14,6 +16,9 @@ class EditUser extends Component
     public string $password = '';
     public string $role = '';
 
+    /**
+     * @return array<string, array<string>>
+     */
     protected function rules(): array
     {
         return [
@@ -29,10 +34,10 @@ class EditUser extends Component
         $this->user = $user;
         $this->name = $user->name;
         $this->email = $user->email;
-        $this->role = $user->roles()->first()->id;
+        $this->role = $user->roles()->first()->id;  /* @phpstan-ignore-line */
     }
 
-    public function save()
+    public function save(): RedirectResponse
     {
         $this->authorize('manage', $this->user);
 
@@ -48,7 +53,7 @@ class EditUser extends Component
             ->with('status', 'User ' . $this->name . ' updated.');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.users.edit-user', [
             'roles' => Role::all(),

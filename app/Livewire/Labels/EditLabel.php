@@ -3,6 +3,8 @@
 namespace App\Livewire\Labels;
 
 use App\Models\Label;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 
 class EditLabel extends Component
@@ -16,12 +18,15 @@ class EditLabel extends Component
         $this->name = $label->name;
     }
 
-    // Unique with exception doesn't work as Rule Attribute
+    /**
+     * @return array<string, array<string>>
+     */
     public function rules(): array
     {
         return [
             'name' => [
                 'required',
+                // Unique with exception doesn't work as Rule Attribute
                 'unique:labels,name,' . $this->label->id,
                 'min:3',
                 'max:255',
@@ -29,7 +34,7 @@ class EditLabel extends Component
         ];
     }
 
-    public function save()
+    public function save(): RedirectResponse
     {
         $this->authorize('manage', $this->label);
 
@@ -44,7 +49,7 @@ class EditLabel extends Component
             ->with('status', 'Label ' . $this->name . ' updated.');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.labels.edit-label');
     }

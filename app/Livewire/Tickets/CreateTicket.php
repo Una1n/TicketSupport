@@ -6,14 +6,15 @@ use App\Livewire\Forms\TicketForm;
 use App\Models\Category;
 use App\Models\Label;
 use App\Models\Ticket;
-use Auth;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 
 class CreateTicket extends Component
 {
     public TicketForm $form;
 
-    public function save()
+    public function save(): RedirectResponse
     {
         $this->authorize('create', Ticket::class);
 
@@ -24,7 +25,7 @@ class CreateTicket extends Component
         $this->form->validate();
 
         $properties = $this->form->only(['title', 'status', 'description', 'priority']);
-        $properties += ['user_id' => Auth::user()->id];
+        $properties += ['user_id' => auth()->user()->id];
 
         $ticket = Ticket::create($properties);
         $ticket->categories()->sync($this->form->selectedCategories);
@@ -34,7 +35,7 @@ class CreateTicket extends Component
             ->with('status', 'Ticket created.');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.tickets.create-ticket', [
             'categories' => Category::all(),

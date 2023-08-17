@@ -3,6 +3,7 @@
 namespace App\Livewire\Users;
 
 use App\Models\User;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -21,7 +22,7 @@ class ListUser extends Component
         session()->flash('status', 'User ' . $name . ' Deleted!');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.users.list-user', [
             'users' => User::orderBy('name')->paginate(8),

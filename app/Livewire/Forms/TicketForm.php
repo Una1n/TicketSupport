@@ -19,12 +19,14 @@ class TicketForm extends Form
     #[Rule(['required', 'string', 'min:20'])]
     public string $description = '';
 
+    /** @var array<string> */
     #[Rule(['sometimes', 'exists:categories,id'])]
     public array $selectedCategories = [];
 
+    /** @var array<string> */
     #[Rule(['sometimes', 'exists:labels,id'])]
     public array $selectedLabels = [];
 
     #[Rule(['nullable', 'exists:users,id'])]
-    public $agentAssigned = null;
+    public ?int $agentAssigned = null;
 }

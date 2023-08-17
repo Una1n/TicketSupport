@@ -8,6 +8,8 @@ use App\Models\Label;
 use App\Models\Ticket;
 use App\Models\User;
 use Auth;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 
 class EditTicket extends Component
@@ -28,7 +30,7 @@ class EditTicket extends Component
         $this->form->selectedLabels = $ticket->labels()->pluck('id')->toArray();
     }
 
-    public function save()
+    public function save(): RedirectResponse
     {
         $this->authorize('update', $this->ticket);
 
@@ -48,7 +50,7 @@ class EditTicket extends Component
             ->with('status', 'Ticket updated.');
     }
 
-    public function render()
+    public function render(): View
     {
         $this->authorize('update', $this->ticket);
 

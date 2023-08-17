@@ -3,6 +3,8 @@
 namespace App\Livewire\Categories;
 
 use App\Models\Category;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 
 class EditCategory extends Component
@@ -16,12 +18,15 @@ class EditCategory extends Component
         $this->name = $category->name;
     }
 
-    // Unique with exception doesn't work as Rule Attribute
+    /**
+     * @return array<string, array<string>>
+     */
     public function rules(): array
     {
         return [
             'name' => [
                 'required',
+                // Unique with exception doesn't work as Rule Attribute
                 'unique:categories,name,' . $this->category->id,
                 'min:3',
                 'max:255',
@@ -29,7 +34,7 @@ class EditCategory extends Component
         ];
     }
 
-    public function save()
+    public function save(): RedirectResponse
     {
         $this->authorize('manage', $this->category);
 
@@ -44,7 +49,7 @@ class EditCategory extends Component
             ->with('status', 'Category ' . $this->name . ' updated.');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.categories.edit-category');
     }

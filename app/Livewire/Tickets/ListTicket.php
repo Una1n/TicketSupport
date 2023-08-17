@@ -5,6 +5,7 @@ namespace App\Livewire\Tickets;
 use App\Models\Category;
 use App\Models\Ticket;
 use Auth;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -17,9 +18,9 @@ class ListTicket extends Component
     public string $search = '';
 
     // Filters
-    public $categoryFilter;
-    public $statusFilter;
-    public $priorityFilter;
+    public string $categoryFilter;
+    public string $statusFilter;
+    public string $priorityFilter;
 
     public function deleteTicket(Ticket $ticket): void
     {
@@ -32,7 +33,7 @@ class ListTicket extends Component
         session()->flash('status', 'Ticket ' . $title . ' Deleted!');
     }
 
-    public function render()
+    public function render(): View
     {
         $filteredTickets = Ticket::with(['user', 'categories', 'labels', 'agent'])
             ->search($this->search)
@@ -46,10 +47,10 @@ class ListTicket extends Component
                 $query->where('priority', '=', $this->priorityFilter);
             })
             ->when(Auth::user()->hasRole('Agent'), function ($query) {
-                $query->assignedToAgent(Auth::user());
+                $query->assignedToAgent(auth()->user());
             })
             ->when(! Auth::user()->hasAnyRole('Admin', 'Agent'), function ($query) {
-                $query->byUser(Auth::user());
+                $query->byUser(auth()->user());
             });
 
         return view('livewire.tickets.list-ticket', [

@@ -3,6 +3,7 @@
 namespace App\Livewire\Categories;
 
 use App\Models\Category;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -21,7 +22,7 @@ class ListCategory extends Component
         session()->flash('status', 'Category ' . $name . ' Deleted!');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.categories.list-category', [
             'categories' => Category::orderBy('name')->paginate(10),

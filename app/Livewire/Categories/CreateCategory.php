@@ -4,6 +4,7 @@ namespace App\Livewire\Categories;
 
 use App\Models\Category;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 
@@ -12,7 +13,7 @@ class CreateCategory extends Component
     #[Rule(['required', 'unique:categories,name', 'min:3', 'max:255'])]
     public string $name = '';
 
-    public function save()
+    public function save(): RedirectResponse
     {
         $this->authorize('manage', Category::class);
 

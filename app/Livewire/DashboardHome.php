@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\Models\Ticket;
-use Auth;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
@@ -15,7 +14,7 @@ class DashboardHome extends Component
 
     public function mount(): void
     {
-        $user = Auth::user();
+        $user = auth()->user();
 
         if ($user->hasRole('Admin')) {
             $this->closedTickets = Ticket::closed()->count();
