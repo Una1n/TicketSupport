@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Tickets\CreateTicket;
+use App\Mail\TicketCreated;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -29,6 +30,30 @@ it('can create a new ticket', function () {
     expect($ticket->status)->toEqual('open');
     expect($ticket->description)->toEqual('This is a test description for ticket');
     expect($ticket->user->name)->toEqual('Jerry');
+});
+
+it('sends an email to the admin with a link to assign an agent (edit ticket)', function () {
+    Mail::fake();
+
+    Livewire::test(CreateTicket::class)
+        ->set('form.title', 'Test Title')
+        ->set('form.priority', 'low')
+        ->set('form.description', 'This is a test description for ticket')
+        ->call('save');
+
+    Mail::assertSent(TicketCreated::class);
+});
+
+it('has specific content in the ticket created email', function () {
+    $ticket = Ticket::factory()->create();
+
+    $mailable = new TicketCreated($ticket);
+    $mailable->assertSeeInHtml($ticket->title);
+    $mailable->assertSeeInHtml($ticket->user->name);
+    $mailable->assertSeeInHtml(route('tickets.edit', $ticket));
+
+    expect($mailable->subject)->toEqual('Ticket Created');
+    $mailable->assertHasTo('admin@admin.com');
 });
 
 it('validates required fields', function (string $name, string $value) {

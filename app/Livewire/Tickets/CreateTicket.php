@@ -3,6 +3,7 @@
 namespace App\Livewire\Tickets;
 
 use App\Livewire\Forms\TicketForm;
+use App\Mail\TicketCreated;
 use App\Models\Category;
 use App\Models\Label;
 use App\Models\Ticket;
@@ -10,6 +11,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 use Livewire\Features\SupportRedirects\Redirector;
+use Mail;
 
 class CreateTicket extends Component
 {
@@ -31,6 +33,8 @@ class CreateTicket extends Component
         $ticket = Ticket::create($properties);
         $ticket->categories()->sync($this->form->selectedCategories);
         $ticket->labels()->sync($this->form->selectedLabels);
+
+        Mail::send(new TicketCreated($ticket));
 
         return redirect()->route('tickets.show', $ticket)
             ->with('status', 'Ticket created.');
