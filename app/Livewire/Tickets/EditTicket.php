@@ -46,6 +46,11 @@ class EditTicket extends Component
         $this->ticket->categories()->sync($this->form->selectedCategories);
         $this->ticket->labels()->sync($this->form->selectedLabels);
 
+        foreach ($this->form->attachments as $attachment) {
+            // $path = $attachment->store('media');
+            $this->ticket->addMedia($attachment)->toMediaCollection('attachments');
+        }
+
         return redirect()->route('tickets.show', $this->ticket)
             ->with('status', 'Ticket updated.');
     }

@@ -69,6 +69,14 @@
                 @endforeach
             </div>
         </div>
+        <div>
+            <label for="attachments" class="mb-1 block text-sm font-medium text-gray-700">Files Attached</label>
+            <input id="attachments" wire:model="form.attachments" multiple type="file"
+                class="block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-blue-500 file:px-4 file:py-2.5 file:text-sm file:font-semibold file:text-white hover:file:bg-blue-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60" />
+            @error('form.attachments.*')
+                <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+            @enderror
+        </div>
         @can('manage tickets')
             <div>
                 <label for="agents" class="mb-1 block text-sm font-medium text-gray-700">Assigned Agent</label>

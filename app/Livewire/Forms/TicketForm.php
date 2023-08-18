@@ -29,4 +29,7 @@ class TicketForm extends Form
 
     #[Rule(['nullable', 'exists:users,id'])]
     public ?int $agentAssigned = null;
+
+    // Files attached
+    public mixed $attachments = [];
 }

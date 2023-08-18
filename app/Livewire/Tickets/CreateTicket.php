@@ -10,11 +10,13 @@ use App\Models\Ticket;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Livewire\Features\SupportRedirects\Redirector;
 use Mail;
 
 class CreateTicket extends Component
 {
+    use WithFileUploads;
     public TicketForm $form;
 
     public function save(): Redirector|RedirectResponse
@@ -33,6 +35,11 @@ class CreateTicket extends Component
         $ticket = Ticket::create($properties);
         $ticket->categories()->sync($this->form->selectedCategories);
         $ticket->labels()->sync($this->form->selectedLabels);
+
+        foreach ($this->form->attachments as $attachment) {
+            // $path = $attachment->store('media');
+            $ticket->addMedia($attachment)->toMediaCollection('attachments');
+        }
 
         Mail::send(new TicketCreated($ticket));
 

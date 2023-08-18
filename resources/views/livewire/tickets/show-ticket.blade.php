@@ -53,6 +53,16 @@
             <div class="col-span-5">{{ $ticket->user->name }}</div>
             <div class="font-bold">Agent Assigned</div>
             <div class="col-span-5">{{ $ticket->agent->name ?? '' }}</div>
+            <div class="font-bold">Attachment(s)</div>
+            <div class="col-span-5">
+                @foreach ($ticket->getMedia('attachments') as $attachment)
+                    <a href="{{ $attachment->getUrl() }}"
+                        class="text-blue-600 hover:underline">{{ $attachment->file_name }}</a>
+                    @if ($loop->iteration !== $loop->count)
+                        ,
+                    @endif
+                @endforeach
+            </div>
         </div>
     </div>
     <div class="flex gap-5">
