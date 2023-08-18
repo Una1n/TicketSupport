@@ -53,7 +53,7 @@ class ListTicket extends Component
             });
 
         return view('livewire.tickets.list-ticket', [
-            'tickets' => $filteredTickets->paginate(8),
+            'tickets' => $filteredTickets->latest()->paginate(8),
             'categories' => Category::all(),
         ]);
     }
