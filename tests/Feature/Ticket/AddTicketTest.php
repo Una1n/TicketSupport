@@ -5,6 +5,8 @@ use App\Mail\TicketCreated;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\UploadedFile;
+
 use function Pest\Laravel\get;
 
 beforeEach(function () {
@@ -30,6 +32,26 @@ it('can create a new ticket', function () {
     expect($ticket->status)->toEqual('open');
     expect($ticket->description)->toEqual('This is a test description for ticket');
     expect($ticket->user->name)->toEqual('Jerry');
+});
+
+it('can upload files as attachments to the ticket', function () {
+    Storage::fake('media');
+
+    $files[] = UploadedFile::fake()->image('test.png');
+    $files[] = UploadedFile::fake()->image('test2.png');
+
+    Livewire::test(CreateTicket::class)
+        ->set('form.title', 'Test Title')
+        ->set('form.priority', 'low')
+        ->set('form.description', 'This is a test description for ticket')
+        ->set('form.attachments', $files)
+        ->call('save');
+
+    $ticket = Ticket::whereTitle('Test Title')->first();
+
+    foreach ($ticket->media as $media) {
+        Storage::disk('media')->assertExists($media->getUrlGenerator('')->getPathRelativeToRoot());
+    }
 });
 
 it('sends an email to the admin with a link to assign an agent (edit ticket)', function () {

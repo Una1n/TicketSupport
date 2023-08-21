@@ -6,6 +6,8 @@ use App\Models\Label;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\UploadedFile;
+
 use function Pest\Laravel\get;
 
 beforeEach(function () {
@@ -56,6 +58,31 @@ it('can edit a ticket', function () {
     expect($ticket->user->name)->toEqual($user->name);
     expect($ticket->categories[0]->name)->toEqual($newCategory->name);
     expect($ticket->labels[0]->name)->toEqual($newLabel->name);
+});
+
+it('can upload attachments for the edited ticket', function () {
+    Storage::fake('media');
+
+    $ticket = Ticket::factory()->create([
+        'title' => 'Test Title',
+    ]);
+
+    $files[] = UploadedFile::fake()->image('test.png');
+    $files[] = UploadedFile::fake()->image('test2.png');
+
+    Livewire::test(EditTicket::class, ['ticket' => $ticket])
+        ->set('form.title', 'New Title')
+        ->set('form.priority', 'high')
+        ->set('form.status', 'closed')
+        ->set('form.description', 'New Description for ticket!!!!!!')
+        ->set('form.attachments', $files)
+        ->call('save');
+
+    $ticket->refresh();
+
+    foreach ($ticket->media as $media) {
+        Storage::disk('media')->assertExists($media->getUrlGenerator('')->getPathRelativeToRoot());
+    }
 });
 
 it('validates required fields', function (string $name, string $value) {
