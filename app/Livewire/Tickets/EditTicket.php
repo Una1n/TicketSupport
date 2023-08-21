@@ -10,10 +10,12 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Livewire\Features\SupportRedirects\Redirector;
 
 class EditTicket extends Component
 {
+    use WithFileUploads;
     public Ticket $ticket;
     public TicketForm $form;
 
