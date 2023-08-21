@@ -49,8 +49,8 @@ class EditTicket extends Component
         $this->ticket->labels()->sync($this->form->selectedLabels);
 
         foreach ($this->form->attachments as $attachment) {
-            // $path = $attachment->store('media');
-            $this->ticket->addMedia($attachment)->toMediaCollection('attachments');
+            $path = $attachment->store('livewire', 'media');
+            $this->ticket->addMediaFromDisk($path, 'media')->toMediaCollection('attachments');
         }
 
         return redirect()->route('tickets.show', $this->ticket)

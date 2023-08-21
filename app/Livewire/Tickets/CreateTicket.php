@@ -37,8 +37,8 @@ class CreateTicket extends Component
         $ticket->labels()->sync($this->form->selectedLabels);
 
         foreach ($this->form->attachments as $attachment) {
-            // $path = $attachment->store('media');
-            $ticket->addMedia($attachment)->toMediaCollection('attachments');
+            $path = $attachment->store('livewire', 'media');
+            $ticket->addMediaFromDisk($path, 'media')->toMediaCollection('attachments');
         }
 
         Mail::send(new TicketCreated($ticket));
