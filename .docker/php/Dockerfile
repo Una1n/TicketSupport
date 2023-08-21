@@ -25,7 +25,12 @@ RUN sed -i "s/user = www-data/user = laravel/g" /usr/local/etc/php-fpm.d/www.con
 RUN sed -i "s/group = www-data/group = laravel/g" /usr/local/etc/php-fpm.d/www.conf
 RUN echo "php_admin_flag[log_errors] = on" >> /usr/local/etc/php-fpm.d/www.conf
 
-RUN docker-php-ext-install pdo pdo_mysql bcmath
+RUN apk add -Uuv \
+    git bash supervisor freetype-dev libjpeg-turbo-dev libzip-dev libpng-dev \
+    && rm -rf /var/cache/apk/*
+
+# Install extensions
+RUN docker-php-ext-install pdo pdo_mysql gd bcmath
 
 # Switch to that user
 USER laravel
