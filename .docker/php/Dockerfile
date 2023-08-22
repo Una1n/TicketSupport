@@ -30,7 +30,7 @@ RUN apk add -Uuv \
     && rm -rf /var/cache/apk/*
 
 # Install extensions
-RUN docker-php-ext-install pdo pdo_mysql gd bcmath
+RUN docker-php-ext-install pdo pdo_mysql gd bcmath exif
 
 # Switch to that user
 USER laravel
