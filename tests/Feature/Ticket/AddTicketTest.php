@@ -4,7 +4,6 @@ use App\Livewire\Tickets\CreateTicket;
 use App\Mail\TicketCreated;
 use App\Models\Ticket;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\UploadedFile;
 
 use function Pest\Laravel\get;
@@ -99,9 +98,9 @@ it('is not allowed to reach this endpoint when not logged in', function () {
         ->set('form.title', 'Test Title')
         ->set('form.priority', 'low')
         ->set('form.description', 'This is a test description for ticket')
-        ->call('save');
-
-})->throws(AuthorizationException::class, 'This action is unauthorized.');
+        ->call('save')
+        ->assertForbidden();
+});
 
 it('is allowed to reach this endpoint when logged in', function () {
     login(User::factory()->create());
@@ -114,5 +113,4 @@ it('is allowed to reach this endpoint when logged in', function () {
         ->set('form.priority', 'low')
         ->set('form.description', 'This is a test description for ticket')
         ->call('save');
-
 });

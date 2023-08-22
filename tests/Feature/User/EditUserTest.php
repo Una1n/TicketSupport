@@ -2,9 +2,9 @@
 
 use App\Livewire\Users\EditUser;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
-use function Pest\Laravel\get;
 use Spatie\Permission\Models\Role;
+
+use function Pest\Laravel\get;
 
 beforeEach(function () {
     login();
@@ -67,6 +67,6 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
 
     Livewire::test(EditUser::class, ['user' => $user])
         ->set('name', 'test')
-        ->call('save');
-
-})->throws(AuthorizationException::class, 'This action is unauthorized.');
+        ->call('save')
+        ->assertForbidden();
+});

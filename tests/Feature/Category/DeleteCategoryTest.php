@@ -3,7 +3,6 @@
 use App\Livewire\Categories\ListCategory;
 use App\Models\Category;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
 
 beforeEach(function () {
     login();
@@ -26,6 +25,6 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
     $category = Category::factory()->create();
 
     Livewire::test(ListCategory::class)
-        ->call('deleteCategory', $category);
-
-})->throws(AuthorizationException::class, 'This action is unauthorized.');
+        ->call('deleteCategory', $category)
+        ->assertForbidden();
+});

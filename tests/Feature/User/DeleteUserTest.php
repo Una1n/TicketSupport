@@ -2,7 +2,6 @@
 
 use App\Livewire\Users\ListUser;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
 
 beforeEach(function () {
     login();
@@ -25,6 +24,6 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
     $user = User::factory()->create();
 
     Livewire::test(ListUser::class)
-        ->call('deleteUser', $user);
-
-})->throws(AuthorizationException::class, 'This action is unauthorized.');
+        ->call('deleteUser', $user)
+        ->assertForbidden();
+});

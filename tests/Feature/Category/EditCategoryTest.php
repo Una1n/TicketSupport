@@ -3,7 +3,7 @@
 use App\Livewire\Categories\EditCategory;
 use App\Models\Category;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
+
 use function Pest\Laravel\get;
 
 beforeEach(function () {
@@ -59,6 +59,6 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
 
     Livewire::test(EditCategory::class, ['category' => $category])
         ->set('name', 'test')
-        ->call('save');
-
-})->throws(AuthorizationException::class, 'This action is unauthorized.');
+        ->call('save')
+        ->assertForbidden();
+});

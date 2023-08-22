@@ -3,7 +3,6 @@
 use App\Livewire\Labels\ListLabel;
 use App\Models\Label;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
 
 beforeEach(function () {
     login();
@@ -26,6 +25,6 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
     $label = Label::factory()->create();
 
     Livewire::test(ListLabel::class)
-        ->call('deleteLabel', $label);
-
-})->throws(AuthorizationException::class, 'This action is unauthorized.');
+        ->call('deleteLabel', $label)
+        ->assertForbidden();
+});

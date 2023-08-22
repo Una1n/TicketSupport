@@ -4,7 +4,6 @@ use App\Livewire\Comments\ShowComments;
 use App\Models\Comment;
 use App\Models\Ticket;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
 use Spatie\Permission\Models\Role;
 
 beforeEach(function () {
@@ -40,13 +39,11 @@ it('is not allowed to add comments when not logged in', function () {
 
     $ticket = Ticket::factory()->create();
 
-    // TODO: ->assertUnauthorized()/->assertForbidden()/->assertStatus()
-    // these functions don't work, but we can get around it by catching it with pest
     Livewire::test(ShowComments::class, ['ticket' => $ticket])
         ->set('newComment', 'Test Message for comment')
-        ->call('save');
-
-})->throws(AuthorizationException::class, 'This action is unauthorized.');
+        ->call('save')
+        ->assertForbidden();
+});
 
 it('is allowed to add comments when logged in as regular user', function () {
     $user = User::factory()->create();
@@ -56,8 +53,6 @@ it('is allowed to add comments when logged in as regular user', function () {
 
     $ticket = Ticket::factory()->create();
 
-    // TODO: ->assertUnauthorized()/->assertForbidden()/->assertStatus()
-    // these functions don't work, but we can get around it by catching it with pest
     Livewire::test(ShowComments::class, ['ticket' => $ticket])
         ->set('newComment', 'Test Message for comment')
         ->call('save')
