@@ -74,7 +74,7 @@ When the new ticket is created, admin should get an email with the link to the E
 - Run `php artisan key:generate`
 - Run `php artisan migrate --seed` (it has some seeded data for your testing)
 - Launch `http://localhost:8000/` in your browser
-- You can login as admin to manage data with default credentials `admin@example.com` - `password`
+- You can login as admin to manage data with default credentials `admin@admin.com` - `password`
 
 ## How to use with Docker + WSL
 
@@ -86,4 +86,4 @@ When the new ticket is created, admin should get an email with the link to the E
 - Run `./dock artisan migrate --seed` (it has some seeded data for your testing)
 - Run `./dock start`
 - Launch `http://localhost:8000/` in your browser
-- You can login as admin to manage data with default credentials `admin@example.com` - `password`
+- You can login as admin to manage data with default credentials `admin@admin.com` - `password`
