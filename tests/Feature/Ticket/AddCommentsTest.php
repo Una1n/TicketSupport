@@ -21,8 +21,8 @@ it('can create a new comment', function () {
 
     expect($ticket->comments)->not->toBeNull();
     expect($ticket->comments)->toHaveCount(1);
-    expect($ticket->comments[0]->message)->toEqual('Test Message for comment');
-    expect($ticket->comments[0]->user_id)->toEqual(auth()->user()->id);
+    expect($ticket->comments->first()->message)->toEqual('Test Message for comment');
+    expect($ticket->comments->first()->user_id)->toEqual(auth()->user()->id);
 });
 
 it('validates required message field', function () {

@@ -31,7 +31,7 @@ it('can edit a user', function () {
 
     expect($user->name)->toEqual('New Name');
     expect($user->roles)->toHaveCount(1);
-    expect($user->roles[0]->name)->toEqual('Agent');
+    expect($user->roles->first()->name)->toEqual('Agent');
 });
 
 it('validates required fields', function (string $name, string $value) {

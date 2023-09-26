@@ -56,8 +56,8 @@ it('can edit a ticket', function () {
     expect($ticket->status)->toEqual('closed');
     expect($ticket->description)->toEqual('New Description for ticket!!!!!!');
     expect($ticket->user->name)->toEqual($user->name);
-    expect($ticket->categories[0]->name)->toEqual($newCategory->name);
-    expect($ticket->labels[0]->name)->toEqual($newLabel->name);
+    expect($ticket->categories->first()->name)->toEqual($newCategory->name);
+    expect($ticket->labels->first()->name)->toEqual($newLabel->name);
 });
 
 it('can upload attachments for the edited ticket', function () {
