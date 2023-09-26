@@ -3,6 +3,7 @@
 use App\Livewire\Comments\ShowComments;
 use App\Models\Comment;
 use App\Models\Ticket;
+
 use function Pest\Laravel\get;
 
 beforeEach(function () {
@@ -23,9 +24,7 @@ it('can show comments for a ticket', function () {
     ]);
 
     Livewire::test(ShowComments::class, ['ticket' => $ticket])
-        ->assertSee($comments[0]->message)
-        ->assertSee($comments[1]->message)
-        ->assertSee($comments[2]->message)
-        ->assertSee($comments[3]->message)
-        ->assertSee($comments[4]->message);
+        ->assertSee([
+            ...$comments->pluck('message')->toArray(),
+        ]);
 });

@@ -3,6 +3,7 @@
 use App\Livewire\Tickets\ListTicket;
 use App\Models\Category;
 use App\Models\Ticket;
+
 use function Pest\Laravel\get;
 
 beforeEach(function () {
@@ -19,9 +20,9 @@ it('can show a list of tickets', function () {
     $tickets = Ticket::factory(3)->create();
 
     Livewire::test(ListTicket::class)
-        ->assertSee($tickets[0]->title)
-        ->assertSee($tickets[1]->title)
-        ->assertSee($tickets[2]->title);
+        ->assertSee([
+            ...$tickets->pluck('title')->toArray(),
+        ]);
 });
 
 it('can show a list of tickets filtered by priority', function () {
@@ -49,12 +50,11 @@ it('can show a list of tickets filtered by priority', function () {
             // expect($tickets)->toHaveCount(4);
             // $this->assertCount(4, $tickets);
         })
-        ->assertSee($ticketsLow[0]->title)
-        ->assertSee($ticketsLow[1]->title)
-        ->assertSee($ticketsLow[2]->title)
-        ->assertSee($ticketsLow[3]->title)
-        ->assertDontSee($ticketsMedium[0]->title)
-        ->assertDontSee($ticketsHigh[0]->title);
+        ->assertSee([
+            ...$ticketsLow->pluck('title')->toArray(),
+        ])
+        ->assertDontSee($ticketsMedium->first()->title)
+        ->assertDontSee($ticketsHigh->first()->title);
 });
 
 it('can show a list of tickets filtered by status', function () {
@@ -78,13 +78,12 @@ it('can show a list of tickets filtered by status', function () {
             // expect($tickets)->toHaveCount(4);
             // $this->assertCount(4, $tickets);
         })
-        ->assertSee($ticketsOpen[0]->title)
-        ->assertSee($ticketsOpen[1]->title)
-        ->assertSee($ticketsOpen[2]->title)
-        ->assertSee($ticketsOpen[3]->title)
-        ->assertDontSee($ticketsClosed[0]->title)
-        ->assertDontSee($ticketsClosed[1]->title)
-        ->assertDontSee($ticketsClosed[2]->title);
+        ->assertSee([
+            ...$ticketsOpen->pluck('title')->toArray(),
+        ])
+        ->assertDontSee([
+            ...$ticketsClosed->pluck('title')->toArray(),
+        ]);
 });
 
 it('can show a list of tickets filtered by category', function () {
@@ -112,13 +111,12 @@ it('can show a list of tickets filtered by category', function () {
             // expect($tickets)->toHaveCount(4);
             // $this->assertCount(4, $tickets);
         })
-        ->assertSee($ticketsWithPaymentCategory[0]->title)
-        ->assertSee($ticketsWithPaymentCategory[1]->title)
-        ->assertSee($ticketsWithPaymentCategory[2]->title)
-        ->assertSee($ticketsWithPaymentCategory[3]->title)
-        ->assertDontSee($ticketsWithOtherCategory[0]->title)
-        ->assertDontSee($ticketsWithOtherCategory[1]->title)
-        ->assertDontSee($ticketsWithOtherCategory[2]->title);
+        ->assertSee([
+            ...$ticketsWithPaymentCategory->pluck('title')->toArray(),
+        ])
+        ->assertDontSee([
+            ...$ticketsWithOtherCategory->pluck('title')->toArray(),
+        ]);
 });
 
 it('can show a list of tickets filtered by search', function () {
@@ -140,13 +138,12 @@ it('can show a list of tickets filtered by search', function () {
             // expect($tickets)->toHaveCount(4);
             // $this->assertCount(4, $tickets);
         })
-        ->assertSee($ticketsToSearch[0]->title)
-        ->assertSee($ticketsToSearch[1]->title)
-        ->assertSee($ticketsToSearch[2]->title)
-        ->assertSee($ticketsToSearch[3]->title)
-        ->assertDontSee($ticketsNotInSearch[0]->title)
-        ->assertDontSee($ticketsNotInSearch[1]->title)
-        ->assertDontSee($ticketsNotInSearch[2]->title);
+        ->assertSee([
+            ...$ticketsToSearch->pluck('title')->toArray(),
+        ])
+        ->assertDontSee([
+            ...$ticketsNotInSearch->pluck('title')->toArray(),
+        ]);
 });
 
 it('is only allowed to reach this endpoint when logged in', function () {

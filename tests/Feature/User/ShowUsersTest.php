@@ -2,6 +2,7 @@
 
 use App\Livewire\Users\ListUser;
 use App\Models\User;
+
 use function Pest\Laravel\get;
 
 beforeEach(function () {
@@ -18,9 +19,9 @@ it('can show a list of users', function () {
     $users = User::factory(3)->create();
 
     Livewire::test(ListUser::class)
-        ->assertSee($users[0]->name)
-        ->assertSee($users[1]->name)
-        ->assertSee($users[2]->name);
+        ->assertSee([
+            ...$users->pluck('name')->toArray(),
+        ]);
 });
 
 it('is only allowed to reach this endpoint when logged in as admin', function () {

@@ -3,8 +3,9 @@
 use App\Livewire\ActivityLogs\ListLog;
 use App\Models\Ticket;
 use App\Models\User;
-use function Pest\Laravel\get;
 use Spatie\Activitylog\Models\Activity;
+
+use function Pest\Laravel\get;
 
 beforeEach(function () {
     login();
@@ -24,15 +25,13 @@ it('can show a list of logs', function () {
         ->get();
 
     Livewire::test(ListLog::class)
-        ->assertSee($tickets[0]->title)
-        ->assertSee($logs[0]->description)
-        ->assertSee($logs[0]->created_at->diffForHumans())
-        ->assertSee($tickets[1]->title)
-        ->assertSee($logs[1]->description)
-        ->assertSee($logs[1]->created_at->diffForHumans())
-        ->assertSee($tickets[2]->title)
-        ->assertSee($logs[2]->description)
-        ->assertSee($logs[2]->created_at->diffForHumans());
+        ->assertSee([
+            ...$tickets->pluck('title')->toArray(),
+            ...$logs->pluck('description')->toArray(),
+            ...$logs->pluck('created_at')
+                ->map(fn ($item) => $item->diffForHumans())
+                ->toArray(),
+        ]);
 });
 
 it('is only allowed to reach this endpoint when logged in as admin', function () {
