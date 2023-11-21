@@ -97,7 +97,7 @@
                                     class="rounded-full bg-blue-400 px-4 py-1 text-blue-800 hover:bg-blue-500 hover:text-white">Edit</a>
                             @endcan
                             @can('manage tickets')
-                                <button onclick="confirm('Are you sure?') || event.stopImmediatePropagation()"
+                                <button wire:confirm="Are you sure you want to delete this ticket?"
                                     wire:click="deleteTicket({{ $ticket }})"
                                     class="rounded-full bg-red-400 px-4 py-1 text-red-800 hover:bg-red-500 hover:text-white">Delete</button>
                             @endcan
