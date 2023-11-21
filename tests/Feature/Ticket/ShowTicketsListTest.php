@@ -41,14 +41,7 @@ it('can show a list of tickets filtered by priority', function () {
     Livewire::test(ListTicket::class)
         ->set('priorityFilter', 'low')
         ->assertViewHas('tickets', function ($tickets) {
-            if ($tickets->count() === 4) {
-                return true;
-            }
-
-            return false;
-            // TODO: Expectation/Assertion is not working
-            // expect($tickets)->toHaveCount(4);
-            // $this->assertCount(4, $tickets);
+            return $tickets->count() === 4;
         })
         ->assertSee([
             ...$ticketsLow->pluck('title')->toArray(),
@@ -69,14 +62,7 @@ it('can show a list of tickets filtered by status', function () {
     Livewire::test(ListTicket::class)
         ->set('statusFilter', 'open')
         ->assertViewHas('tickets', function ($tickets) {
-            if ($tickets->count() === 4) {
-                return true;
-            }
-
-            return false;
-            // TODO: Expectation/Assertion is not working
-            // expect($tickets)->toHaveCount(4);
-            // $this->assertCount(4, $tickets);
+            return $tickets->count() === 4;
         })
         ->assertSee([
             ...$ticketsOpen->pluck('title')->toArray(),
@@ -102,14 +88,7 @@ it('can show a list of tickets filtered by category', function () {
     Livewire::test(ListTicket::class)
         ->set('categoryFilter', $paymentCategory->id)
         ->assertViewHas('tickets', function ($tickets) {
-            if ($tickets->count() === 4) {
-                return true;
-            }
-
-            return false;
-            // TODO: Expectation/Assertion is not working
-            // expect($tickets)->toHaveCount(4);
-            // $this->assertCount(4, $tickets);
+            return $tickets->count() === 4;
         })
         ->assertSee([
             ...$ticketsWithPaymentCategory->pluck('title')->toArray(),
@@ -129,14 +108,7 @@ it('can show a list of tickets filtered by search', function () {
     Livewire::test(ListTicket::class)
         ->set('search', 'title')
         ->assertViewHas('tickets', function ($tickets) {
-            if ($tickets->count() === 4) {
-                return true;
-            }
-
-            return false;
-            // TODO: Expectation/Assertion is not working
-            // expect($tickets)->toHaveCount(4);
-            // $this->assertCount(4, $tickets);
+            return $tickets->count() === 4;
         })
         ->assertSee([
             ...$ticketsToSearch->pluck('title')->toArray(),
