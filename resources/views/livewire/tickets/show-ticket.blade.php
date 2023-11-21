@@ -74,10 +74,10 @@
             class="mt-4 rounded-lg border border-green-500 bg-green-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-green-700 hover:bg-green-700 focus:ring focus:ring-green-200 disabled:cursor-not-allowed disabled:border-green-300 disabled:bg-green-300">
         </button>
     </div>
-    <div x-show="isShowingComments">
+    <div x-show="isShowingComments" wire:transition>
         <livewire:comments.show-comments :ticket="$ticket" />
     </div>
-    <div x-show="isShowingLogs">
+    <div x-show="isShowingLogs" wire:transition>
         <livewire:activity-logs.show-logs :ticket="$ticket" />
     </div>
 </div>
