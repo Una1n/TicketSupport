@@ -5,23 +5,23 @@ namespace App\Livewire\Users;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Livewire\Attributes\Rule;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\Features\SupportRedirects\Redirector;
 use Spatie\Permission\Models\Role;
 
 class CreateUser extends Component
 {
-    #[Rule(['required', 'min:3', 'max:255'])]
+    #[Validate(['required', 'min:3', 'max:255'])]
     public string $name = '';
 
-    #[Rule(['required', 'email', 'unique:users,email', 'max:255'])]
+    #[Validate(['required', 'email', 'unique:users,email', 'max:255'])]
     public string $email = '';
 
-    #[Rule(['required', 'min:8', 'max:255'])]
+    #[Validate(['required', 'min:8', 'max:255'])]
     public string $password = '';
 
-    #[Rule(['required', 'exists:roles,id'])]
+    #[Validate(['required', 'exists:roles,id'])]
     public string $role = '';
 
     public function save(): Redirector|RedirectResponse
