@@ -5,7 +5,6 @@ use App\Models\Category;
 use App\Models\Label;
 use App\Models\Ticket;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\UploadedFile;
 
 use function Pest\Laravel\get;
@@ -103,13 +102,8 @@ it('is not allowed to reach this endpoint when logged in as default user', funct
 
     $ticket = Ticket::factory()->create();
 
-    get(route('tickets.edit', $ticket))
+    Livewire::test(EditTicket::class, ['ticket' => $ticket])
         ->assertForbidden();
-
-    // TODO: Not working for some reason
-    // Livewire::test(EditTicket::class, ['ticket' => $ticket])
-    //     ->call('save');
-    // })->throws(AuthorizationException::class, 'This action is unauthorized.');
 });
 
 it('is allowed to reach this endpoint as agent when assigned to the ticket', function () {
