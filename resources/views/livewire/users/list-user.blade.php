@@ -18,7 +18,8 @@
                         <td class="flex justify-end gap-4 px-6 py-4 font-medium">
                             <a href="{{ route('users.edit', $user) }}"
                                 class="rounded-full bg-blue-400 px-4 py-1 text-blue-800 hover:bg-blue-500 hover:text-white">Edit</a>
-                            <button onclick="confirm('Are you sure?') || event.stopImmediatePropagation()"
+                            <button
+                                wire:confirm.prompt="Are you sure you want to delete this user?\n\nType DELETE to confirm|DELETE"
                                 wire:click="deleteUser({{ $user }})"
                                 class="rounded-full bg-red-400 px-4 py-1 text-red-800 hover:bg-red-500 hover:text-white">Delete</button>
                         </td>
