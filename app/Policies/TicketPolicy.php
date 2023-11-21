@@ -23,11 +23,15 @@ class TicketPolicy
 
     public function view(User $user, Ticket $ticket): bool
     {
-        if ($user->hasRole('Agent') && ! $ticket->agent->is($user)) {
-            return false;
+        if ($user->hasRole('Agent') && $ticket->agent->is($user)) {
+            return true;
         }
 
-        return true;
+        if ($ticket->user->is($user)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function create(User $user): bool

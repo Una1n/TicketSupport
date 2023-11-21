@@ -4,6 +4,9 @@ use App\Livewire\Tickets\ShowTicket;
 use App\Models\Category;
 use App\Models\Label;
 use App\Models\Ticket;
+use App\Models\User;
+use Spatie\Permission\Models\Role;
+
 use function Pest\Laravel\get;
 
 beforeEach(function () {
@@ -18,7 +21,7 @@ it('has component on show page', function () {
         ->assertOk();
 });
 
-it('can show a ticket', function () {
+it('can show a ticket for an admin', function () {
     $ticket = Ticket::factory()->create();
     $category = Category::all()->random();
     $label = Label::all()->random();
@@ -33,4 +36,27 @@ it('can show a ticket', function () {
         ->assertSee($ticket->description)
         ->assertSee($category->name)
         ->assertSee($label->name);
+});
+
+it('is not allowed to show tickets from other users', function () {
+    $user = User::factory()->create();
+    login($user);
+
+    $ticket = Ticket::factory()->create();
+
+    Livewire::test(ShowTicket::class, ['ticket' => $ticket])
+        ->assertForbidden();
+});
+
+it('is not allowed to show tickets from other agents', function () {
+    $user = User::factory()->create();
+    $user->assignRole(
+        Role::whereName('Agent')->first()
+    );
+    login($user);
+
+    $ticket = Ticket::factory()->create();
+
+    Livewire::test(ShowTicket::class, ['ticket' => $ticket])
+        ->assertForbidden();
 });
