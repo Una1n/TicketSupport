@@ -16,7 +16,7 @@ class ListUser extends Component
         $this->authorize('manage', $user);
 
         if (auth()->check() && auth()->user()->id == $user->id) {
-            session()->flash('status', 'You cannot delete your own account.');
+            abort(403, 'You cannot delete your own account');
         }
 
         $name = $user->name;
