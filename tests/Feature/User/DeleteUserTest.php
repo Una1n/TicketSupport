@@ -30,7 +30,6 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
         ->assertForbidden();
 });
 
-
 it('authenticated user cannot delete their own account', function () {
     $user = Auth::user();
 
@@ -39,6 +38,20 @@ it('authenticated user cannot delete their own account', function () {
         ->assertForbidden();
 
     // Check user
-    $this->assertDatabaseHas('users', ['id' => auth()->id()]);
+    $this->assertDatabaseHas('users', ['id' => $user->id]);
 });
 
+it('deletes associated tickets when user is deleted', function () {
+    $user = User::factory()->hasTickets(1)->create();
+    $ticketID = $user->tickets()->first()->id;
+
+    expect(User::find($user->id))->not->toBeNull();
+    expect($ticketID)->not->toBeNull();
+
+    $this->assertDatabaseHas('tickets', ['id' => $ticketID]);
+
+    User::find($user->id)->delete();
+
+    expect(User::find($user->id))->toBeNull();
+   $this->assertDatabaseMissing('tickets', ['id' => $ticketID]);
+});
