@@ -2,6 +2,7 @@
 
 use App\Livewire\Users\ListUser;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Livewire;
 
 beforeEach(function () {
@@ -29,11 +30,15 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
         ->assertForbidden();
 });
 
+
 it('authenticated user cannot delete their own account', function () {
-    $user = User::factory()->create();
-    login($user);
+    $user = Auth::user();
 
     Livewire::test(ListUser::class)
         ->call('deleteUser', $user)
         ->assertForbidden();
+
+    // Check user
+    $this->assertDatabaseHas('users', ['id' => auth()->id()]);
 });
+
