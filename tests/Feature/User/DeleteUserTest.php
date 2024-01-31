@@ -4,6 +4,8 @@ use App\Livewire\Users\ListUser;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Livewire;
+use function Pest\Laravel\assertModelExists;
+use function Pest\Laravel\assertModelMissing;
 
 beforeEach(function () {
     login();
@@ -43,15 +45,15 @@ it('authenticated user cannot delete their own account', function () {
 
 it('deletes associated tickets when user is deleted', function () {
     $user = User::factory()->hasTickets(1)->create();
-    $ticketID = $user->tickets()->first()->id;
+    $ticket = $user->tickets()->first();
 
-    expect(User::find($user->id))->not->toBeNull();
-    expect($ticketID)->not->toBeNull();
+    expect($user)->not->toBeNull();
+    expect($ticket)->not->toBeNull();
 
-    $this->assertDatabaseHas('tickets', ['id' => $ticketID]);
+    assertModelExists($ticket);
 
-    User::find($user->id)->delete();
+    $user->delete();
 
-    expect(User::find($user->id))->toBeNull();
-   $this->assertDatabaseMissing('tickets', ['id' => $ticketID]);
+    expect($user->fresh())->toBeNull();
+    assertModelMissing($ticket);
 });
