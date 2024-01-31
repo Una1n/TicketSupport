@@ -4,6 +4,7 @@ use App\Livewire\Users\ListUser;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Livewire;
+
 use function Pest\Laravel\assertModelExists;
 use function Pest\Laravel\assertModelMissing;
 
@@ -39,8 +40,7 @@ it('authenticated user cannot delete their own account', function () {
         ->call('deleteUser', $user)
         ->assertForbidden();
 
-    // Check user
-    $this->assertDatabaseHas('users', ['id' => $user->id]);
+    assertModelExists($user);
 });
 
 it('deletes associated tickets when user is deleted', function () {
