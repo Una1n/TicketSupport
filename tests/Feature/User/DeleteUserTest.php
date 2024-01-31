@@ -2,6 +2,10 @@
 
 use App\Livewire\Users\ListUser;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Livewire;
+use function Pest\Laravel\assertModelExists;
+use function Pest\Laravel\assertModelMissing;
 
 beforeEach(function () {
     login();
@@ -26,4 +30,30 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
     Livewire::test(ListUser::class)
         ->call('deleteUser', $user)
         ->assertForbidden();
+});
+
+it('authenticated user cannot delete their own account', function () {
+    $user = Auth::user();
+
+    Livewire::test(ListUser::class)
+        ->call('deleteUser', $user)
+        ->assertForbidden();
+
+    // Check user
+    $this->assertDatabaseHas('users', ['id' => $user->id]);
+});
+
+it('deletes associated tickets when user is deleted', function () {
+    $user = User::factory()->hasTickets(1)->create();
+    $ticket = $user->tickets()->first();
+
+    expect($user)->not->toBeNull();
+    expect($ticket)->not->toBeNull();
+
+    assertModelExists($ticket);
+
+    $user->delete();
+
+    expect($user->fresh())->toBeNull();
+    assertModelMissing($ticket);
 });
