@@ -5,6 +5,7 @@ namespace App\Livewire\Labels;
 use App\Models\Label;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\Features\SupportRedirects\Redirector;
 
@@ -27,8 +28,7 @@ class EditLabel extends Component
         return [
             'name' => [
                 'required',
-                // Unique with exception doesn't work as Rule Attribute
-                'unique:labels,name,' . $this->label->id,
+                Rule::unique('labels')->ignore($this->label),
                 'min:3',
                 'max:255',
             ],
@@ -39,7 +39,6 @@ class EditLabel extends Component
     {
         $this->authorize('manage', $this->label);
 
-        // Still needed even though the docs say it runs automatically
         $this->validate();
 
         $this->label->update([

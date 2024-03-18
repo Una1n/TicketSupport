@@ -5,6 +5,7 @@ namespace App\Livewire\Categories;
 use App\Models\Category;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\Features\SupportRedirects\Redirector;
 
@@ -27,8 +28,7 @@ class EditCategory extends Component
         return [
             'name' => [
                 'required',
-                // Unique with exception doesn't work as Rule Attribute
-                'unique:categories,name,' . $this->category->id,
+                Rule::unique('categories')->ignore($this->category),
                 'min:3',
                 'max:255',
             ],
@@ -39,7 +39,6 @@ class EditCategory extends Component
     {
         $this->authorize('manage', $this->category);
 
-        // Still needed even though the docs say it runs automatically
         $this->validate();
 
         $this->category->update([
