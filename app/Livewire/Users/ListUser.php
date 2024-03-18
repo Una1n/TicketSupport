@@ -15,7 +15,7 @@ class ListUser extends Component
     {
         $this->authorize('manage', $user);
 
-        if (auth()->check() && auth()->user()->id == $user->id) {
+        if (auth()->check() && auth()->user() == $user) {
             abort(403, 'You cannot delete your own account');
         }
 
