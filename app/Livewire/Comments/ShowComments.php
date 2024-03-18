@@ -21,7 +21,6 @@ class ShowComments extends Component
     {
         $this->authorize('add comments', Comment::class);
 
-        // Still needed even though the docs say it runs automatically
         $this->validate();
 
         Comment::create([
@@ -36,9 +35,8 @@ class ShowComments extends Component
 
     public function render(): View
     {
-        $comments = Comment::query()
+        $comments = $this->ticket->comments()
             ->with('user')
-            ->where('ticket_id', '=', $this->ticket->id)
             ->latest()
             ->get();
 
