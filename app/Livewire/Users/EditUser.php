@@ -5,6 +5,7 @@ namespace App\Livewire\Users;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\Features\SupportRedirects\Redirector;
 use Spatie\Permission\Models\Role;
@@ -24,7 +25,7 @@ class EditUser extends Component
     {
         return [
             'name' => ['required', 'min:3', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $this->user->id],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($this->user)],
             'password' => ['sometimes', 'min:8', 'max:255'],
             'role' => ['required', 'exists:roles,id'],
         ];

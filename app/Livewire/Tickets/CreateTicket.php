@@ -26,7 +26,6 @@ class CreateTicket extends Component
         // Default to open status
         $this->form->status = 'open';
 
-        // Still needed even though the docs say it runs automatically
         $this->form->validate();
 
         $properties = $this->form->only(['title', 'status', 'description', 'priority']);

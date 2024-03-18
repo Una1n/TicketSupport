@@ -36,7 +36,6 @@ class EditTicket extends Component
     {
         $this->authorize('update', $this->ticket);
 
-        // Still needed even though the docs say it runs automatically
         $this->form->validate();
 
         $properties = $this->form->only(['title', 'status', 'description', 'priority']);
