@@ -18,7 +18,6 @@ class CreateCategory extends Component
     {
         $this->authorize('manage', Category::class);
 
-        // Still needed even though the docs say it runs automatically
         $this->validate();
 
         Category::create(

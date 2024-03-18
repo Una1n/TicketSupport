@@ -18,7 +18,6 @@ class CreateLabel extends Component
     {
         $this->authorize('manage', Label::class);
 
-        // Still needed even though the docs say it runs automatically
         $this->validate();
 
         Label::create(

@@ -28,7 +28,6 @@ class CreateUser extends Component
     {
         $this->authorize('manage', User::class);
 
-        // Still needed even though the docs say it runs automatically
         $this->validate();
 
         $user = User::create(
