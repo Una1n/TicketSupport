@@ -128,6 +128,18 @@ services:
         networks:
             - laravel
 
+    # Test Database Service
+    testmysql:
+        image: mysql/mysql-server:8.0
+        ports:
+            - "4307:3306"
+        environment:
+            MYSQL_DATABASE: ticketSupportDB
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_ROOT_HOST: "%"
+        networks:
+            - laravel
+
     # Mailpit Service
     mailpit:
         image: axllent/mailpit:latest
