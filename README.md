@@ -1,8 +1,7 @@
 # Ticket Support System Example Project using Laravel 10 + Livewire 3
 
 This is an example project for a Ticket Support System.
-Laravel 10 is used as framework with Livewire 3 (Beta) for the front-end.
-
+Laravel 10 is used as framework with Livewire 3 for the front-end.
 
 ## Glossary
 
@@ -12,6 +11,7 @@ then admins assign them to agents, and all parties can view ticket statuses.
 ## Database structure
 
 ### Every ticket needs to have:
+
 - title (required)
 - text description (required)
 - multiple files attached (optional)
@@ -21,11 +21,12 @@ then admins assign them to agents, and all parties can view ticket statuses.
 - multiple categories (belongsToMany relationship with categories table)
 - multiple labels (belongsToMany relationship with labels table)
 
-## Auth
+## Authentication
 
 There should be login and register functionality, they may come from starter kit like Laravel Breeze or other one of your choice.
 
 ### Every user needs to have one of three roles:
+
 - Regular user (default)
 - Agent
 - Administrator
@@ -49,6 +50,7 @@ They can edit tickets and add comments.
 ### Admin users: manage everything
 
 Admins see not only tickets table, but also can view more menu items:
+
 - Dashboard with the amount of tickets per status (total / open / closed, etc.)
 - Manage Labels, Categories, Priorities and Users, in CRUD way
 
@@ -63,22 +65,23 @@ After clicking on ticket, any user can get to its page, and there should be a fo
 
 When the new ticket is created, admin should get an email with the link to the Edit form of the ticket.
 
-- - - - -
+---
 
-## How to use without Docker/WSL
+## How to install and run without Docker (need php + composer + npm + mysql installed locally)
 
 - Clone the repository with `git clone`
-- Copy `.env.example` file to `.env` and edit database credentials there
+- Copy `.env.example` file to `.env` and edit database credentials
 - Run `composer install`
 - Run `npm install`
 - Run `php artisan key:generate`
 - Run `php artisan migrate --seed` (it has some seeded data for your testing)
 - Launch `http://localhost:8000/` in your browser
 - You can login as admin to manage data with default credentials `admin@admin.com` - `password`
+- Tests can be run by typing: `./vendor/bin/pest --parallel`
 
-## How to use with Docker + WSL
+## How to install and run with Docker + WSL (or any Linux distro)
 
-- Clone the repository with `git clone` in a WSL directory
+- Clone the repository with `git clone` in a WSL (or any Linux distro) directory
 - Copy `.env.example` file to `.env`
 - Run `./dock composer install`
 - Run `./dock npm install`
@@ -87,3 +90,4 @@ When the new ticket is created, admin should get an email with the link to the E
 - Run `./dock start`
 - Launch `http://localhost:8000/` in your browser
 - You can login as admin to manage data with default credentials `admin@admin.com` - `password`
+- Tests can be run by typing: `./dock pest --parallel`
