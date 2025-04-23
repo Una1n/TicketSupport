@@ -1,12 +1,19 @@
 <?php
 
+namespace Tests\Feature\Category;
+
 use App\Livewire\Categories\ListCategory;
 use App\Models\Category;
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
 
 use function Pest\Laravel\get;
+use function Pest\Laravel\seed;
+use function Pest\Livewire\livewire;
+use function Tests\login;
 
 beforeEach(function () {
+    seed(PermissionSeeder::class);
     login();
 });
 
@@ -19,7 +26,7 @@ it('has component on index page', function () {
 it('can show a list of categories', function () {
     $categories = Category::factory(3)->create();
 
-    Livewire::test(ListCategory::class)
+    livewire(ListCategory::class)
         ->assertSee([
             ...$categories->pluck('name')->toArray(),
         ]);

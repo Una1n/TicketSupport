@@ -1,12 +1,19 @@
 <?php
 
+namespace Tests\Feature\Category;
+
 use App\Livewire\Categories\EditCategory;
 use App\Models\Category;
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
 
 use function Pest\Laravel\get;
+use function Pest\Laravel\seed;
+use function Pest\Livewire\livewire;
+use function Tests\login;
 
 beforeEach(function () {
+    seed(PermissionSeeder::class);
     login();
 });
 
@@ -21,7 +28,7 @@ it('has component on edit page', function () {
 it('can edit a category', function () {
     $category = Category::factory()->create();
 
-    Livewire::test(EditCategory::class, ['category' => $category])
+    livewire(EditCategory::class, ['category' => $category])
         ->set('name', 'New Name')
         ->call('save');
 
@@ -33,7 +40,7 @@ it('can edit a category', function () {
 it('validates name is required', function () {
     $category = Category::factory()->create();
 
-    Livewire::test(EditCategory::class, ['category' => $category])
+    livewire(EditCategory::class, ['category' => $category])
         ->set('name', '')
         ->call('save')
         ->assertHasErrors('name');
@@ -43,7 +50,7 @@ it('validates name is unique', function () {
     Category::factory()->create(['name' => 'test']);
     $category = Category::factory()->create(['name' => 'categoryname']);
 
-    Livewire::test(EditCategory::class, ['category' => $category])
+    livewire(EditCategory::class, ['category' => $category])
         ->set('name', 'test')
         ->call('save')
         ->assertHasErrors('name');
@@ -57,7 +64,7 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
     get(route('categories.edit', $category))
         ->assertForbidden();
 
-    Livewire::test(EditCategory::class, ['category' => $category])
+    livewire(EditCategory::class, ['category' => $category])
         ->set('name', 'test')
         ->call('save')
         ->assertForbidden();

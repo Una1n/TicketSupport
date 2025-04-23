@@ -1,15 +1,22 @@
 <?php
 
+namespace Tests\Feature\Ticket;
+
 use App\Livewire\Tickets\ShowTicket;
 use App\Models\Category;
 use App\Models\Label;
 use App\Models\Ticket;
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
 use Spatie\Permission\Models\Role;
 
 use function Pest\Laravel\get;
+use function Pest\Laravel\seed;
+use function Pest\Livewire\livewire;
+use function Tests\login;
 
 beforeEach(function () {
+    seed(PermissionSeeder::class);
     login();
 });
 
@@ -28,7 +35,7 @@ it('can show a ticket for an admin', function () {
     $ticket->categories()->attach($category);
     $ticket->labels()->attach($label);
 
-    Livewire::test(ShowTicket::class, ['ticket' => $ticket])
+    livewire(ShowTicket::class, ['ticket' => $ticket])
         ->assertSee(ucfirst($ticket->title))
         ->assertSee(ucfirst($ticket->status))
         ->assertSee(ucfirst($ticket->priority))
@@ -44,7 +51,7 @@ it('is not allowed to show tickets from other users', function () {
 
     $ticket = Ticket::factory()->create();
 
-    Livewire::test(ShowTicket::class, ['ticket' => $ticket])
+    livewire(ShowTicket::class, ['ticket' => $ticket])
         ->assertForbidden();
 });
 
@@ -57,6 +64,6 @@ it('is not allowed to show tickets from other agents', function () {
 
     $ticket = Ticket::factory()->create();
 
-    Livewire::test(ShowTicket::class, ['ticket' => $ticket])
+    livewire(ShowTicket::class, ['ticket' => $ticket])
         ->assertForbidden();
 });

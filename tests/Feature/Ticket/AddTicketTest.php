@@ -1,14 +1,23 @@
 <?php
 
+namespace Tests\Feature\Ticket;
+
 use App\Livewire\Tickets\CreateTicket;
 use App\Mail\TicketCreated;
 use App\Models\Ticket;
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 use function Pest\Laravel\get;
+use function Pest\Laravel\seed;
+use function Pest\Livewire\livewire;
+use function Tests\login;
 
 beforeEach(function () {
+    seed(PermissionSeeder::class);
     login();
 });
 
@@ -19,7 +28,7 @@ it('has component on create page', function () {
 });
 
 it('can create a new ticket', function () {
-    Livewire::test(CreateTicket::class)
+    livewire(CreateTicket::class)
         ->set('form.title', 'Test Title')
         ->set('form.priority', 'low')
         ->set('form.description', 'This is a test description for ticket')
@@ -39,7 +48,7 @@ it('can upload files as attachments to the ticket', function () {
     $files[] = UploadedFile::fake()->image('test.png');
     $files[] = UploadedFile::fake()->image('test2.png');
 
-    Livewire::test(CreateTicket::class)
+    livewire(CreateTicket::class)
         ->set('form.title', 'Test Title')
         ->set('form.priority', 'low')
         ->set('form.description', 'This is a test description for ticket')
@@ -56,7 +65,7 @@ it('can upload files as attachments to the ticket', function () {
 it('sends an email to the admin with a link to assign an agent (edit ticket)', function () {
     Mail::fake();
 
-    Livewire::test(CreateTicket::class)
+    livewire(CreateTicket::class)
         ->set('form.title', 'Test Title')
         ->set('form.priority', 'low')
         ->set('form.description', 'This is a test description for ticket')
@@ -78,7 +87,7 @@ it('has specific content in the ticket created email', function () {
 });
 
 it('validates required fields', function (string $name, string $value) {
-    Livewire::test(CreateTicket::class)
+    livewire(CreateTicket::class)
         ->set($name, $value)
         ->call('save')
         ->assertHasErrors($name);
@@ -89,12 +98,12 @@ it('validates required fields', function (string $name, string $value) {
 ]);
 
 it('is not allowed to reach this endpoint when not logged in', function () {
-    Auth::logout();
+    auth()->logout();
 
     get(route('tickets.create'))
         ->assertRedirectToRoute('login');
 
-    Livewire::test(CreateTicket::class)
+    livewire(CreateTicket::class)
         ->set('form.title', 'Test Title')
         ->set('form.priority', 'low')
         ->set('form.description', 'This is a test description for ticket')
@@ -108,7 +117,7 @@ it('is allowed to reach this endpoint when logged in', function () {
     get(route('tickets.create'))
         ->assertOk();
 
-    Livewire::test(CreateTicket::class)
+    livewire(CreateTicket::class)
         ->set('form.title', 'Test Title')
         ->set('form.priority', 'low')
         ->set('form.description', 'This is a test description for ticket')

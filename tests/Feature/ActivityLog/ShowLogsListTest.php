@@ -1,13 +1,20 @@
 <?php
 
+namespace Tests\Feature\ActivityLog;
+
 use App\Livewire\ActivityLogs\ListLog;
 use App\Models\Ticket;
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
 use Spatie\Activitylog\Models\Activity;
 
 use function Pest\Laravel\get;
+use function Pest\Laravel\seed;
+use function Pest\Livewire\livewire;
+use function Tests\login;
 
 beforeEach(function () {
+    seed(PermissionSeeder::class);
     login();
 });
 
@@ -24,7 +31,7 @@ it('can show a list of logs', function () {
         ->whereIn('subject_id', $tickets->pluck('id'))
         ->get();
 
-    Livewire::test(ListLog::class)
+    livewire(ListLog::class)
         ->assertSee([
             ...$tickets->pluck('title')->toArray(),
             ...$logs->pluck('description')->toArray(),

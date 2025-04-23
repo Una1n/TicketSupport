@@ -1,19 +1,27 @@
 <?php
 
+namespace Tests\Feature\Ticket;
+
 use App\Livewire\Comments\ShowComments;
 use App\Models\Comment;
 use App\Models\Ticket;
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
 use Spatie\Permission\Models\Role;
 
+use function Pest\Laravel\seed;
+use function Pest\Livewire\livewire;
+use function Tests\login;
+
 beforeEach(function () {
+    seed(PermissionSeeder::class);
     login();
 });
 
 it('can create a new comment', function () {
     $ticket = Ticket::factory()->create();
 
-    Livewire::test(ShowComments::class, ['ticket' => $ticket])
+    livewire(ShowComments::class, ['ticket' => $ticket])
         ->set('newComment', 'Test Message for comment')
         ->call('save');
 
@@ -28,18 +36,18 @@ it('can create a new comment', function () {
 it('validates required message field', function () {
     $ticket = Ticket::factory()->create();
 
-    Livewire::test(ShowComments::class, ['ticket' => $ticket])
+    livewire(ShowComments::class, ['ticket' => $ticket])
         ->set('newComment', '')
         ->call('save')
         ->assertHasErrors('newComment');
 });
 
 it('is not allowed to add comments when not logged in', function () {
-    Auth::logout();
+    auth()->logout();
 
     $ticket = Ticket::factory()->create();
 
-    Livewire::test(ShowComments::class, ['ticket' => $ticket])
+    livewire(ShowComments::class, ['ticket' => $ticket])
         ->set('newComment', 'Test Message for comment')
         ->call('save')
         ->assertForbidden();
@@ -53,7 +61,7 @@ it('is allowed to add comments when logged in as regular user', function () {
 
     $ticket = Ticket::factory()->create();
 
-    Livewire::test(ShowComments::class, ['ticket' => $ticket])
+    livewire(ShowComments::class, ['ticket' => $ticket])
         ->set('newComment', 'Test Message for comment')
         ->call('save')
         ->assertStatus(200);

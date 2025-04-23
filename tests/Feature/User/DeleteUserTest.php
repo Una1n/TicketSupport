@@ -1,14 +1,20 @@
 <?php
 
+namespace Tests\Feature\User;
+
 use App\Livewire\Users\ListUser;
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Livewire;
 
 use function Pest\Laravel\assertModelExists;
 use function Pest\Laravel\assertModelMissing;
+use function Pest\Laravel\seed;
+use function Pest\Livewire\livewire;
+use function Tests\login;
 
 beforeEach(function () {
+    seed(PermissionSeeder::class);
     login();
 });
 
@@ -16,7 +22,7 @@ it('can delete a user', function () {
     $user = User::factory()->create();
     $userID = $user->id;
 
-    Livewire::test(ListUser::class)
+    livewire(ListUser::class)
         ->call('deleteUser', $user);
 
     $user = User::whereId($userID)->first();
@@ -28,7 +34,7 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
 
     $user = User::factory()->create();
 
-    Livewire::test(ListUser::class)
+    livewire(ListUser::class)
         ->call('deleteUser', $user)
         ->assertForbidden();
 });
@@ -36,7 +42,7 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
 it('authenticated user cannot delete their own account', function () {
     $user = Auth::user();
 
-    Livewire::test(ListUser::class)
+    livewire(ListUser::class)
         ->call('deleteUser', $user)
         ->assertForbidden();
 

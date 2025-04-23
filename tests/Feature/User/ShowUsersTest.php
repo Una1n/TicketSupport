@@ -1,11 +1,18 @@
 <?php
 
+namespace Tests\Feature\User;
+
 use App\Livewire\Users\ListUser;
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
 
 use function Pest\Laravel\get;
+use function Pest\Laravel\seed;
+use function Pest\Livewire\livewire;
+use function Tests\login;
 
 beforeEach(function () {
+    seed(PermissionSeeder::class);
     login();
 });
 
@@ -18,7 +25,7 @@ it('has component on index page', function () {
 it('can show a list of users', function () {
     $users = User::factory(3)->create();
 
-    Livewire::test(ListUser::class)
+    livewire(ListUser::class)
         ->assertSee([
             ...$users->pluck('name')->toArray(),
         ]);

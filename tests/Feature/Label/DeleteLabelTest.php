@@ -1,10 +1,18 @@
 <?php
 
+namespace Tests\Feature\Label;
+
 use App\Livewire\Labels\ListLabel;
 use App\Models\Label;
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
+
+use function Pest\Laravel\seed;
+use function Pest\Livewire\livewire;
+use function Tests\login;
 
 beforeEach(function () {
+    seed(PermissionSeeder::class);
     login();
 });
 
@@ -12,7 +20,7 @@ it('can delete a label', function () {
     $label = Label::factory()->create();
     $labelID = $label->id;
 
-    Livewire::test(ListLabel::class)
+    livewire(ListLabel::class)
         ->call('deleteLabel', $label);
 
     $label = Label::whereId($labelID)->first();
@@ -24,7 +32,7 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
 
     $label = Label::factory()->create();
 
-    Livewire::test(ListLabel::class)
+    livewire(ListLabel::class)
         ->call('deleteLabel', $label)
         ->assertForbidden();
 });

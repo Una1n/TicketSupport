@@ -13,7 +13,7 @@ use function Pest\Livewire\livewire;
 use function Tests\login;
 
 beforeEach(function () {
-    seed([PermissionSeeder::class]);
+    seed(PermissionSeeder::class);
     login();
 });
 
@@ -33,7 +33,7 @@ it('can create a new regular user', function () {
         ->set('role', $role->id)
         ->call('save');
 
-    $user = User::whereName('Henk Stubbe')->first();
+    $user = User::where('name', 'Henk Stubbe')->first();
     expect($user)->not->toBeNull();
     expect($user->roles)->toHaveCount(1);
 });

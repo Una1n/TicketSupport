@@ -1,12 +1,19 @@
 <?php
 
+namespace Tests\Feature\Label;
+
 use App\Livewire\Labels\ListLabel;
 use App\Models\Label;
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
 
 use function Pest\Laravel\get;
+use function Pest\Laravel\seed;
+use function Pest\Livewire\livewire;
+use function Tests\login;
 
 beforeEach(function () {
+    seed(PermissionSeeder::class);
     login();
 });
 
@@ -19,7 +26,7 @@ it('has component on index page', function () {
 it('can show a list of labels', function () {
     $labels = Label::factory(3)->create();
 
-    Livewire::test(ListLabel::class)
+    livewire(ListLabel::class)
         ->assertSee([
             ...$labels->pluck('name')->toArray(),
         ]);
