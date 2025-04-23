@@ -4,12 +4,10 @@ includes:
 parameters:
     ignoreErrors:
         - '#MustVerifyEmail#'
-    #    - '#with no value type specified in iterable type array\.#'
-    #    - '#return type has no value type specified in iterable type array\.#'
+        - identifier: missingType.generics
 
     paths:
         - app/
 
     # Level 9 is the highest level
-    level: 6
-    checkGenericClassInNonGenericObjectType: false
+    level: 7
