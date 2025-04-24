@@ -7,6 +7,8 @@ use App\Models\Label;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 
+use function Pest\Laravel\assertModelExists;
+use function Pest\Laravel\assertModelMissing;
 use function Pest\Laravel\seed;
 use function Pest\Livewire\livewire;
 use function Tests\login;
@@ -18,13 +20,11 @@ beforeEach(function () {
 
 it('can delete a label', function () {
     $label = Label::factory()->create();
-    $labelID = $label->id;
 
     livewire(ListLabel::class)
         ->call('deleteLabel', $label);
 
-    $label = Label::whereId($labelID)->first();
-    expect($label)->toBeNull();
+    assertModelMissing($label);
 });
 
 it('is only allowed to reach this endpoint when logged in as admin', function () {
@@ -35,4 +35,6 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
     livewire(ListLabel::class)
         ->call('deleteLabel', $label)
         ->assertForbidden();
+
+    assertModelExists($label);
 });
