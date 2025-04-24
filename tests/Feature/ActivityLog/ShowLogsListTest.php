@@ -27,7 +27,7 @@ it('has component on index page', function () {
 it('can show a list of logs', function () {
     $tickets = Ticket::factory(3)->create();
 
-    $logs = Activity::where('subject_type', '=', Ticket::class)
+    $logs = Activity::whereSubjectType(Ticket::class)
         ->whereIn('subject_id', $tickets->pluck('id'))
         ->get();
 
