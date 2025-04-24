@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "04198e91530f773b08bc597fc8ae086c",
+    "content-hash": "48916860d1bae21a97c2e5ee40427c35",
     "packages": [
         {
             "name": "brick/math",
@@ -1198,16 +1198,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v11.44.2",
+            "version": "v11.44.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "f85216c82cbd38b66d67ebd20ea762cb3751a4b4"
+                "reference": "819555ccc7e88ea92945ea785ef9f0fa9b6d4931"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/f85216c82cbd38b66d67ebd20ea762cb3751a4b4",
-                "reference": "f85216c82cbd38b66d67ebd20ea762cb3751a4b4",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/819555ccc7e88ea92945ea785ef9f0fa9b6d4931",
+                "reference": "819555ccc7e88ea92945ea785ef9f0fa9b6d4931",
                 "shasum": ""
             },
             "require": {
@@ -1409,7 +1409,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-03-12T14:34:30+00:00"
+            "time": "2025-04-24T13:59:11+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -3648,16 +3648,16 @@
         },
         {
             "name": "spatie/image",
-            "version": "3.8.1",
+            "version": "3.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/image.git",
-                "reference": "80e907bc64fbb7ce87346e97c14534d7dad5d559"
+                "reference": "381f6363a07c3ea1cd32636535afde40af1c4744"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/image/zipball/80e907bc64fbb7ce87346e97c14534d7dad5d559",
-                "reference": "80e907bc64fbb7ce87346e97c14534d7dad5d559",
+                "url": "https://api.github.com/repos/spatie/image/zipball/381f6363a07c3ea1cd32636535afde40af1c4744",
+                "reference": "381f6363a07c3ea1cd32636535afde40af1c4744",
                 "shasum": ""
             },
             "require": {
@@ -3705,7 +3705,7 @@
                 "spatie"
             ],
             "support": {
-                "source": "https://github.com/spatie/image/tree/3.8.1"
+                "source": "https://github.com/spatie/image/tree/3.8.2"
             },
             "funding": [
                 {
@@ -3717,7 +3717,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-27T13:01:00+00:00"
+            "time": "2025-04-24T08:28:20+00:00"
         },
         {
             "name": "spatie/image-optimizer",
