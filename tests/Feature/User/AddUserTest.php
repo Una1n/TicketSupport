@@ -24,7 +24,7 @@ it('has component on create page', function () {
 });
 
 it('can create a new regular user', function () {
-    $role = Role::where('name', 'Regular')->first();
+    $role = Role::whereName('Regular')->first();
 
     livewire(CreateUser::class)
         ->set('name', 'Henk Stubbe')
@@ -33,9 +33,10 @@ it('can create a new regular user', function () {
         ->set('role', $role->id)
         ->call('save');
 
-    $user = User::where('name', 'Henk Stubbe')->first();
+    $user = User::whereName('Henk Stubbe')->first();
     expect($user)->not->toBeNull();
     expect($user->roles)->toHaveCount(1);
+    expect($user->roles->first()->name)->toBe('Regular');
 });
 
 it('validates required fields', function (string $name, string $value) {

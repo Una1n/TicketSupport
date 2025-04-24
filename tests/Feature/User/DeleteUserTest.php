@@ -5,7 +5,6 @@ namespace Tests\Feature\User;
 use App\Livewire\Users\ListUser;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
-use Illuminate\Support\Facades\Auth;
 
 use function Pest\Laravel\assertModelExists;
 use function Pest\Laravel\assertModelMissing;
@@ -20,13 +19,11 @@ beforeEach(function () {
 
 it('can delete a user', function () {
     $user = User::factory()->create();
-    $userID = $user->id;
 
     livewire(ListUser::class)
         ->call('deleteUser', $user);
 
-    $user = User::whereId($userID)->first();
-    expect($user)->toBeNull();
+    assertModelMissing($user);
 });
 
 it('is only allowed to reach this endpoint when logged in as admin', function () {
@@ -40,7 +37,7 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
 });
 
 it('authenticated user cannot delete their own account', function () {
-    $user = Auth::user();
+    $user = auth()->user();
 
     livewire(ListUser::class)
         ->call('deleteUser', $user)
@@ -56,10 +53,8 @@ it('deletes associated tickets when user is deleted', function () {
     expect($user)->not->toBeNull();
     expect($ticket)->not->toBeNull();
 
-    assertModelExists($ticket);
-
     $user->delete();
 
-    expect($user->fresh())->toBeNull();
+    assertModelMissing($user);
     assertModelMissing($ticket);
 });

@@ -26,7 +26,7 @@ it('has component on edit page', function () {
 });
 
 it('can edit a user', function () {
-    $agentRole = Role::where('name', 'Agent')->first();
+    $agentRole = Role::whereName('Agent')->first();
     $user = User::factory()->create();
 
     livewire(EditUser::class, ['user' => $user])

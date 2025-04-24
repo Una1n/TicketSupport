@@ -6,6 +6,8 @@ use App\Models\User;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertGuest;
+use function Pest\Laravel\assertModelExists;
+use function Pest\Laravel\assertModelMissing;
 
 it('profile page is displayed', function () {
     /** @var \Illuminate\Contracts\Auth\Authenticatable */
@@ -66,7 +68,7 @@ it('user can delete their account', function () {
         ->assertRedirect('/');
 
     assertGuest();
-    expect($user->fresh())->toBeNull();
+    assertModelMissing($user);
 });
 
 it('correct password must be provided to delete account', function () {
@@ -82,5 +84,5 @@ it('correct password must be provided to delete account', function () {
         ->assertSessionHasErrorsIn('userDeletion', 'password')
         ->assertRedirect('/profile');
 
-    expect($user->fresh())->not->toBeNull();
+    assertModelExists($user);
 });
