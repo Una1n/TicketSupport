@@ -16,8 +16,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Ticket extends Model implements HasMedia
 {
     use HasFactory;
-    use LogsActivity;
     use InteractsWithMedia;
+    use LogsActivity;
 
     /** Fillables */
     protected $fillable = [
