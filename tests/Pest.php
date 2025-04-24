@@ -48,8 +48,7 @@ uses(
 function login($user = null): void
 {
     if (! $user) {
-        $user = User::factory()->create(['name' => 'Jerry']);
-        $user->assignRole('Admin');
+        $user = User::factory()->admin()->create(['name' => 'Jerry']);
     }
 
     actingAs($user);

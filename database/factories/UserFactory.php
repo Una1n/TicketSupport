@@ -39,11 +39,29 @@ class UserFactory extends Factory
         ]);
     }
 
+    public function agent(): self
+    {
+        return $this->afterCreating(function (User $user) {
+            $role = Role::whereName('Agent')->first();
+            $user->assignRole($role);
+        });
+    }
+
+    public function admin(): self
+    {
+        return $this->afterCreating(function (User $user) {
+            $role = Role::whereName('Admin')->first();
+            $user->assignRole($role);
+        });
+    }
+
     public function configure(): static
     {
         return $this->afterCreating(function (User $user) {
-            $role = Role::whereName('Regular')->first();
-            $user->assignRole($role);
+            if (! $user->hasAnyRole()) {
+                $role = Role::whereName('Regular')->first();
+                $user->assignRole($role);
+            }
         });
     }
 }

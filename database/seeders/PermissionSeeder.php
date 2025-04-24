@@ -28,11 +28,10 @@ class PermissionSeeder extends Seeder
 
         $adminRole = Role::create(['name' => 'Admin']);
         $adminRole->givePermissionTo($permissions);
-        $admin = User::factory()->create([
+        User::factory()->admin()->create([
             'name' => 'Jerry',
             'email' => 'admin@admin.com',
         ]);
-        $admin->assignRole($adminRole);
 
         $agentRole = Role::create(['name' => 'Agent']);
         $agentRole->givePermissionTo([
