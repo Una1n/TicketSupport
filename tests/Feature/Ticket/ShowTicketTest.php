@@ -3,12 +3,9 @@
 namespace Tests\Feature\Ticket;
 
 use App\Livewire\Tickets\ShowTicket;
-use App\Models\Category;
-use App\Models\Label;
 use App\Models\Ticket;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
-use Spatie\Permission\Models\Role;
 
 use function Pest\Laravel\get;
 use function Pest\Laravel\seed;
@@ -29,11 +26,9 @@ it('has component on show page', function () {
 });
 
 it('can show a ticket for an admin', function () {
-    $ticket = Ticket::factory()->create();
-    $category = Category::all()->random();
-    $label = Label::all()->random();
-    $ticket->categories()->attach($category);
-    $ticket->labels()->attach($label);
+    $ticket = Ticket::factory()->categories()->labels()->create();
+    $category = $ticket->categories->first();
+    $label = $ticket->labels->first();
 
     livewire(ShowTicket::class, ['ticket' => $ticket])
         ->assertSee(ucfirst($ticket->title))
@@ -56,13 +51,11 @@ it('is not allowed to show tickets from other users', function () {
 });
 
 it('is not allowed to show tickets from other agents', function () {
-    $user = User::factory()->create();
-    $user->assignRole(
-        Role::whereName('Agent')->first()
-    );
-    login($user);
+    $agent = User::factory()->agent()->create();
+    login($agent);
 
-    $ticket = Ticket::factory()->create();
+    $otherAgent = User::factory()->agent()->create();
+    $ticket = Ticket::factory()->agent($otherAgent)->create();
 
     livewire(ShowTicket::class, ['ticket' => $ticket])
         ->assertForbidden();

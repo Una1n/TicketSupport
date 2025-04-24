@@ -3,7 +3,6 @@
 namespace Tests\Feature\Ticket;
 
 use App\Livewire\Comments\ShowComments;
-use App\Models\Comment;
 use App\Models\Ticket;
 use Database\Seeders\PermissionSeeder;
 
@@ -25,13 +24,10 @@ it('has component on show ticket page', function () {
 });
 
 it('can show comments for a ticket', function () {
-    $ticket = Ticket::factory()->create();
-    $comments = Comment::factory(5)->create([
-        'ticket_id' => $ticket->id,
-    ]);
+    $ticket = Ticket::factory()->hasComments(5)->create();
 
     livewire(ShowComments::class, ['ticket' => $ticket])
         ->assertSee([
-            ...$comments->pluck('message')->toArray(),
+            ...$ticket->comments->pluck('message')->toArray(),
         ]);
 });

@@ -81,16 +81,10 @@ it('can show a list of tickets filtered by status', function () {
 
 it('can show a list of tickets filtered by category', function () {
     $paymentCategory = Category::whereName('Payment')->first();
-    $ticketsWithPaymentCategory = Ticket::factory(4)->create();
-    foreach ($ticketsWithPaymentCategory as $ticket) {
-        $ticket->categories()->attach($paymentCategory->id);
-    }
+    $ticketsWithPaymentCategory = Ticket::factory(4)->categories([$paymentCategory])->create();
 
     $shippingCategory = Category::whereName('Shipping')->first();
-    $ticketsWithOtherCategory = Ticket::factory(3)->create();
-    foreach ($ticketsWithOtherCategory as $ticket) {
-        $ticket->categories()->attach($shippingCategory->id);
-    }
+    $ticketsWithOtherCategory = Ticket::factory(3)->categories([$shippingCategory])->create();
 
     livewire(ListTicket::class)
         ->set('categoryFilter', $paymentCategory->id)

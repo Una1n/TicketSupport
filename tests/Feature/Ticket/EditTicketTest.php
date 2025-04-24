@@ -31,19 +31,12 @@ it('has component on edit page', function () {
 
 it('can edit a ticket', function () {
     $user = User::factory()->create();
-    $ticket = Ticket::factory()->create([
+    $ticket = Ticket::factory()->recycle($user)->create([
         'title' => 'Test Title',
         'priority' => 'low',
         'description' => 'Test Description for ticket',
         'status' => 'open',
-        'user_id' => $user->id,
     ]);
-
-    $category = Category::whereName('Uncategorized')->first();
-    $ticket->categories()->attach($category);
-
-    $label = Label::whereName('Bug')->first();
-    $ticket->labels()->attach($label);
 
     $newCategory = Category::whereName('Profile')->first();
     $newLabel = Label::whereName('Question')->first();
@@ -115,21 +108,17 @@ it('is not allowed to reach this endpoint when logged in as default user', funct
 });
 
 it('is allowed to reach this endpoint as agent when assigned to the ticket', function () {
-    $user = User::factory()->create();
-    $user->assignRole('Agent');
+    $user = User::factory()->agent()->create();
     login($user);
 
-    $ticket = Ticket::factory()->create([
-        'agent_id' => $user->id,
-    ]);
+    $ticket = Ticket::factory()->agent($user)->create();
 
     get(route('tickets.edit', $ticket))
         ->assertOk();
 });
 
 it('is not allowed to reach this endpoint as agent when not assigned to the ticket', function () {
-    $user = User::factory()->create();
-    $user->assignRole('Agent');
+    $user = User::factory()->agent()->create();
     login($user);
 
     $ticket = Ticket::factory()->create();
@@ -139,8 +128,7 @@ it('is not allowed to reach this endpoint as agent when not assigned to the tick
 });
 
 it('can assign an agent to the ticket as admin', function () {
-    $user = User::factory()->create();
-    $user->assignRole('Agent');
+    $user = User::factory()->agent()->create();
     $ticket = Ticket::factory()->create();
 
     livewire(EditTicket::class, ['ticket' => $ticket])
