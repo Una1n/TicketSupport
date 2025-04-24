@@ -41,7 +41,7 @@ class TicketPolicy
 
     public function update(User $user, Ticket $ticket): bool
     {
-        if ($ticket->agent_id === $user->id) {
+        if ($ticket->agent !== null && $ticket->agent->is($user)) {
             return $user->hasPermissionTo('edit tickets');
         }
 
