@@ -6,7 +6,7 @@
                     class="mb-1 block text-sm font-medium text-gray-700 after:ml-0.5 after:text-red-500 after:content-['*']">
                     New Comment
                 </label>
-                <textarea id="newComment" wire:model="newComment" rows="5" @class([
+                <textarea id="newComment" wire:model.live="newComment" rows="5" @class([
                     'block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50',
                     'border-red-300 focus:border-red-300 focus:ring-red-200' => $errors->has(
                         'newComment'),
