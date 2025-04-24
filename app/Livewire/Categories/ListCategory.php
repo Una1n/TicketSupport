@@ -17,7 +17,7 @@ class ListCategory extends Component
 
         $name = $category->name;
 
-        // Detach tickets
+        // Remove category from tickets
         $category->tickets()->detach();
 
         $category->delete();

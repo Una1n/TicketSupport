@@ -17,6 +17,8 @@ use Mail;
 class CreateTicket extends Component
 {
     use WithFileUploads;
+
+    // Properties (pint removes the empty line between trait and properties unless we comment)
     public TicketForm $form;
 
     public function save(): Redirector|RedirectResponse

@@ -16,6 +16,8 @@ use Livewire\Features\SupportRedirects\Redirector;
 class EditTicket extends Component
 {
     use WithFileUploads;
+
+    // Properties
     public Ticket $ticket;
     public TicketForm $form;
 

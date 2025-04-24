@@ -25,7 +25,12 @@ class EditUser extends Component
     {
         return [
             'name' => ['required', 'min:3', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($this->user)],
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($this->user),
+            ],
             'password' => ['sometimes', 'min:8', 'max:255'],
             'role' => ['required', 'exists:roles,id'],
         ];
