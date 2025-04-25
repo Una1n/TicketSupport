@@ -15,14 +15,13 @@ class TicketCreated extends Mailable
 
     public function __construct(
         public Ticket $ticket
-    ) {
-    }
+    ) {}
 
     public function envelope(): Envelope
     {
         return new Envelope(
             subject: 'Ticket Created',
-            to: 'admin@admin.com'
+            to: ['admin@admin.com']
         );
     }
 

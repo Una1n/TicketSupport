@@ -1,8 +1,11 @@
 <?php
 
+namespace Tests;
+
 use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+
 use function Pest\Laravel\actingAs;
-use Tests\TestCase;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,8 +18,9 @@ use Tests\TestCase;
 |
 */
 
-uses(TestCase::class,
-    Illuminate\Foundation\Testing\LazilyRefreshDatabase::class
+uses(
+    TestCase::class,
+    LazilyRefreshDatabase::class
 )->in('Feature');
 
 /*
@@ -29,10 +33,6 @@ uses(TestCase::class,
 | to assert different things. Of course, you may extend the Expectation API at any time.
 |
 */
-
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -48,8 +48,7 @@ expect()->extend('toBeOne', function () {
 function login($user = null): void
 {
     if (! $user) {
-        $user = User::factory()->create(['name' => 'Jerry']);
-        $user->assignRole('Admin');
+        $user = User::factory()->admin()->create(['name' => 'Jerry']);
     }
 
     actingAs($user);

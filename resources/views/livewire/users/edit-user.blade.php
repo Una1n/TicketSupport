@@ -14,7 +14,7 @@
         <div>
             <label for="name"
                 class="mb-1 block text-sm font-medium text-gray-700 after:ml-0.5 after:text-red-500 after:content-['*']">Name</label>
-            <input type="text" id="name" wire:model="name" @class([
+            <input type="text" id="name" wire:model.live="name" @class([
                 'block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50',
                 'border-red-300 focus:border-red-300 focus:ring-red-200' => $errors->has(
                     'name'),
@@ -26,7 +26,7 @@
         <div>
             <label for="email"
                 class="mb-1 block text-sm font-medium text-gray-700 after:ml-0.5 after:text-red-500 after:content-['*']">Email</label>
-            <input type="text" id="email" wire:model="email" @class([
+            <input type="text" id="email" wire:model.live="email" @class([
                 'block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50',
                 'border-red-300 focus:border-red-300 focus:ring-red-200' => $errors->has(
                     'email'),
@@ -40,7 +40,7 @@
             <label for="password" class="mb-1 block text-sm font-medium text-gray-700">
                 New Password
             </label>
-            <input type="password" id="password" wire:model="password" @class([
+            <input type="password" id="password" wire:model.live="password" @class([
                 'block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-400 focus:ring focus:ring-blue-200 focus:ring-opacity-50',
                 'border-red-300 focus:border-red-300 focus:ring-red-200' => $errors->has(
                     'password'),

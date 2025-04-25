@@ -1,11 +1,19 @@
 <?php
 
+namespace Tests\Feature\ActivityLog;
+
 use App\Livewire\ActivityLogs\ShowLog;
 use App\Models\Ticket;
-use function Pest\Laravel\get;
+use Database\Seeders\PermissionSeeder;
 use Spatie\Activitylog\Models\Activity;
 
+use function Pest\Laravel\get;
+use function Pest\Laravel\seed;
+use function Pest\Livewire\livewire;
+use function Tests\login;
+
 beforeEach(function () {
+    seed(PermissionSeeder::class);
     login();
 });
 
@@ -20,11 +28,11 @@ it('has component on show page', function () {
 it('can show a log', function () {
     $ticket = Ticket::factory()->create();
 
-    $log = Activity::where('subject_type', '=', Ticket::class)
-        ->where('subject_id', '=', $ticket->id)
+    $log = Activity::whereSubjectType(Ticket::class)
+        ->whereSubjectId($ticket->id)
         ->first();
 
-    Livewire::test(ShowLog::class, ['log' => $log])
+    livewire(ShowLog::class, ['log' => $log])
         ->assertSee(ucfirst($ticket->title))
         ->assertSee(ucfirst($log->description))
         ->assertSee($log->created_at->diffForHumans())

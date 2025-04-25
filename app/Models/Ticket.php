@@ -16,8 +16,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Ticket extends Model implements HasMedia
 {
     use HasFactory;
-    use LogsActivity;
     use InteractsWithMedia;
+    use LogsActivity;
 
     /** Fillables */
     protected $fillable = [
@@ -76,17 +76,17 @@ class Ticket extends Model implements HasMedia
 
     public function scopeSearch(Builder $query, string $search): void
     {
-        $query->where('title', 'like', '%' . $search . '%')
-            ->orWhere('priority', 'like', '%' . $search . '%')
-            ->orWhere('status', 'like', '%' . $search . '%')
+        $query->whereLike('title', '%' . $search . '%')
+            ->orWhereLike('priority', '%' . $search . '%')
+            ->orWhereLike('status', '%' . $search . '%')
             ->orWhereHas('user', function (Builder $query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%');
+                $query->whereLike('name', '%' . $search . '%');
             })
             ->orWhereHas('categories', function (Builder $query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%');
+                $query->whereLike('name', '%' . $search . '%');
             })
             ->orWhereHas('labels', function (Builder $query) use ($search) {
-                $query->where('name', 'like', '%' . $search . '%');
+                $query->whereLike('name', '%' . $search . '%');
             });
     }
 

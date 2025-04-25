@@ -1,15 +1,23 @@
 <?php
 
+namespace Tests\Feature\Ticket;
+
 use App\Livewire\Tickets\EditTicket;
 use App\Models\Category;
 use App\Models\Label;
 use App\Models\Ticket;
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 use function Pest\Laravel\get;
+use function Pest\Laravel\seed;
+use function Pest\Livewire\livewire;
+use function Tests\login;
 
 beforeEach(function () {
+    seed(PermissionSeeder::class);
     login();
 });
 
@@ -23,23 +31,16 @@ it('has component on edit page', function () {
 
 it('can edit a ticket', function () {
     $user = User::factory()->create();
-    $ticket = Ticket::factory()->create([
+    $ticket = Ticket::factory()->recycle($user)->create([
         'title' => 'Test Title',
         'priority' => 'low',
         'description' => 'Test Description for ticket',
         'status' => 'open',
-        'user_id' => $user->id,
     ]);
-
-    $category = Category::whereName('Uncategorized')->first();
-    $ticket->categories()->attach($category);
-
-    $label = Label::whereName('Bug')->first();
-    $ticket->labels()->attach($label);
 
     $newCategory = Category::whereName('Profile')->first();
     $newLabel = Label::whereName('Question')->first();
-    Livewire::test(EditTicket::class, ['ticket' => $ticket])
+    livewire(EditTicket::class, ['ticket' => $ticket])
         ->set('form.title', 'New Title')
         ->set('form.priority', 'high')
         ->set('form.status', 'closed')
@@ -69,7 +70,7 @@ it('can upload attachments for the edited ticket', function () {
     $files[] = UploadedFile::fake()->image('test.png');
     $files[] = UploadedFile::fake()->image('test2.png');
 
-    Livewire::test(EditTicket::class, ['ticket' => $ticket])
+    livewire(EditTicket::class, ['ticket' => $ticket])
         ->set('form.title', 'New Title')
         ->set('form.priority', 'high')
         ->set('form.status', 'closed')
@@ -87,7 +88,7 @@ it('can upload attachments for the edited ticket', function () {
 it('validates required fields', function (string $name, string $value) {
     $ticket = Ticket::factory()->create();
 
-    Livewire::test(EditTicket::class, ['ticket' => $ticket])
+    livewire(EditTicket::class, ['ticket' => $ticket])
         ->set($name, $value)
         ->call('save')
         ->assertHasErrors($name);
@@ -102,26 +103,22 @@ it('is not allowed to reach this endpoint when logged in as default user', funct
 
     $ticket = Ticket::factory()->create();
 
-    Livewire::test(EditTicket::class, ['ticket' => $ticket])
+    livewire(EditTicket::class, ['ticket' => $ticket])
         ->assertForbidden();
 });
 
 it('is allowed to reach this endpoint as agent when assigned to the ticket', function () {
-    $user = User::factory()->create();
-    $user->assignRole('Agent');
+    $user = User::factory()->agent()->create();
     login($user);
 
-    $ticket = Ticket::factory()->create([
-        'agent_id' => $user->id,
-    ]);
+    $ticket = Ticket::factory()->agent($user)->create();
 
     get(route('tickets.edit', $ticket))
         ->assertOk();
 });
 
 it('is not allowed to reach this endpoint as agent when not assigned to the ticket', function () {
-    $user = User::factory()->create();
-    $user->assignRole('Agent');
+    $user = User::factory()->agent()->create();
     login($user);
 
     $ticket = Ticket::factory()->create();
@@ -131,11 +128,10 @@ it('is not allowed to reach this endpoint as agent when not assigned to the tick
 });
 
 it('can assign an agent to the ticket as admin', function () {
-    $user = User::factory()->create();
-    $user->assignRole('Agent');
+    $user = User::factory()->agent()->create();
     $ticket = Ticket::factory()->create();
 
-    Livewire::test(EditTicket::class, ['ticket' => $ticket])
+    livewire(EditTicket::class, ['ticket' => $ticket])
         ->set('form.agentAssigned', $user->id)
         ->call('save');
 

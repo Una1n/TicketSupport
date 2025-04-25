@@ -1,12 +1,19 @@
 <?php
 
+namespace Tests\Feature\Category;
+
 use App\Livewire\Categories\CreateCategory;
 use App\Models\Category;
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
 
 use function Pest\Laravel\get;
+use function Pest\Laravel\seed;
+use function Pest\Livewire\livewire;
+use function Tests\login;
 
 beforeEach(function () {
+    seed(PermissionSeeder::class);
     login();
 });
 
@@ -17,7 +24,7 @@ it('has component on create page', function () {
 });
 
 it('can create a new category', function () {
-    Livewire::test(CreateCategory::class)
+    livewire(CreateCategory::class)
         ->set('name', 'Test Name')
         ->call('save');
 
@@ -26,7 +33,7 @@ it('can create a new category', function () {
 });
 
 it('validates name is required', function () {
-    Livewire::test(CreateCategory::class)
+    livewire(CreateCategory::class)
         ->set('name', '')
         ->call('save')
         ->assertHasErrors('name');
@@ -35,7 +42,7 @@ it('validates name is required', function () {
 it('validates name is unique', function () {
     Category::factory()->create(['name' => 'not unique']);
 
-    Livewire::test(CreateCategory::class)
+    livewire(CreateCategory::class)
         ->set('name', 'not unique')
         ->call('save')
         ->assertHasErrors('name');
@@ -47,7 +54,7 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
     get(route('categories.create'))
         ->assertForbidden();
 
-    Livewire::test(CreateCategory::class)
+    livewire(CreateCategory::class)
         ->set('name', 'test')
         ->call('save')
         ->assertForbidden();

@@ -1,12 +1,19 @@
 <?php
 
+namespace Tests\Feature\User;
+
 use App\Livewire\Users\CreateUser;
 use App\Models\User;
+use Database\Seeders\PermissionSeeder;
 use Spatie\Permission\Models\Role;
 
 use function Pest\Laravel\get;
+use function Pest\Laravel\seed;
+use function Pest\Livewire\livewire;
+use function Tests\login;
 
 beforeEach(function () {
+    seed(PermissionSeeder::class);
     login();
 });
 
@@ -19,7 +26,7 @@ it('has component on create page', function () {
 it('can create a new regular user', function () {
     $role = Role::whereName('Regular')->first();
 
-    Livewire::test(CreateUser::class)
+    livewire(CreateUser::class)
         ->set('name', 'Henk Stubbe')
         ->set('email', 'henk@stubbe.nl')
         ->set('password', 'password')
@@ -29,10 +36,11 @@ it('can create a new regular user', function () {
     $user = User::whereName('Henk Stubbe')->first();
     expect($user)->not->toBeNull();
     expect($user->roles)->toHaveCount(1);
+    expect($user->roles->first()->name)->toBe('Regular');
 });
 
 it('validates required fields', function (string $name, string $value) {
-    Livewire::test(CreateUser::class)
+    livewire(CreateUser::class)
         ->set($name, $value)
         ->call('save')
         ->assertHasErrors($name);
@@ -46,7 +54,7 @@ it('validates required fields', function (string $name, string $value) {
 it('validates email is unique', function () {
     User::factory()->create(['email' => 'test@unique.com']);
 
-    Livewire::test(CreateUser::class)
+    livewire(CreateUser::class)
         ->set('name', 'Harry Stevens')
         ->set('email', 'test@unique.com')
         ->set('password', 'password')
@@ -60,7 +68,7 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
     get(route('users.create'))
         ->assertForbidden();
 
-    Livewire::test(CreateUser::class)
+    livewire(CreateUser::class)
         ->set('name', 'Henk Stubbe')
         ->set('email', 'henk@stubbe.nl')
         ->set('password', 'password')
