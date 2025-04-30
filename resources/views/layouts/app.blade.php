@@ -39,7 +39,7 @@
             <div class="ml-5 pt-5">Ticket Support</div>
 
             {{-- MENU --}}
-            <x-mary-menu activate-by-route active-bg-color="bg-primary">
+            <x-mary-menu activate-by-route active-bg-color="bg-primary/30">
 
                 {{-- User --}}
                 @if ($user = auth()->user())
@@ -62,7 +62,9 @@
                 <x-mary-menu-item title="Ticket Logs" icon="o-envelope" link="{{ route('logs.index') }}" />
                 <x-mary-menu-item title="Categories" icon="o-wallet" link="{{ route('categories.index') }}" />
                 <x-mary-menu-item title="Labels" icon="o-tag" link="{{ route('labels.index') }}" />
+                <x-mary-menu-separator />
             </x-mary-menu>
+            <div class="ml-5"><x-mary-theme-toggle /></div>
         </x-slot:sidebar>
 
         <x-slot:content>
