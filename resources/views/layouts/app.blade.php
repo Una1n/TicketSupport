@@ -60,7 +60,7 @@
                 <x-mary-menu-item title="Tickets" icon="o-ticket" link="{{ route('tickets.index') }}" />
                 <x-mary-menu-item title="Users" icon="o-users" link="{{ route('users.index') }}" />
                 <x-mary-menu-item title="Ticket Logs" icon="o-envelope" link="{{ route('logs.index') }}" />
-                <x-mary-menu-item title="Categories" icon="o-wallet" link="{{ route('categories.index') }}" />
+                <x-mary-menu-item title="Categories" icon="o-hashtag" link="{{ route('categories.index') }}" />
                 <x-mary-menu-item title="Labels" icon="o-tag" link="{{ route('labels.index') }}" />
                 <x-mary-menu-separator />
             </x-mary-menu>
