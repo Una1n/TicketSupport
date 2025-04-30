@@ -4,12 +4,31 @@ namespace App\Livewire\Labels;
 
 use App\Models\Label;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
+use Livewire\Features\SupportRedirects\Redirector;
 use Livewire\WithPagination;
+use Mary\Traits\Toast;
 
 class ListLabel extends Component
 {
+    use Toast;
     use WithPagination;
+
+    // Properties
+    public array $headers = [];
+
+    public function mount()
+    {
+        $this->headers = [
+            ['key' => 'name', 'label' => 'Name']
+        ];
+    }
+
+    public function editLabel(Label $label): Redirector|RedirectResponse
+    {
+        return redirect()->route('labels.edit', $label);
+    }
 
     public function deleteLabel(Label $label): void
     {
@@ -17,9 +36,13 @@ class ListLabel extends Component
 
         $name = $label->name;
 
-        $label->delete();
+        $label->tickets()->detach();
 
-        session()->flash('status', 'Label ' . $name . ' Deleted!');
+        if ($label->delete()) {
+            $this->success('Label ' . $name . ' deleted!');
+        } else {
+            $this->error('Label ' . $name . ' deletion failed!');
+        }
     }
 
     public function render(): View
