@@ -15,14 +15,19 @@ class ListLabel extends Component
     use Toast;
     use WithPagination;
 
-    // Properties
     public array $headers = [];
+    public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
 
     public function mount()
     {
         $this->headers = [
             ['key' => 'name', 'label' => 'Name']
         ];
+    }
+
+    public function createLabel(): Redirector|RedirectResponse
+    {
+        return redirect()->route('labels.create');
     }
 
     public function editLabel(Label $label): Redirector|RedirectResponse
@@ -48,7 +53,7 @@ class ListLabel extends Component
     public function render(): View
     {
         return view('livewire.labels.list-label', [
-            'labels' => Label::orderBy('name')->paginate(10),
+            'labels' => Label::orderBy(...array_values($this->sortBy))->paginate(10),
         ]);
     }
 }
