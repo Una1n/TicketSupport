@@ -5,9 +5,7 @@ namespace App\Livewire\Labels;
 use App\Livewire\Forms\LabelForm;
 use App\Models\Label;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
-use Livewire\Features\SupportRedirects\Redirector;
 use Mary\Traits\Toast;
 
 class EditLabel extends Component
@@ -21,9 +19,9 @@ class EditLabel extends Component
         $this->form->setLabel($label);
     }
 
-    public function cancel(): Redirector|RedirectResponse
+    public function cancel(): void
     {
-        return redirect()->route('labels.index');
+        $this->dispatch('cancel')->to(ListLabel::class);
     }
 
     public function save(): void
@@ -36,8 +34,9 @@ class EditLabel extends Component
         $this->success(
             'Label ' . $this->form->name . ' updated!',
             description: $oldName . ' -> ' . $this->form->name,
-            redirectTo: route('labels.index')
         );
+
+        $this->cancel();
     }
 
     public function render(): View

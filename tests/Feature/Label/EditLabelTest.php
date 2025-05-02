@@ -29,7 +29,7 @@ it('can edit a category', function () {
     $label = Label::factory()->create();
 
     livewire(EditLabel::class, ['label' => $label])
-        ->set('name', 'New Name')
+        ->set('form.name', 'New Name')
         ->call('save');
 
     $label->refresh();
@@ -41,9 +41,9 @@ it('validates name is required', function () {
     $label = Label::factory()->create();
 
     livewire(EditLabel::class, ['label' => $label])
-        ->set('name', '')
+        ->set('form.name', '')
         ->call('save')
-        ->assertHasErrors('name');
+        ->assertHasErrors('form.name');
 });
 
 it('validates name is unique', function () {
@@ -51,9 +51,9 @@ it('validates name is unique', function () {
     $label = Label::factory()->create(['name' => 'labelname']);
 
     livewire(EditLabel::class, ['label' => $label])
-        ->set('name', 'test')
+        ->set('form.name', 'test')
         ->call('save')
-        ->assertHasErrors('name');
+        ->assertHasErrors('form.name');
 });
 
 it('is only allowed to reach this endpoint when logged in as admin', function () {
@@ -65,7 +65,7 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
         ->assertForbidden();
 
     livewire(EditLabel::class, ['label' => $label])
-        ->set('name', 'test')
+        ->set('form.name', 'test')
         ->call('save')
         ->assertForbidden();
 });

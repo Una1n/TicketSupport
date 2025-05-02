@@ -9,11 +9,16 @@
             @scope('actions', $label)
                 <div class="flex flex-row">
                     <x-mary-button icon="o-pencil-square" class="btn-ghost text-warning"
-                        wire:click="editLabel({{ $label }})" tooltip="Edit" />
+                        wire:click="openEditModal({{ $label }})" tooltip="Edit" />
                     <x-mary-button icon="o-trash" class="btn-ghost text-error" wire:confirm="Are you sure?"
                         wire:click="deleteLabel({{ $label }})" tooltip="Delete" />
                 </div>
             @endscope
         </x-mary-table>
     </div>
+    @if ($this->editLabel)
+        <x-mary-modal wire:model="editModal" title="Update Label" persistent>
+            @livewire(Labels\EditLabel::class, ['label' => $this->editLabel])
+        </x-mary-modal>
+    @endif
 </div>
