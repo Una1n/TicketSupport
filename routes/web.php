@@ -46,7 +46,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->group(function () {
             Route::get('/', ListCategory::class)->name('index');
             Route::get('/create', CreateCategory::class)->name('create');
-            Route::get('/{category}/edit', EditCategory::class)->name('edit');
         });
 
     Route::middleware('can:manage,' . Label::class)

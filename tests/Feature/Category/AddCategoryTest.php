@@ -25,7 +25,7 @@ it('has component on create page', function () {
 
 it('can create a new category', function () {
     livewire(CreateCategory::class)
-        ->set('name', 'Test Name')
+        ->set('form.name', 'Test Name')
         ->call('save');
 
     $category = Category::whereName('Test Name')->first();
@@ -34,18 +34,18 @@ it('can create a new category', function () {
 
 it('validates name is required', function () {
     livewire(CreateCategory::class)
-        ->set('name', '')
+        ->set('form.name', '')
         ->call('save')
-        ->assertHasErrors('name');
+        ->assertHasErrors('form.name');
 });
 
 it('validates name is unique', function () {
     Category::factory()->create(['name' => 'not unique']);
 
     livewire(CreateCategory::class)
-        ->set('name', 'not unique')
+        ->set('form.name', 'not unique')
         ->call('save')
-        ->assertHasErrors('name');
+        ->assertHasErrors('form.name');
 });
 
 it('is only allowed to reach this endpoint when logged in as admin', function () {
@@ -55,7 +55,7 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
         ->assertForbidden();
 
     livewire(CreateCategory::class)
-        ->set('name', 'test')
+        ->set('form.name', 'test')
         ->call('save')
         ->assertForbidden();
 });

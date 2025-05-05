@@ -2,51 +2,41 @@
 
 namespace App\Livewire\Categories;
 
+use App\Livewire\Forms\CategoryForm;
 use App\Models\Category;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Validation\Rule;
 use Livewire\Component;
-use Livewire\Features\SupportRedirects\Redirector;
+use Mary\Traits\Toast;
 
 class EditCategory extends Component
 {
-    public Category $category;
-    public string $name = '';
+    use Toast;
+
+    public CategoryForm $form;
 
     public function mount(Category $category): void
     {
-        $this->category = $category;
-        $this->name = $category->name;
+        $this->form->setCategory($category);
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
-    public function rules(): array
+    public function cancel(): void
     {
-        return [
-            'name' => [
-                'required',
-                Rule::unique('categories')->ignore($this->category),
-                'min:3',
-                'max:255',
-            ],
-        ];
+        $this->dispatch('cancel')->to(ListCategory::class);
     }
 
-    public function save(): Redirector|RedirectResponse
+    public function save(): void
     {
-        $this->authorize('manage', $this->category);
+        $this->authorize('manage', $this->form->category);
 
-        $this->validate();
+        $oldName = $this->form->category->name;
+        $this->form->update();
 
-        $this->category->update([
-            'name' => $this->name,
-        ]);
+        $this->success(
+            'Category ' . $this->form->name . ' updated!',
+            description: $oldName . ' -> ' . $this->form->name,
+        );
 
-        return redirect()->route('categories.index')
-            ->with('status', 'Category ' . $this->name . ' updated.');
+        $this->cancel();
     }
 
     public function render(): View

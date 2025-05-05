@@ -2,30 +2,35 @@
 
 namespace App\Livewire\Categories;
 
+use App\Livewire\Forms\CategoryForm;
 use App\Models\Category;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\Features\SupportRedirects\Redirector;
+use Mary\Traits\Toast;
 
 class CreateCategory extends Component
 {
-    #[Validate(['required', 'unique:categories,name', 'min:3', 'max:255'])]
-    public string $name = '';
+    use Toast;
 
-    public function save(): Redirector|RedirectResponse
+    public CategoryForm $form;
+
+    public function cancel(): Redirector|RedirectResponse
+    {
+        return redirect()->route('labels.index');
+    }
+
+    public function save(): void
     {
         $this->authorize('manage', Category::class);
 
-        $this->validate();
+        $this->form->store();
 
-        Category::create(
-            $this->only(['name'])
+        $this->success(
+            'Category ' . $this->form->name . ' created!',
+            redirectTo: route('categories.index')
         );
-
-        return redirect()->route('categories.index')
-            ->with('status', 'Category ' . $this->name . ' created.');
     }
 
     public function render(): View
