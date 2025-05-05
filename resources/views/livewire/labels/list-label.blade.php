@@ -7,7 +7,7 @@
     <div class="card bg-base-100 p-5 pt-2 shadow-xs">
         <x-mary-table :headers="$headers" :rows="$labels" :sort-by="$sortBy" with-pagination>
             @scope('actions', $label)
-                <div class="flex flex-row">
+                <div wire:key="{{ $label->id }}" class="flex flex-row">
                     <x-mary-button icon="o-pencil-square" class="btn-ghost text-warning"
                         wire:click="openEditModal({{ $label }})" tooltip="Edit" />
                     <x-mary-button icon="o-trash" class="btn-ghost text-error" wire:confirm="Are you sure?"
