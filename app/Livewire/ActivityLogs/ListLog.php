@@ -11,9 +11,19 @@ class ListLog extends Component
 {
     use WithPagination;
 
+    public array $headers = [
+        ['key' => 'subject.title', 'label' => 'Title', 'sortable' => false],
+        ['key' => 'description', 'label' => 'Description'],
+        ['key' => 'causer.name', 'label' => 'Caused By'],
+        ['key' => 'created_at', 'label' => 'Created'],
+    ];
+    public array $sortBy = ['column' => 'created_at', 'direction' => 'asc'];
+
     public function render(): View
     {
-        $logs = Activity::with(['subject', 'causer'])->latest()->paginate(10);
+        $logs = Activity::with(['subject', 'causer'])
+            ->orderBy(...array_values($this->sortBy))
+            ->latest()->paginate(10);
 
         return view('livewire.activity-logs.list-log', [
             'logs' => $logs,
