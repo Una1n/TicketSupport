@@ -8,7 +8,6 @@ use App\Livewire\Categories\EditCategory;
 use App\Livewire\Categories\ListCategory;
 use App\Livewire\DashboardHome;
 use App\Livewire\Labels\CreateLabel;
-use App\Livewire\Labels\EditLabel;
 use App\Livewire\Labels\ListLabel;
 use App\Livewire\Tickets\CreateTicket;
 use App\Livewire\Tickets\EditTicket;
@@ -56,7 +55,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->group(function () {
             Route::get('/', ListLabel::class)->name('index');
             Route::get('/create', CreateLabel::class)->name('create');
-            Route::get('/{label}/edit', EditLabel::class)->name('edit');
         });
 
     Route::middleware('can:manage,' . User::class)
