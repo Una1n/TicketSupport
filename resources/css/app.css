@@ -17,7 +17,7 @@
 .mary-table-pagination {
     button,
     span {
-        @apply text-xs border-none text-base-content;
+        @apply text-xs border-none text-base-content py-1;
     }
 
     button {
@@ -35,6 +35,6 @@
     }
 
     span[aria-disabled="true"] span {
-        @apply bg-base-200;
+        @apply bg-base-content/0;
     }
 }
