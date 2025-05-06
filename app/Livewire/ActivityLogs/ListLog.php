@@ -17,7 +17,7 @@ class ListLog extends Component
         ['key' => 'causer.name', 'label' => 'Caused By', 'sortable' => false],
         ['key' => 'created_at', 'label' => 'Created'],
     ];
-    public array $sortBy = ['column' => 'created_at', 'direction' => 'asc'];
+    public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
 
     public function render(): View
     {
