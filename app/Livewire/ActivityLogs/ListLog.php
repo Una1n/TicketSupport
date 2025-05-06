@@ -14,7 +14,7 @@ class ListLog extends Component
     public array $headers = [
         ['key' => 'subject.title', 'label' => 'Title', 'sortable' => false],
         ['key' => 'description', 'label' => 'Description'],
-        ['key' => 'causer.name', 'label' => 'Caused By'],
+        ['key' => 'causer.name', 'label' => 'Caused By', 'sortable' => false],
         ['key' => 'created_at', 'label' => 'Created'],
     ];
     public array $sortBy = ['column' => 'created_at', 'direction' => 'asc'];
