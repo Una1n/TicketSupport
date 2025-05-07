@@ -1,40 +1,33 @@
 <div>
-    <x-status />
-    <div class="mb-5 text-2xl font-bold">Users</div>
-    <div class="max-w-5xl overflow-hidden rounded-lg border border-gray-200 shadow-md">
-        <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th scope="col" class="px-6 py-4 font-medium text-gray-400">Name</th>
-                    <th scope="col" class="px-6 py-4 font-medium text-gray-400">Email</th>
-                    <th scope="col" class="px-6 py-4 font-medium text-gray-400"></th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100 border-t border-gray-100">
-                @foreach ($users as $user)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 font-medium text-gray-900">{{ $user->name }}</td>
-                        <td class="px-6 py-4 font-medium text-gray-900">{{ $user->email }}</td>
-                        <td class="flex justify-end gap-4 px-6 py-4 font-medium">
-                            <a href="{{ route('users.edit', $user) }}"
-                                class="rounded-full bg-blue-400 px-4 py-1 text-blue-800 hover:bg-blue-500 hover:text-white">Edit</a>
-                            <button
-                                wire:confirm.prompt="Are you sure you want to delete this user?\n\nType DELETE to confirm|DELETE"
-                                wire:click="deleteUser({{ $user }})"
-                                class="rounded-full bg-red-400 px-4 py-1 text-red-800 hover:bg-red-500 hover:text-white">Delete</button>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <div class="bg-white p-4">{{ $users->links() }}</div>
+    <x-mary-header title="Users" separator>
+        <x-slot:actions>
+            <x-mary-button icon="o-plus" label="Create" class="btn-primary" wire:click="createUser" responsive />
+        </x-slot:actions>
+    </x-mary-header>
+    <div class="card bg-base-100 p-5 pt-2 shadow-xs">
+        <x-mary-table :headers="$headers" :rows="$users" :sort-by="$sortBy" with-pagination>
+            @scope('cell_customRoles', $user)
+                <div class="flex flex-row gap-2">
+                    @foreach ($user->roles as $role)
+                        @if ($role->name === 'Regular')
+                            <x-mary-badge value="{{ $role->name }}" class="badge-accent badge-soft" />
+                        @elseif ($role->name === 'Agent')
+                            <x-mary-badge value="{{ $role->name }}" class="badge-primary badge-soft" />
+                        @elseif ($role->name === 'Admin')
+                            <x-mary-badge value="{{ $role->name }}" class="badge-warning badge-soft" />
+                        @endif
+                    @endforeach
+                </div>
+            @endscope
+            @scope('actions', $user)
+                <div class="flex flex-row">
+                    <x-mary-button icon="o-pencil-square" class="btn-ghost text-warning"
+                        wire:click="editUser({{ $user }})" tooltip="Edit" />
+                    <x-mary-button icon="o-trash" class="btn-ghost text-error"
+                        wire:confirm="This will also delete all tickets from this user. Are you sure?"
+                        wire:click="deleteUser({{ $user }})" tooltip="Delete" />
+                </div>
+            @endscope
+        </x-mary-table>
     </div>
-
-    <div class="mt-8">
-        <a href="{{ route('users.create') }}"
-            class="rounded-lg border border-green-500 bg-green-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:border-green-700 hover:bg-green-700 focus:ring focus:ring-green-200 disabled:cursor-not-allowed disabled:border-green-300 disabled:bg-green-300">
-            Create User
-        </a>
-    </div>
-
 </div>
