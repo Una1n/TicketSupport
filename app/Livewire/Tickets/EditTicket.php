@@ -60,8 +60,6 @@ class EditTicket extends Component
 
     public function render(): View
     {
-        $this->authorize('update', $this->ticket);
-
         return view('livewire.tickets.edit-ticket', [
             'categories' => Category::all(),
             'labels' => Label::all(),

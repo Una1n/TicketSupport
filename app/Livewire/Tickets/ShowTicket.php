@@ -12,8 +12,6 @@ class ShowTicket extends Component
 
     public function render(): View
     {
-        $this->authorize('view', $this->ticket);
-
         return view('livewire.tickets.show-ticket');
     }
 }

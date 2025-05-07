@@ -21,6 +21,7 @@ use App\Models\Label;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use Spatie\Activitylog\Models\Activity;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +41,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', DashboardHome::class)->name('dashboard');
 
-    Route::middleware('can:manage,' . Category::class)
+    Route::can('manage', Category::class)
         ->prefix('categories')
         ->as('categories.')
         ->group(function () {
@@ -48,7 +49,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/create', CreateCategory::class)->name('create');
         });
 
-    Route::middleware('can:manage,' . Label::class)
+    Route::can('manage', Label::class)
         ->prefix('labels')
         ->as('labels.')
         ->group(function () {
@@ -56,7 +57,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/create', CreateLabel::class)->name('create');
         });
 
-    Route::middleware('can:manage,' . User::class)
+    Route::can('manage', User::class)
         ->prefix('users')
         ->as('users.')
         ->group(function () {
@@ -72,14 +73,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/create', CreateTicket::class)->name('create')
             ->can('create', Ticket::class);
 
-        // Authorization handled in livewire components, because
-        // route model binding doesn't work here through middleware
-        // (ex. ->can('update', 'ticket'))
-        Route::get('/{ticket}/show', ShowTicket::class)->name('show');
-        Route::get('/{ticket}/edit', EditTicket::class)->name('edit');
+        Route::get('/{ticket}/show', ShowTicket::class)->name('show')
+            ->can('view', 'ticket');
+
+        Route::get('/{ticket}/edit', EditTicket::class)->name('edit')
+            ->can('update', 'ticket');
     });
 
-    Route::middleware('can:access logs')
+    Route::can('access logs', Activity::class)
         ->prefix('logs')
         ->as('logs.')
         ->group(function () {
