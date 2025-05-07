@@ -93,9 +93,9 @@ it('validates required fields', function (string $name, string $value) {
         ->call('save')
         ->assertHasErrors($name);
 })->with([
-    'title' => ['form.title', ''],
-    'priority' => ['form.priority', ''],
-    'description' => ['form.description', ''],
+    ['form.title', ''],
+    ['form.priority', ''],
+    ['form.description', ''],
 ]);
 
 it('is not allowed to reach this endpoint when logged in as default user', function () {
@@ -103,7 +103,7 @@ it('is not allowed to reach this endpoint when logged in as default user', funct
 
     $ticket = Ticket::factory()->create();
 
-    livewire(EditTicket::class, ['ticket' => $ticket])
+    get(route('tickets.edit', $ticket))
         ->assertForbidden();
 });
 

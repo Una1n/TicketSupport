@@ -92,9 +92,9 @@ it('validates required fields', function (string $name, string $value) {
         ->call('save')
         ->assertHasErrors($name);
 })->with([
-    'title' => ['form.title', ''],
-    'priority' => ['form.priority', ''],
-    'description' => ['form.description', ''],
+    ['form.title', ''],
+    ['form.priority', ''],
+    ['form.description', ''],
 ]);
 
 it('is not allowed to reach this endpoint when not logged in', function () {

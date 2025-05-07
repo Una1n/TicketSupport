@@ -46,7 +46,7 @@ it('is not allowed to show tickets from other users', function () {
 
     $ticket = Ticket::factory()->create();
 
-    livewire(ShowTicket::class, ['ticket' => $ticket])
+    get(route('tickets.show', $ticket))
         ->assertForbidden();
 });
 
@@ -57,6 +57,6 @@ it('is not allowed to show tickets from other agents', function () {
     $otherAgent = User::factory()->agent()->create();
     $ticket = Ticket::factory()->agent($otherAgent)->create();
 
-    livewire(ShowTicket::class, ['ticket' => $ticket])
+    get(route('tickets.show', $ticket))
         ->assertForbidden();
 });
