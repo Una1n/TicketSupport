@@ -16,6 +16,11 @@ class TicketPolicy
         return null;
     }
 
+    public function manage(User $user, Ticket $ticket = null): bool
+    {
+        return $user->hasPermissionTo('manage tickets');
+    }
+
     public function viewAny(User $user): bool
     {
         return true;
