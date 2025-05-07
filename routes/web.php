@@ -21,7 +21,6 @@ use App\Models\Label;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
-use Spatie\Activitylog\Models\Activity;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +40,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', DashboardHome::class)->name('dashboard');
 
-    Route::can('manage', Category::class)
+    Route::middleware('can:manage,' . Category::class)
         ->prefix('categories')
         ->as('categories.')
         ->group(function () {
@@ -49,7 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/create', CreateCategory::class)->name('create');
         });
 
-    Route::can('manage', Label::class)
+    Route::middleware('can:manage,' . Label::class)
         ->prefix('labels')
         ->as('labels.')
         ->group(function () {
@@ -57,7 +56,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/create', CreateLabel::class)->name('create');
         });
 
-    Route::can('manage', User::class)
+    Route::middleware('can:manage,' . User::class)
         ->prefix('users')
         ->as('users.')
         ->group(function () {
@@ -80,7 +79,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->can('update', 'ticket');
     });
 
-    Route::can('access logs', Activity::class)
+    Route::middleware('can:access logs')
         ->prefix('logs')
         ->as('logs.')
         ->group(function () {
