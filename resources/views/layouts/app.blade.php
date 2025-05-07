@@ -62,10 +62,18 @@
 
                 <x-mary-menu-item title="Home" icon="o-home" link="{{ route('dashboard') }}" />
                 <x-mary-menu-item title="Tickets" icon="o-ticket" link="{{ route('tickets.index') }}" />
-                <x-mary-menu-item title="Users" icon="o-users" link="{{ route('users.index') }}" />
-                <x-mary-menu-item title="Ticket Logs" icon="o-envelope" link="{{ route('logs.index') }}" />
-                <x-mary-menu-item title="Categories" icon="o-hashtag" link="{{ route('categories.index') }}" />
-                <x-mary-menu-item title="Labels" icon="o-tag" link="{{ route('labels.index') }}" />
+                @can('manage users')
+                    <x-mary-menu-item title="Users" icon="o-users" link="{{ route('users.index') }}" />
+                @endcan
+                @can('access logs')
+                    <x-mary-menu-item title="Ticket Logs" icon="o-envelope" link="{{ route('logs.index') }}" />
+                @endcan
+                @can('manage categories')
+                    <x-mary-menu-item title="Categories" icon="o-hashtag" link="{{ route('categories.index') }}" />
+                @endcan
+                @can('manage labels')
+                    <x-mary-menu-item title="Labels" icon="o-tag" link="{{ route('labels.index') }}" />
+                @endcan
                 <x-mary-menu-separator />
             </x-mary-menu>
             <div class="ml-5"><x-mary-theme-toggle /></div>
