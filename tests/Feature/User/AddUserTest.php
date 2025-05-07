@@ -45,10 +45,10 @@ it('validates required fields', function (string $name, string $value) {
         ->call('save')
         ->assertHasErrors($name);
 })->with([
-    'form.name' => ['name', ''],
-    'form.email' => ['email', ''],
-    'form.password' => ['password', ''],
-    'form.role' => ['role', ''],
+    ['form.name', ''],
+    ['form.email', ''],
+    ['form.password', ''],
+    ['form.role', ''],
 ]);
 
 it('validates email is unique', function () {
