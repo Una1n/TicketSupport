@@ -11,12 +11,13 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->string('title', 255);
             $table->text('description');
             $table->enum('priority', ['low', 'medium', 'high'])->default('low');
             $table->enum('status', ['open', 'closed'])->default('open');
-            $table->foreignId('agent_id')->nullable()->constrained('users');
+            $table->foreignIdFor(User::class, 'agent_id')
+                ->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }
@@ -24,6 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('tickets', function (Blueprint $table) {
+            $table->dropConstrainedForeignIdFor(User::class);
             $table->dropConstrainedForeignIdFor(User::class, 'agent_id');
         });
 
