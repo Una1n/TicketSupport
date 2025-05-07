@@ -31,7 +31,7 @@
     </x-mary-nav>
 
     {{-- MAIN --}}
-    <x-mary-main full-width>
+    <x-mary-main>
         {{-- SIDEBAR --}}
         <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-100 lg:bg-inherit">
 
