@@ -2,43 +2,37 @@
 
 namespace App\Livewire\Users;
 
+use App\Livewire\Forms\UserForm;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\Features\SupportRedirects\Redirector;
+use Mary\Traits\Toast;
 use Spatie\Permission\Models\Role;
 
 class CreateUser extends Component
 {
-    #[Validate(['required', 'min:3', 'max:255'])]
-    public string $name = '';
+    use Toast;
 
-    #[Validate(['required', 'email', 'unique:users,email', 'max:255'])]
-    public string $email = '';
+    public UserForm $form;
 
-    #[Validate(['required', 'min:8', 'max:255'])]
-    public string $password = '';
+    public function cancel(): Redirector|RedirectResponse
+    {
+        return redirect()->route('users.index');
+    }
 
-    #[Validate(['required', 'exists:roles,id'])]
-    public string $role = '';
-
-    public function save(): Redirector|RedirectResponse
+    public function save(): void
     {
         $this->authorize('manage', User::class);
 
-        $this->validate();
+        $this->form->store();
 
-        $user = User::create(
-            $this->only(['name', 'email', 'password'])
+        $this->success(
+            'User ' . $this->form->name . ' created!',
+            description: 'Role: ' . $this->form->user->roles()->first()->name,
+            redirectTo: route('users.index')
         );
-
-        $role = Role::whereId($this->role)->first();
-        $user->assignRole($role);
-
-        return redirect()->route('users.index')
-            ->with('status', 'User ' . $this->name . ' created.');
     }
 
     public function render(): View

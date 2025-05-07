@@ -27,10 +27,10 @@ it('can create a new regular user', function () {
     $role = Role::whereName('Regular')->first();
 
     livewire(CreateUser::class)
-        ->set('name', 'Henk Stubbe')
-        ->set('email', 'henk@stubbe.nl')
-        ->set('password', 'password')
-        ->set('role', $role->id)
+        ->set('form.name', 'Henk Stubbe')
+        ->set('form.email', 'henk@stubbe.nl')
+        ->set('form.password', 'password')
+        ->set('form.role', $role->id)
         ->call('save');
 
     $user = User::whereName('Henk Stubbe')->first();
@@ -45,21 +45,21 @@ it('validates required fields', function (string $name, string $value) {
         ->call('save')
         ->assertHasErrors($name);
 })->with([
-    'name' => ['name', ''],
-    'email' => ['email', ''],
-    'password' => ['password', ''],
-    'role' => ['role', ''],
+    'form.name' => ['name', ''],
+    'form.email' => ['email', ''],
+    'form.password' => ['password', ''],
+    'form.role' => ['role', ''],
 ]);
 
 it('validates email is unique', function () {
     User::factory()->create(['email' => 'test@unique.com']);
 
     livewire(CreateUser::class)
-        ->set('name', 'Harry Stevens')
-        ->set('email', 'test@unique.com')
-        ->set('password', 'password')
+        ->set('form.name', 'Harry Stevens')
+        ->set('form.email', 'test@unique.com')
+        ->set('form.password', 'password')
         ->call('save')
-        ->assertHasErrors('email');
+        ->assertHasErrors('form.email');
 });
 
 it('is only allowed to reach this endpoint when logged in as admin', function () {
@@ -69,9 +69,9 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
         ->assertForbidden();
 
     livewire(CreateUser::class)
-        ->set('name', 'Henk Stubbe')
-        ->set('email', 'henk@stubbe.nl')
-        ->set('password', 'password')
+        ->set('form.name', 'Henk Stubbe')
+        ->set('form.email', 'henk@stubbe.nl')
+        ->set('form.password', 'password')
         ->call('save')
         ->assertForbidden();
 });

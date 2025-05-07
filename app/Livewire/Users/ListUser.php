@@ -4,7 +4,9 @@ namespace App\Livewire\Users;
 
 use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
+use Livewire\Features\SupportRedirects\Redirector;
 use Livewire\WithPagination;
 use Mary\Traits\Toast;
 
@@ -23,6 +25,16 @@ class ListUser extends Component
             ['key' => 'email', 'label' => 'Email'],
             ['key' => 'customRoles', 'label' => 'Roles']
         ];
+    }
+
+    public function createUser(): Redirector|RedirectResponse
+    {
+        return redirect()->route('users.create');
+    }
+
+    public function editUser(User $user): Redirector|RedirectResponse
+    {
+        return redirect()->route('users.edit', $user);
     }
 
     public function deleteUser(User $user): void
