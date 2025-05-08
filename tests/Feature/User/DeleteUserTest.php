@@ -3,6 +3,7 @@
 namespace Tests\Feature\User;
 
 use App\Livewire\Users\ListUser;
+use App\Models\Ticket;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 
@@ -57,4 +58,20 @@ it('deletes associated tickets when user is deleted', function () {
 
     assertModelMissing($user);
     assertModelMissing($ticket);
+});
+
+it('removes agent from ticket when assigned user is deleted', function () {
+    $user = User::factory()->agent()->create();
+    $ticket = Ticket::factory()->agent($user)->create();
+
+    expect($user)->not->toBeNull();
+    expect($ticket)->not->toBeNull();
+
+    $user->delete();
+
+    assertModelMissing($user);
+    assertModelExists($ticket);
+
+    $ticket->refresh();
+    expect($ticket->agent)->toBeNull();
 });
