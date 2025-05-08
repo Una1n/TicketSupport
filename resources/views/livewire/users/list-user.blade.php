@@ -6,6 +6,12 @@
     </x-mary-header>
     <div class="card bg-base-100 p-5 pt-2 shadow-xs">
         <x-mary-table :headers="$headers" :rows="$users" :sort-by="$sortBy" with-pagination>
+            @scope('cell_name', $user)
+                <div class="flex flex-col">
+                    <div>{{ $user->name }}</div>
+                    <div class="text-base-content/30 lg:hidden">{{ $user->email }}</div>
+                </div>
+            @endscope
             @scope('cell_customRoles', $user)
                 <div class="flex flex-row gap-2">
                     @foreach ($user->roles as $role)

@@ -15,17 +15,12 @@ class ListUser extends Component
     use Toast;
     use WithPagination;
 
-    public array $headers = [];
+    public array $headers = [
+        ['key' => 'name', 'label' => 'Name'],
+        ['key' => 'email', 'label' => 'Email', 'class' => 'hidden lg:table-cell'],
+        ['key' => 'customRoles', 'label' => 'Role', 'class' => 'hidden lg:table-cell']
+    ];
     public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
-
-    public function mount()
-    {
-        $this->headers = [
-            ['key' => 'name', 'label' => 'Name'],
-            ['key' => 'email', 'label' => 'Email'],
-            ['key' => 'customRoles', 'label' => 'Role']
-        ];
-    }
 
     public function createUser(): Redirector|RedirectResponse
     {
