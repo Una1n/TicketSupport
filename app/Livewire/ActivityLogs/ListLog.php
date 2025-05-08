@@ -12,13 +12,19 @@ class ListLog extends Component
     use WithPagination;
 
     public array $headers = [
-        ['key' => 'subject.title', 'label' => 'Title', 'sortable' => false],
-        ['key' => 'description', 'label' => 'Description', 'class' => 'hidden lg:table-cell'],
+        ['key' => 'icon', 'label' => '', 'sortable' => false, 'class' => 'lg:hidden'],
+        [
+            'key' => 'subject.title', 'label' => 'Title', 'sortable' => false,
+            'class' => 'whitespace-nowrap'],
+        [
+            'key' => 'description', 'label' => 'Status',
+            'class' => 'hidden text-center lg:table-cell'
+        ],
         [
             'key' => 'causer.name', 'label' => 'Caused By', 'sortable' => false,
             'class' => 'hidden lg:table-cell'
         ],
-        ['key' => 'created_at', 'label' => 'Created'],
+        ['key' => 'created_at', 'label' => 'Created', 'class' => 'hidden lg:table-cell'],
     ];
     public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
 
