@@ -17,7 +17,15 @@
                     @if ($log->description === 'deleted')
                         {{ ucfirst(json_decode($log->properties, true)['old']['title']) }}
                     @else
-                        {{ ucfirst($log->subject->title) }}
+                        @if ($log->subject)
+                            {{ ucfirst($log->subject->title) }}
+                        @else
+                            @if ($log->description === 'updated')
+                                <span class="text-error">[Title Unavailable]</span>
+                            @else
+                                {{ ucfirst(json_decode($log->properties, true)['attributes']['title']) }}
+                            @endif
+                        @endif
                     @endif
                 </div>
                 @if ($log->causer)

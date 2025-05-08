@@ -12,6 +12,16 @@
                     <div class="flex flex-col">
                         @if ($log->subject)
                             <div>{{ $log->subject->title }}</div>
+                        @else
+                            @if ($log->subject)
+                                {{ ucfirst($log->subject->title) }}
+                            @else
+                                @if ($log->description === 'updated')
+                                    <span class="text-error">[Title Unavailable]</span>
+                                @else
+                                    {{ ucfirst(json_decode($log->properties, true)['attributes']['title']) }}
+                                @endif
+                            @endif
                         @endif
                         <div class="text-base-content/30 lg:hidden">{{ $log->created_at->diffForHumans() }}</div>
                     </div>
