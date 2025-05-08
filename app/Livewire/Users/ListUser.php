@@ -23,7 +23,7 @@ class ListUser extends Component
         $this->headers = [
             ['key' => 'name', 'label' => 'Name'],
             ['key' => 'email', 'label' => 'Email'],
-            ['key' => 'customRoles', 'label' => 'Roles']
+            ['key' => 'customRoles', 'label' => 'Role']
         ];
     }
 
