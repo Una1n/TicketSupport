@@ -4,8 +4,10 @@
             <x-mary-input wire:model.live="search" icon="o-magnifying-glass" placeholder="Search..." clearable />
         </x-slot:middle>
         <x-slot:actions>
-            <!-- TODO: Add badge to show number of active filters, (0) by default -->
-            <x-mary-button icon="o-funnel" label="Filters" class="btn-neutral" wire:click="filterTickets" responsive />
+            <x-mary-button icon="o-funnel" class="btn-neutral" wire:click="filterTickets" responsive>
+                Filters
+                <x-mary-badge value="{{ $activeFilters }}" class="badge-soft badge-sm badge-primary" />
+            </x-mary-button>
             <x-mary-button icon="o-plus" label="Create" class="btn-primary" wire:click="createTicket" responsive />
         </x-slot:actions>
     </x-mary-header>
@@ -41,7 +43,7 @@
                 placeholder="All" />
             <x-mary-select label="Priority" wire:model.live="priorityFilter" :options="$priorityOptions"
                 icon="o-question-mark-circle" placeholder="All" />
-            <x-mary-select label="Categories" wire:model.live="categoryFilter" :options="$categories"
+            <x-mary-select label="Categories" wire:model.live="categoryFilter" :options="$categoryOptions"
                 icon="o-question-mark-circle" placeholder="All" />
             <x-slot:actions>
                 <x-mary-button label="Reset" wire:click="resetFilters" icon="o-x-mark" />

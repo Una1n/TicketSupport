@@ -34,6 +34,7 @@ class ListTicket extends Component
 
     // Filters
     public bool $showFilters = false;
+    public int $activeFilters = 0;
     public string $categoryFilter;
     public string $statusFilter;
     public string $priorityFilter;
@@ -49,6 +50,20 @@ class ListTicket extends Component
         $this->statusFilter = '';
         $this->priorityFilter = '';
         $this->showFilters = false;
+    }
+
+    public function updateFilterCounter(): void
+    {
+        $this->activeFilters = 0;
+        if (! empty($this->statusFilter)) {
+            $this->activeFilters++;
+        }
+        if (! empty($this->priorityFilter)) {
+            $this->activeFilters++;
+        }
+        if (! empty($this->categoryFilter)) {
+            $this->activeFilters++;
+        }
     }
 
     // public function deleteTicket(Ticket $ticket): void
@@ -82,12 +97,14 @@ class ListTicket extends Component
                 $query->byUser(auth()->user());
             });
 
+        $this->updateFilterCounter();
+
         return view('livewire.tickets.list-ticket', [
             'tickets' => $filteredTickets
                 ->orderBy(...array_values($this->sortBy))
                 ->latest()
                 ->paginate(8),
-            'categories' => Category::all(),
+            'categoryOptions' => Category::all(),
             'statusOptions' => [
                 ['id' => 'open', 'name' => 'Open'],
                 ['id' => 'closed', 'name' => 'Closed'],
