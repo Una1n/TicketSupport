@@ -1,11 +1,11 @@
 <div>
     <x-mary-header title="Tickets" separator>
         <x-slot:middle class="!justify-end">
-            <x-mary-input icon="o-magnifying-glass" placeholder="Search..." />
+            <x-mary-input wire:model.live="search" icon="o-magnifying-glass" placeholder="Search..." clearable />
         </x-slot:middle>
         <x-slot:actions>
             <!-- TODO: Add badge to show number of active filters, (0) by default -->
-            <x-mary-button icon="o-funnel" label="Filters" class="btn-neutral" wire:click="filterTicket" responsive />
+            <x-mary-button icon="o-funnel" label="Filters" class="btn-neutral" wire:click="filterTickets" responsive />
             <x-mary-button icon="o-plus" label="Create" class="btn-primary" wire:click="createTicket" responsive />
         </x-slot:actions>
     </x-mary-header>
@@ -34,4 +34,19 @@
             @endscope
         </x-mary-table>
     </div>
+    <x-mary-drawer wire:model="showFilters" title="Filters" right separator with-close-button close-on-escape
+        class="w-11/12 lg:w-1/3">
+        <div class="flex flex-col gap-4">
+            <x-mary-select label="Status" wire:model.live="statusFilter" :options="$statusOptions" icon="o-question-mark-circle"
+                placeholder="All" />
+            <x-mary-select label="Priority" wire:model.live="priorityFilter" :options="$priorityOptions"
+                icon="o-question-mark-circle" placeholder="All" />
+            <x-mary-select label="Categories" wire:model.live="categoryFilter" :options="$categories"
+                icon="o-question-mark-circle" placeholder="All" />
+            <x-slot:actions>
+                <x-mary-button label="Reset" wire:click="resetFilters" icon="o-x-mark" />
+                <x-mary-button label="Done" class="btn-primary" @click="$wire.showFilters = false" icon="o-check" />
+            </x-slot:actions>
+        </div>
+    </x-mary-drawer>
 </div>

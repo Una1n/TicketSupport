@@ -15,10 +15,12 @@ class ListTicket extends Component
 
     #[Url()]
     public string $search = '';
+
+    // Table Settings
     public array $headers = [
-        ['key' => 'status', 'label' => 'Status', 'class' => 'text-center max-w-14'],
-        ['key' => 'priority', 'label' => 'Priority', 'class' => 'max-w-14'],
+        ['key' => 'status', 'label' => 'Status', 'class' => 'text-center max-w-10'],
         ['key' => 'title', 'label' => 'Title', 'class' => 'max-w-36 truncate'],
+        ['key' => 'priority', 'label' => 'Priority', 'class' => 'max-w-14'],
         [
             'key' => 'agent.name', 'label' => 'Assigned To',
             'class' => 'max-w-26', 'sortable' => false,
@@ -31,20 +33,34 @@ class ListTicket extends Component
     public array $sortBy = ['column' => 'title', 'direction' => 'asc'];
 
     // Filters
+    public bool $showFilters = false;
     public string $categoryFilter;
     public string $statusFilter;
     public string $priorityFilter;
 
-    public function deleteTicket(Ticket $ticket): void
+    public function filterTickets(): void
     {
-        $this->authorize('manage', $ticket);
-
-        $title = $ticket->title;
-
-        $ticket->delete();
-
-        session()->flash('status', 'Ticket ' . $title . ' Deleted!');
+        $this->showFilters = true;
     }
+
+    public function resetFilters(): void
+    {
+        $this->categoryFilter = '';
+        $this->statusFilter = '';
+        $this->priorityFilter = '';
+        $this->showFilters = false;
+    }
+
+    // public function deleteTicket(Ticket $ticket): void
+    // {
+    //     $this->authorize('manage', $ticket);
+    //
+    //     $title = $ticket->title;
+    //
+    //     $ticket->delete();
+    //
+    //     session()->flash('status', 'Ticket ' . $title . ' Deleted!');
+    // }
 
     public function render(): View
     {
@@ -72,6 +88,15 @@ class ListTicket extends Component
                 ->latest()
                 ->paginate(8),
             'categories' => Category::all(),
+            'statusOptions' => [
+                ['id' => 'open', 'name' => 'Open'],
+                ['id' => 'closed', 'name' => 'Closed'],
+            ],
+            'priorityOptions' => [
+                ['id' => 'low', 'name' => 'Low'],
+                ['id' => 'medium', 'name' => 'Medium'],
+                ['id' => 'high', 'name' => 'High'],
+            ],
         ]);
     }
 }
