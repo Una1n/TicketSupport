@@ -15,6 +15,20 @@ class ListTicket extends Component
 
     #[Url()]
     public string $search = '';
+    public array $headers = [
+        ['key' => 'status', 'label' => 'Status', 'class' => 'text-center max-w-14'],
+        ['key' => 'priority', 'label' => 'Priority', 'class' => 'max-w-14'],
+        ['key' => 'title', 'label' => 'Title', 'class' => 'max-w-36 truncate'],
+        [
+            'key' => 'agent.name', 'label' => 'Assigned To',
+            'class' => 'max-w-26', 'sortable' => false,
+        ],
+        [
+            'key' => 'customCategories', 'label' => 'Categories',
+            'class' => 'max-w-40', 'sortable' => false,
+        ],
+    ];
+    public array $sortBy = ['column' => 'title', 'direction' => 'asc'];
 
     // Filters
     public string $categoryFilter;
@@ -53,7 +67,10 @@ class ListTicket extends Component
             });
 
         return view('livewire.tickets.list-ticket', [
-            'tickets' => $filteredTickets->latest()->paginate(8),
+            'tickets' => $filteredTickets
+                ->orderBy(...array_values($this->sortBy))
+                ->latest()
+                ->paginate(8),
             'categories' => Category::all(),
         ]);
     }
