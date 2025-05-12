@@ -13,14 +13,10 @@
                         @if ($log->subject)
                             <div>{{ $log->subject->title }}</div>
                         @else
-                            @if ($log->subject)
-                                {{ ucfirst($log->subject->title) }}
+                            @if ($log->description === 'updated')
+                                <span class="text-error">[Title Unavailable]</span>
                             @else
-                                @if ($log->description === 'updated')
-                                    <span class="text-error">[Title Unavailable]</span>
-                                @else
-                                    {{ ucfirst(json_decode($log->properties, true)['attributes']['title']) }}
-                                @endif
+                                {{ ucfirst(json_decode($log->properties, true)['attributes']['title']) }}
                             @endif
                         @endif
                         <div class="text-base-content/30 lg:hidden">{{ $log->created_at->diffForHumans() }}</div>
