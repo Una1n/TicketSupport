@@ -12,7 +12,7 @@
         </x-slot:actions>
     </x-mary-header>
     <div class="card bg-base-100 p-5 pt-2 shadow-xs">
-        <x-mary-table :headers="$headers" :rows="$tickets" :sort-by="$sortBy" with-pagination>
+        <x-mary-table :headers="$headers" :rows="$tickets" :sort-by="$sortBy" :link="route('tickets.show', ['ticket' => '[id]'])" with-pagination>
             @scope('cell_priority', $ticket)
                 @if ($ticket->priority === 'low')
                     <x-mary-badge value="Low" class="badge-soft badge-accent" />

@@ -77,6 +77,10 @@ class ListTicket extends Component
     //     session()->flash('status', 'Ticket ' . $title . ' Deleted!');
     // }
 
+    // TODO: Only show tickets based on logged in user:
+    // regular user = only show tickets created by themselves
+    // agent = only show tickets assigned to them
+    // admin = show all tickets
     public function render(): View
     {
         $filteredTickets = Ticket::with(['user', 'categories', 'labels', 'agent'])
