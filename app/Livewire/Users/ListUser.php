@@ -15,10 +15,11 @@ class ListUser extends Component
     use Toast;
     use WithPagination;
 
+    // Table Settings
     public array $headers = [
         ['key' => 'name', 'label' => 'Name'],
         ['key' => 'email', 'label' => 'Email', 'class' => 'hidden lg:table-cell'],
-        ['key' => 'customRoles', 'label' => 'Role', 'class' => 'hidden lg:table-cell']
+        ['key' => 'customRoles', 'label' => 'Role', 'class' => 'hidden lg:table-cell'],
     ];
     public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
 
@@ -52,7 +53,9 @@ class ListUser extends Component
     public function render(): View
     {
         return view('livewire.users.list-user', [
-            'users' => User::with('roles:name')->orderBy('name')->paginate(8),
+            'users' => User::with('roles:name')
+                ->orderBy(...array_values($this->sortBy))
+                ->paginate(8),
         ]);
     }
 }
