@@ -18,16 +18,22 @@ class ListTicket extends Component
 
     // Table Settings
     public array $headers = [
-        ['key' => 'status', 'label' => 'Status', 'class' => 'text-center max-w-10'],
-        ['key' => 'title', 'label' => 'Title', 'class' => 'max-w-36 truncate'],
-        ['key' => 'priority', 'label' => 'Priority', 'class' => 'max-w-14'],
+        [
+            'key' => 'status', 'label' => 'Status',
+            'class' => 'text-center max-w-10 hidden lg:table-cell',
+        ],
+        ['key' => 'title', 'label' => 'Title', 'class' => 'max-w-20 lg:max-w-40'],
+        [
+            'key' => 'priority', 'label' => 'Priority',
+            'class' => 'max-w-14 text-center hidden lg:table-cell',
+        ],
         [
             'key' => 'agent.name', 'label' => 'Assigned To',
-            'class' => 'max-w-26', 'sortable' => false,
+            'class' => 'max-w-26 hidden lg:table-cell', 'sortable' => false,
         ],
         [
             'key' => 'customCategories', 'label' => 'Categories',
-            'class' => 'max-w-40', 'sortable' => false,
+            'class' => 'max-w-40 hidden lg:table-cell', 'sortable' => false,
         ],
     ];
     public array $sortBy = ['column' => 'title', 'direction' => 'asc'];

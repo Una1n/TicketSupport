@@ -5,13 +5,13 @@
         </x-slot:middle>
         <x-slot:actions>
             <x-mary-button icon="o-funnel" class="btn-neutral" wire:click="filterTickets" responsive>
-                Filters
+                <span class="hidden lg:block">Filters</span>
                 <x-mary-badge value="{{ $activeFilters }}" class="badge-soft badge-sm badge-primary" />
             </x-mary-button>
             <x-mary-button icon="o-plus" label="Create" class="btn-primary" wire:click="createTicket" responsive />
         </x-slot:actions>
     </x-mary-header>
-    <div class="card bg-base-100 p-5 pt-2 shadow-xs">
+    <div class="card bg-base-100 lg:p-5 pt-2 pb-2 shadow-xs">
         <x-mary-table :headers="$headers" :rows="$tickets" :sort-by="$sortBy" :link="route('tickets.show', ['ticket' => '[id]'])" with-pagination>
             @scope('cell_priority', $ticket)
                 @if ($ticket->priority === 'low')
@@ -21,6 +21,25 @@
                 @else
                     <x-mary-badge value="High" class="badge-soft badge-error" />
                 @endif
+            @endscope
+            @scope('cell_title', $ticket)
+                <div class="flex-col hidden lg:table-cell">
+                    <div class="max-w-65 truncate">{{ ucfirst($ticket->title) }}</div>
+                    <x-mary-icon name="m-user" class="text-xs text-base-content/30" label="{{ $ticket->user->name }}" />
+                </div>
+                <div class="flex flex-row lg:hidden">
+                    @if ($ticket->priority === 'low')
+                        <div class="bg-accent mr-2">&ensp;</div>
+                    @elseif ($ticket->priority === 'medium')
+                        <div class="bg-warning mr-2">&ensp;</div>
+                    @else
+                        <div class="bg-error mr-2">&ensp;</div>
+                    @endif
+                    <div class="flex flex-col lg:hidden text-xs">
+                        <div class="max-w-50 truncate">{{ ucfirst($ticket->title) }}</div>
+                        <span class="text-xs text-base-content/30">{{ ucfirst($ticket->status) }}</span>
+                    </div>
+                </div>
             @endscope
             @scope('cell_customCategories', $ticket)
                 <div class="flex flex-row gap-2">
