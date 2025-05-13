@@ -1,36 +1,45 @@
-<div>
-    <div class="mt-4 text-xl font-bold">Logs</div>
-    <div class="mb-4">
+<x-mary-collapse separator>
+    <x-slot:heading>
+        Logs
+    </x-slot:heading>
+    <x-slot:content class="flex flex-col gap-4">
         @foreach ($logs as $log)
-            <div class="mt-2 rounded-lg border border-orange-600 bg-orange-200 px-4 py-2 shadow-md">
-                <div class="mb-1 text-xs">
-                    @if ($log->event === 'created')
-                        {{ $log->created_at->diffForHumans() }}
-                        @if ($log->causer)
-                            <span class="font-semibold"> by {{ $log->causer->name }}</span>
-                        @endif
-                    @else
-                        {{ $log->updated_at->diffForHumans() }}
-                        @if ($log->causer)
-                            <span class="font-semibold"> by {{ $log->causer->name }}</span>
-                        @endif
+            @if ($log->causer)
+                @php
+                    $causedBy = $log->causer->name;
+                @endphp
+            @else
+                @php
+                    $causedBy = 'System';
+                @endphp
+            @endif
+            <x-mary-card title="Ticket {{ ucfirst($log->description) }}" subtitle="By {{ $causedBy }}"
+                class="text-xs lg:text-sm" shadow>
+                <x-slot:menu>
+                    @if ($log->description === 'updated')
+                        <x-mary-icon name="o-pencil-square" class="text-warning" />
+                    @elseif ($log->description === 'created')
+                        <x-mary-icon name="o-plus-circle" class="text-success" />
+                    @elseif ($log->description === 'deleted')
+                        <x-mary-icon name="o-trash" class="text-error" />
                     @endif
-                </div>
-                <div>
-                    @if ($log->event === 'created')
-                        Ticket Created
-                    @else
-                        Ticket Updated:</br>
-                        @foreach ($log->changes->get('attributes') as $key => $attribute)
-                            @if ($key === 'agent.name')
-                                <p><span class="text-gray-500">Agent Assigned = </span> {{ $attribute }}</p>
-                            @else
-                                <p><span class="text-gray-500">{{ ucfirst($key) }} = </span> {{ $attribute }}</p>
-                            @endif
-                        @endforeach
+                    <x-mary-badge value="{{ $log->created_at->diffForHumans() }}"
+                        class="badge-primary badge-soft hidden lg:block" />
+                </x-slot:menu>
+                @foreach ($log->changes->get('attributes') as $key => $attribute)
+                    @if (empty($attribute))
+                        @continue
                     @endif
-                </div>
-            </div>
+                    @if ($key === 'agent.name')
+                        <p><span class="text-base-content/50">Agent Assigned = </span> {{ $attribute }}</p>
+                    @else
+                        <p><span class="text-base-content/50">{{ ucfirst($key) }} = </span>
+                            {{ $attribute }}</p>
+                    @endif
+                @endforeach
+                <div class="flex justify-end lg:hidden"><x-mary-badge value="{{ $log->created_at->diffForHumans() }}"
+                        class="badge-primary badge-soft mt-4" /></div>
+            </x-mary-card>
         @endforeach
-    </div>
-</div>
+    </x-slot:content>
+</x-mary-collapse>
