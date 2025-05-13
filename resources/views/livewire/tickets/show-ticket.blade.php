@@ -57,7 +57,11 @@
                     </div>
                     <div>
                         <div class="font-bold">Assigned Agent</div>
-                        <div class="text-base-content/50">{{ $ticket->agent->name }}</div>
+                        @if ($ticket->agent)
+                            <div class="text-base-content/50">{{ $ticket->agent->name }}</div>
+                        @else
+                            <div class="text-base-content/30">No Agent Assigned yet</div>
+                        @endif
                     </div>
                 </div>
             </x-mary-card>
@@ -65,15 +69,19 @@
                 <div class="flex flex-col gap-6">
                     <div>
                         <div class="font-bold">Categories</div>
-                        @foreach ($ticket->categories as $category)
+                        @forelse ($ticket->categories as $category)
                             <x-mary-badge value="{{ $category->name }}" class="badge-soft badge-primary" />
-                        @endforeach
+                        @empty
+                            <span class="text-base-content/30">No categories attached</span>
+                        @endforelse
                     </div>
                     <div>
                         <div class="font-bold">Labels</div>
-                        @foreach ($ticket->labels as $label)
+                        @forelse ($ticket->labels as $label)
                             <x-mary-badge value="{{ $label->name }}" class="badge-soft badge-secondary" />
-                        @endforeach
+                        @empty
+                            <span class="text-base-content/30">No labels attached</span>
+                        @endforelse
                     </div>
                 </div>
             </x-mary-card>
