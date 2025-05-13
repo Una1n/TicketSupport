@@ -47,6 +47,18 @@
             </div>
         </x-mary-card>
         <div class="flex flex-col lg:flex-row justify-stretch gap-6">
+            <x-mary-card title="Users" class="grow" shadow separator>
+                <div class="flex flex-col gap-6">
+                    <div>
+                        <div class="font-bold">Created By</div>
+                        <div class="text-base-content/50">{{ $ticket->user->name }}</div>
+                    </div>
+                    <div>
+                        <div class="font-bold">Assigned Agent</div>
+                        <div class="text-base-content/50">{{ $ticket->agent->name }}</div>
+                    </div>
+                </div>
+            </x-mary-card>
             <x-mary-card title="Classification" class="grow" shadow separator>
                 <div class="flex flex-col gap-6">
                     <div>
@@ -60,18 +72,6 @@
                         @foreach ($ticket->labels as $label)
                             <x-mary-badge value="{{ $label->name }}" class="badge-soft badge-secondary" />
                         @endforeach
-                    </div>
-                </div>
-            </x-mary-card>
-            <x-mary-card title="Users" class="grow" shadow separator>
-                <div class="flex flex-col gap-6">
-                    <div>
-                        <div class="font-bold">Created By</div>
-                        <div class="text-base-content/50">{{ $ticket->user->name }}</div>
-                    </div>
-                    <div>
-                        <div class="font-bold">Assigned Agent</div>
-                        <div class="text-base-content/50">{{ $ticket->agent->name }}</div>
                     </div>
                 </div>
             </x-mary-card>
