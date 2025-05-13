@@ -1,4 +1,4 @@
-<div x-data="{ isShowingLogs: false, isShowingComments: true }">
+<div>
     <x-mary-header title="Ticket" separator>
         <x-slot:actions>
             <x-mary-button label="Edit" icon="o-pencil-square" wire:click="editTicket({{ $ticket }})"
@@ -86,17 +86,11 @@
                 </div>
             </x-mary-card>
         </div>
-        <div class="flex gap-5">
-            <x-mary-button label="Hide Logs" x-text="isShowingLogs ? 'Hide Logs' : 'Show Logs'"
-                @click="isShowingLogs = !isShowingLogs" class="btn-primary btn-dash" />
-            <x-mary-button label="Hide Comments" x-text="isShowingComments ? 'Hide Comments' : 'Show Comments'"
-                @click="isShowingComments = !isShowingComments" class="btn-primary btn-dash" />
-        </div>
     </div>
-    <div x-show="isShowingComments" wire:transition>
+    <div class="mt-6">
         <livewire:comments.show-comments :ticket="$ticket" />
     </div>
-    <div x-show="isShowingLogs" wire:transition>
+    <div class="mt-6">
         <livewire:activity-logs.show-logs :ticket="$ticket" />
     </div>
 </div>
