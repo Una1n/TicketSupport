@@ -1,8 +1,10 @@
 <div x-data="{ isShowingLogs: false, isShowingComments: true }">
     <x-mary-header title="Ticket" separator>
         <x-slot:actions>
-            <x-mary-button label="Edit" icon="o-pencil-square" class="text-warning btn-ghost" responsive />
-            <x-mary-button label="Delete" icon="o-trash" class="text-error btn-ghost" responsive />
+            <x-mary-button label="Edit" icon="o-pencil-square" wire:click="editTicket({{ $ticket }})"
+                class="text-warning btn-ghost" responsive />
+            <x-mary-button label="Delete" icon="o-trash" wire:click="deleteTicket({{ $ticket }})"
+                class="text-error btn-ghost" responsive />
         </x-slot:actions>
     </x-mary-header>
     <div class="flex flex-col gap-6">
