@@ -139,3 +139,24 @@ it('can assign an agent to the ticket as admin', function () {
 
     expect($ticket->agent->id)->toEqual($agent->id);
 });
+
+it('can remove attachments from ticket', function () {
+    Storage::fake('media');
+
+    $ticket = Ticket::factory()->create();
+
+    $uploadedFile1 = UploadedFile::fake()->image('test.png');
+    $uploadedFile2 = UploadedFile::fake()->image('test2.png');
+
+    $ticket->addMedia($uploadedFile1)->toMediaCollection('attachments');
+    $ticket->addMedia($uploadedFile2)->toMediaCollection('attachments');
+
+    expect($ticket->getMedia('attachments'))->toHaveCount(2);
+
+    $firstMedia = $ticket->getFirstMedia('attachments');
+    livewire(EditTicket::class, ['ticket' => $ticket])
+        ->call('removeAttachment', $firstMedia);
+
+    $ticket->refresh();
+    expect($ticket->getMedia('attachments'))->toHaveCount(1);
+});
