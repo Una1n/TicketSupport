@@ -55,7 +55,7 @@ it('can edit a ticket', function () {
     expect($ticket->priority)->toEqual('high');
     expect($ticket->status)->toEqual('closed');
     expect($ticket->description)->toEqual('New Description for ticket!!!!!!');
-    expect($ticket->user->name)->toEqual($user->name);
+    expect($ticket->user->id)->toEqual($user->id);
     expect($ticket->categories->first()->name)->toEqual($newCategory->name);
     expect($ticket->labels->first()->name)->toEqual($newLabel->name);
 });
@@ -128,14 +128,14 @@ it('is not allowed to reach this endpoint as agent when not assigned to the tick
 });
 
 it('can assign an agent to the ticket as admin', function () {
-    $user = User::factory()->agent()->create();
+    $agent = User::factory()->agent()->create();
     $ticket = Ticket::factory()->create();
 
     livewire(EditTicket::class, ['ticket' => $ticket])
-        ->set('form.agentAssigned', $user->id)
+        ->set('form.agentAssigned', $agent->id)
         ->call('save');
 
     $ticket->refresh();
 
-    expect($ticket->agent->name)->toEqual($user->name);
+    expect($ticket->agent->id)->toEqual($agent->id);
 });

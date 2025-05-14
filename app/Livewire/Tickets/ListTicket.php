@@ -5,8 +5,10 @@ namespace App\Livewire\Tickets;
 use App\Models\Category;
 use App\Models\Ticket;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Attributes\Url;
 use Livewire\Component;
+use Livewire\Features\SupportRedirects\Redirector;
 use Livewire\WithPagination;
 
 class ListTicket extends Component
@@ -72,21 +74,11 @@ class ListTicket extends Component
         }
     }
 
-    // public function deleteTicket(Ticket $ticket): void
-    // {
-    //     $this->authorize('manage', $ticket);
-    //
-    //     $title = $ticket->title;
-    //
-    //     $ticket->delete();
-    //
-    //     session()->flash('status', 'Ticket ' . $title . ' Deleted!');
-    // }
+    public function createTicket(): Redirector|RedirectResponse
+    {
+        return redirect()->route('tickets.create');
+    }
 
-    // TODO: Only show tickets based on logged in user:
-    // regular user = only show tickets created by themselves
-    // agent = only show tickets assigned to them
-    // admin = show all tickets
     public function render(): View
     {
         $filteredTickets = Ticket::with(['user', 'categories', 'labels', 'agent'])
