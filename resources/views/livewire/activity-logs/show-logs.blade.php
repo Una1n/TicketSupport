@@ -27,9 +27,8 @@
                         class="badge-primary badge-soft hidden lg:block" />
                 </x-slot:menu>
                 @foreach ($log->changes->get('attributes') as $key => $attribute)
-                    @if (empty($attribute))
-                        @continue
-                    @endif
+                    @continue(empty($attribute))
+
                     @if ($key === 'agent.name')
                         <p><span class="text-base-content/50">Agent Assigned = </span> {{ $attribute }}</p>
                     @else
