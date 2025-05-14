@@ -9,7 +9,6 @@ use Livewire\Form;
 class CategoryForm extends Form
 {
     public ?Category $category = null;
-
     public string $name = '';
 
     public function setCategory(Category $category): void
@@ -33,7 +32,7 @@ class CategoryForm extends Form
         ];
     }
 
-    public function update()
+    public function update(): void
     {
         $this->validate();
 
@@ -42,7 +41,7 @@ class CategoryForm extends Form
         );
     }
 
-    public function store()
+    public function store(): void
     {
         $this->validate();
 

@@ -11,7 +11,6 @@ use Spatie\Permission\Models\Role;
 class UserForm extends Form
 {
     public ?User $user = null;
-
     public string $name;
     public string $email;
     public string $password;
@@ -65,6 +64,7 @@ class UserForm extends Form
         $this->user->syncRoles($newRole);
 
         // If we go from Agent to Regular, we remove this agent from tickets its assigned to
+        // @phpstan-ignore property.notFound
         if ($oldRole->name === 'Agent' && $newRole->name === 'Regular') {
             Ticket::whereAgentId($this->user->id)->update(['agent_id' => null]);
         }

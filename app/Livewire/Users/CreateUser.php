@@ -15,6 +15,7 @@ class CreateUser extends Component
 {
     use Toast;
 
+    // User Form
     public UserForm $form;
 
     public function cancel(): Redirector|RedirectResponse
@@ -30,7 +31,8 @@ class CreateUser extends Component
 
         $this->success(
             'User ' . $this->form->name . ' created!',
-            description: 'Role: ' . $this->form->user->roles()->first()->name,
+            /** @phpstan-ignore property.notFound */
+            description: 'Role: ' . $this->form->user->roles->first()->name,
             redirectTo: route('users.index')
         );
     }

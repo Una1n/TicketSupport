@@ -16,26 +16,24 @@ class ListLabel extends Component
     use Toast;
     use WithPagination;
 
+    /** @var array<array<string, string>> */
+    public array $headers = [
+        ['key' => 'name', 'label' => 'Name'],
+    ];
+
+    /** @var array<string, string> */
+    public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
     public bool $editModal = false;
     public ?Label $editLabel = null;
-    public array $headers = [];
-    public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
 
-    public function mount()
-    {
-        $this->headers = [
-            ['key' => 'name', 'label' => 'Name']
-        ];
-    }
-
-    public function openEditModal(Label $label)
+    public function openEditModal(Label $label): void
     {
         $this->editLabel = $label;
         $this->editModal = true;
     }
 
     #[On('cancel')]
-    public function closeEditModal()
+    public function closeEditModal(): void
     {
         $this->editModal = false;
         $this->editLabel = null;

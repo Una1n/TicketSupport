@@ -9,7 +9,6 @@ use Livewire\Form;
 class LabelForm extends Form
 {
     public ?Label $label = null;
-
     public string $name = '';
 
     public function setLabel(Label $label): void
@@ -33,7 +32,7 @@ class LabelForm extends Form
         ];
     }
 
-    public function update()
+    public function update(): void
     {
         $this->validate();
 
@@ -42,7 +41,7 @@ class LabelForm extends Form
         );
     }
 
-    public function store()
+    public function store(): void
     {
         $this->validate();
 

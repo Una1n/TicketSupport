@@ -15,12 +15,14 @@ class ListUser extends Component
     use Toast;
     use WithPagination;
 
-    // Table Settings
+    /** @var array<array<string, string>> */
     public array $headers = [
         ['key' => 'name', 'label' => 'Name'],
         ['key' => 'email', 'label' => 'Email', 'class' => 'hidden lg:table-cell'],
         ['key' => 'customRoles', 'label' => 'Role', 'class' => 'hidden lg:table-cell'],
     ];
+
+    /** @var array<string, string> */
     public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
 
     public function createUser(): Redirector|RedirectResponse

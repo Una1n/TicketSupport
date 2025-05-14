@@ -61,6 +61,7 @@ class TicketForm extends Form
 
         $this->validate();
 
+        /** @phpstan-ignore assign.propertyType */
         $this->ticket = auth()->user()->tickets()->create(
             $this->only(['title', 'status', 'description', 'priority']),
         );

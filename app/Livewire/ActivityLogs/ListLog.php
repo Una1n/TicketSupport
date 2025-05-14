@@ -11,6 +11,7 @@ class ListLog extends Component
 {
     use WithPagination;
 
+    /** @var array<array<string, string|bool>> */
     public array $headers = [
         ['key' => 'icon', 'label' => '', 'sortable' => false, 'class' => 'lg:hidden'],
         [
@@ -18,14 +19,16 @@ class ListLog extends Component
             'class' => 'whitespace-nowrap'],
         [
             'key' => 'description', 'label' => 'Status',
-            'class' => 'hidden text-center lg:table-cell'
+            'class' => 'hidden text-center lg:table-cell',
         ],
         [
             'key' => 'causer.name', 'label' => 'Caused By', 'sortable' => false,
-            'class' => 'hidden lg:table-cell'
+            'class' => 'hidden lg:table-cell',
         ],
         ['key' => 'created_at', 'label' => 'Created', 'class' => 'hidden lg:table-cell'],
     ];
+
+    /** @var array<string, string> */
     public array $sortBy = ['column' => 'created_at', 'direction' => 'desc'];
 
     public function render(): View

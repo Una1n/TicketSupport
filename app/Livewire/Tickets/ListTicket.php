@@ -18,7 +18,7 @@ class ListTicket extends Component
     #[Url()]
     public string $search = '';
 
-    // Table Settings
+    /** @var array<array<string, string|bool>> */
     public array $headers = [
         [
             'key' => 'status', 'label' => 'Status',
@@ -38,6 +38,8 @@ class ListTicket extends Component
             'class' => 'max-w-40 hidden lg:table-cell', 'sortable' => false,
         ],
     ];
+
+    /** @var array<string, string> */
     public array $sortBy = ['column' => 'title', 'direction' => 'asc'];
 
     // Filters
