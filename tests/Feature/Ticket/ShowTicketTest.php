@@ -35,7 +35,7 @@ it('can show a ticket for an admin', function () {
         ->assertSee(ucfirst($ticket->status))
         ->assertSee(ucfirst($ticket->priority))
         ->assertSee($ticket->user->name)
-        ->assertSee($ticket->description)
+        ->assertSee(ucfirst($ticket->description))
         ->assertSee($category->name)
         ->assertSee($label->name);
 });

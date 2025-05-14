@@ -7,7 +7,6 @@ use App\Models\Comment;
 use App\Models\Ticket;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
-use Spatie\Permission\Models\Role;
 
 use function Pest\Laravel\seed;
 use function Pest\Livewire\livewire;
@@ -55,8 +54,6 @@ it('is not allowed to add comments when not logged in', function () {
 
 it('is allowed to add comments when logged in as regular user', function () {
     $user = User::factory()->create();
-    $role = Role::whereName('Regular')->first();
-    $user->assignRole($role);
     login($user);
 
     $ticket = Ticket::factory()->create();

@@ -39,7 +39,7 @@ it('can create a new ticket', function () {
     expect($ticket->priority)->toEqual('low');
     expect($ticket->status)->toEqual('open');
     expect($ticket->description)->toEqual('This is a test description for ticket');
-    expect($ticket->user->name)->toEqual('Jerry');
+    expect($ticket->user->id)->toEqual(auth()->user()->id);
 });
 
 it('can upload files as attachments to the ticket', function () {

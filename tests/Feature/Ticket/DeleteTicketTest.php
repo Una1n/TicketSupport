@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\User;
 
-use App\Livewire\Tickets\ListTicket;
+use App\Livewire\Tickets\ShowTicket;
 use App\Models\Category;
 use App\Models\Label;
 use App\Models\Ticket;
@@ -22,7 +22,7 @@ beforeEach(function () {
 it('can delete a ticket', function () {
     $ticket = Ticket::factory()->create();
 
-    livewire(ListTicket::class)
+    livewire(ShowTicket::class, ['ticket' => $ticket])
         ->call('deleteTicket', $ticket);
 
     assertModelMissing($ticket);
@@ -33,7 +33,7 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
 
     $ticket = Ticket::factory()->create();
 
-    livewire(ListTicket::class)
+    livewire(ShowTicket::class, ['ticket' => $ticket])
         ->call('deleteTicket', $ticket)
         ->assertForbidden();
 });

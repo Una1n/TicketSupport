@@ -6,6 +6,7 @@ use App\Livewire\Tickets\ListTicket;
 use App\Models\Category;
 use App\Models\Ticket;
 use Database\Seeders\PermissionSeeder;
+use Str;
 
 use function Pest\Laravel\get;
 use function Pest\Laravel\seed;
@@ -28,7 +29,7 @@ it('can show a list of tickets', function () {
 
     livewire(ListTicket::class)
         ->assertSee([
-            ...$tickets->pluck('title')->toArray(),
+            ...$tickets->pluck('title')->capitalize()->toArray(),
         ]);
 });
 
@@ -51,10 +52,10 @@ it('can show a list of tickets filtered by priority', function () {
             return $tickets->count() === 4;
         })
         ->assertSee([
-            ...$ticketsLow->pluck('title')->toArray(),
+            ...$ticketsLow->pluck('title')->capitalize()->toArray(),
         ])
-        ->assertDontSee($ticketsMedium->first()->title)
-        ->assertDontSee($ticketsHigh->first()->title);
+        ->assertDontSee(Str::ucfirst($ticketsMedium->first()->title))
+        ->assertDontSee(Str::ucfirst($ticketsHigh->first()->title));
 });
 
 it('can show a list of tickets filtered by status', function () {
@@ -72,10 +73,10 @@ it('can show a list of tickets filtered by status', function () {
             return $tickets->count() === 4;
         })
         ->assertSee([
-            ...$ticketsOpen->pluck('title')->toArray(),
+            ...$ticketsOpen->pluck('title')->capitalize()->toArray(),
         ])
         ->assertDontSee([
-            ...$ticketsClosed->pluck('title')->toArray(),
+            ...$ticketsClosed->pluck('title')->capitalize()->toArray(),
         ]);
 });
 
@@ -92,10 +93,10 @@ it('can show a list of tickets filtered by category', function () {
             return $tickets->count() === 4;
         })
         ->assertSee([
-            ...$ticketsWithPaymentCategory->pluck('title')->toArray(),
+            ...$ticketsWithPaymentCategory->pluck('title')->capitalize()->toArray(),
         ])
         ->assertDontSee([
-            ...$ticketsWithOtherCategory->pluck('title')->toArray(),
+            ...$ticketsWithOtherCategory->pluck('title')->capitalize()->toArray(),
         ]);
 });
 
@@ -112,10 +113,10 @@ it('can show a list of tickets filtered by search', function () {
             return $tickets->count() === 4;
         })
         ->assertSee([
-            ...$ticketsToSearch->pluck('title')->toArray(),
+            ...$ticketsToSearch->pluck('title')->capitalize()->toArray(),
         ])
         ->assertDontSee([
-            ...$ticketsNotInSearch->pluck('title')->toArray(),
+            ...$ticketsNotInSearch->pluck('title')->capitalize()->toArray(),
         ]);
 });
 
