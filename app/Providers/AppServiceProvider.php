@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
+use Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,5 +28,11 @@ class AppServiceProvider extends ServiceProvider
         // Shows an exception if you're trying to fill an unfillable attribute in your model
         // Shows an exception if you're trying to access an attribute on the model that doesn't exist
         Model::shouldBeStrict(! App::isProduction());
+
+        Collection::macro('capitalize', function () {
+            return $this->map(function (string $value) {
+                return Str::ucfirst($value);
+            });
+        });
     }
 }
