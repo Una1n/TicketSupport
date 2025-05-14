@@ -16,7 +16,8 @@
             </x-mary-card>
         @endif
         @foreach ($comments as $comment)
-            <x-mary-card title="{{ $comment->user->name }}" subtitle="{{ $comment->user->email }}" class="">
+            <x-mary-card title="{{ $comment->user->name }}" subtitle="{{ $comment->user->email }}"
+                @class(['bg-primary/3' => $loop->odd])>
                 <x-slot:menu>
                     <x-mary-badge value="{{ $comment->created_at->diffForHumans() }}"
                         class="badge-primary badge-soft hidden lg:block" />
