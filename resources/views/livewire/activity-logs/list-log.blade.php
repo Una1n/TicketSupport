@@ -1,17 +1,18 @@
 <div>
     <x-mary-header title="Ticket Activity Logs" separator />
-    <div class="card bg-base-100 p-5 pt-2 shadow-xs">
+    <x-mary-card>
         <x-mary-table :headers="$headers" :rows="$logs" :sort-by="$sortBy" :link="route('logs.show', ['log' => '[id]'])" with-pagination>
             @scope('cell_subject.title', $log)
                 @if ($log->description === 'deleted')
                     <div class="flex flex-col">
-                        <div>{{ json_decode($log->properties, true)['old']['title'] }}</div>
+                        <div class="max-w-45 truncate lg:max-w-full lg:text-nowrap">
+                            {{ json_decode($log->properties, true)['old']['title'] }}</div>
                         <div class="text-base-content/30 lg:hidden">{{ $log->created_at->diffForHumans() }}</div>
                     </div>
                 @else
                     <div class="flex flex-col">
                         @if ($log->subject)
-                            <div>{{ $log->subject->title }}</div>
+                            <div class="max-w-45 lg:max-w-full truncate lg:text-nowrap">{{ $log->subject->title }}</div>
                         @else
                             @if ($log->description === 'updated')
                                 <span class="text-error">[Title Unavailable]</span>
@@ -45,5 +46,5 @@
                 {{ $log->created_at->diffForHumans() }}
             @endscope
         </x-mary-table>
-    </div>
+    </x-mary-card>
 </div>

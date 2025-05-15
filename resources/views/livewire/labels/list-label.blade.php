@@ -4,7 +4,7 @@
             <x-mary-button icon="o-plus" label="Create" class="btn-primary" wire:click="createLabel" responsive />
         </x-slot:actions>
     </x-mary-header>
-    <div class="card bg-base-100 p-5 pt-2 shadow-xs">
+    <x-mary-card>
         <x-mary-table :headers="$headers" :rows="$labels" :sort-by="$sortBy" with-pagination>
             @scope('actions', $label)
                 <div wire:key="{{ $label->id }}" class="flex flex-row">
@@ -15,7 +15,7 @@
                 </div>
             @endscope
         </x-mary-table>
-    </div>
+    </x-mary-card>
     @if ($this->editLabel)
         <x-mary-modal wire:model="editModal" title="Update Label" persistent>
             @livewire(Labels\EditLabel::class, ['label' => $this->editLabel])

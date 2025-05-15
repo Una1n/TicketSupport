@@ -4,7 +4,7 @@
             <x-mary-button icon="o-plus" label="Create" class="btn-primary" wire:click="createUser" responsive />
         </x-slot:actions>
     </x-mary-header>
-    <div class="card bg-base-100 p-5 pt-2 shadow-xs">
+    <x-mary-card>
         <x-mary-table :headers="$headers" :rows="$users" :sort-by="$sortBy" with-pagination>
             @scope('cell_name', $user)
                 <div class="flex flex-col">
@@ -35,5 +35,5 @@
                 </div>
             @endscope
         </x-mary-table>
-    </div>
+    </x-mary-card>
 </div>

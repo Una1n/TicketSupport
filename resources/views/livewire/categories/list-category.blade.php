@@ -4,7 +4,7 @@
             <x-mary-button icon="o-plus" label="Create" class="btn-primary" wire:click="createCategory" responsive />
         </x-slot:actions>
     </x-mary-header>
-    <div class="card bg-base-100 p-5 pt-2 shadow-xs">
+    <x-mary-card>
         <x-mary-table :headers="$headers" :rows="$categories" :sort-by="$sortBy" with-pagination>
             @scope('actions', $category)
                 <div class="flex flex-row">
@@ -15,7 +15,7 @@
                 </div>
             @endscope
         </x-mary-table>
-    </div>
+    </x-mary-card>
     @if ($this->editCategory)
         <x-mary-modal wire:model="editModal" title="Update Category" persistent>
             @livewire(Categories\EditCategory::class, ['category' => $this->editCategory])

@@ -11,7 +11,7 @@
             <x-mary-button icon="o-plus" label="Create" class="btn-primary" wire:click="createTicket" responsive />
         </x-slot:actions>
     </x-mary-header>
-    <div class="card bg-base-100 lg:p-5 pt-2 pb-2 shadow-xs">
+    <x-mary-card>
         <x-mary-table :headers="$headers" :rows="$tickets" :sort-by="$sortBy" :link="route('tickets.show', ['ticket' => '[id]'])" with-pagination>
             @scope('cell_priority', $ticket)
                 @if ($ticket->priority === 'low')
@@ -54,7 +54,7 @@
                 @endif
             @endscope
         </x-mary-table>
-    </div>
+    </x-mary-card>
     <x-mary-drawer wire:model="showFilters" title="Filters" right separator with-close-button close-on-escape
         class="w-11/12 lg:w-1/3">
         <div class="flex flex-col gap-4">
