@@ -15,7 +15,6 @@ class CreateUser extends Component
 {
     use Toast;
 
-    // User Form
     public UserForm $form;
 
     public function cancel(): Redirector|RedirectResponse

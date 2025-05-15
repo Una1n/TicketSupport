@@ -16,7 +16,6 @@ class CreateTicket extends Component
     use Toast;
     use WithFileUploads;
 
-    // Create Ticket Form
     public TicketForm $form;
 
     public function save(): void

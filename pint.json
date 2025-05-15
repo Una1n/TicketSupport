@@ -8,9 +8,9 @@
         },
         "class_attributes_separation": {
             "elements": {
-                "const": "one",
+                "const": "none",
                 "method": "one",
-                "property": "only_if_meta",
+                "property": "none",
                 "trait_import": "none",
                 "case": "none"
             }

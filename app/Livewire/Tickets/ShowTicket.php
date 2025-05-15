@@ -13,7 +13,6 @@ class ShowTicket extends Component
 {
     use Toast;
 
-    // Current Ticket
     public Ticket $ticket;
 
     public function editTicket(Ticket $ticket): Redirector|RedirectResponse

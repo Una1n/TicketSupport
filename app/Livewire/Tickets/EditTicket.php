@@ -20,7 +20,6 @@ class EditTicket extends Component
     use Toast;
     use WithFileUploads;
 
-    // Ticket Form
     public TicketForm $form;
 
     public function mount(Ticket $ticket): void
