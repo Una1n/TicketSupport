@@ -36,11 +36,8 @@
                     <div class="font-bold">Attachment(s)</div>
                     <div>
                         @forelse ($ticket->getMedia('attachments') as $attachment)
-                            <a href="{{ $attachment->getUrl() }}"
-                                class="text-blue-600 hover:underline">{{ $attachment->file_name }}</a>
-                            @if ($loop->iteration !== $loop->count)
-                                ,
-                            @endif
+                            <x-mary-button label="Attachment {{ $loop->iteration }}" icon="o-link"
+                                link="{{ $attachment->getUrl() }}" class="btn-accent text-xs" external />
                         @empty
                             <span class="text-base-content/30">No Attachments Found</span>
                         @endforelse
