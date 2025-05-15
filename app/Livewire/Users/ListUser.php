@@ -15,11 +15,14 @@ class ListUser extends Component
     use Toast;
     use WithPagination;
 
-    /** @var array<array<string, string>> */
+    /** @var array<array<string, string|bool>> */
     public array $headers = [
         ['key' => 'name', 'label' => 'Name'],
         ['key' => 'email', 'label' => 'Email', 'class' => 'hidden lg:table-cell'],
-        ['key' => 'customRoles', 'label' => 'Role', 'class' => 'hidden lg:table-cell'],
+        [
+            'key' => 'customRoles', 'label' => 'Role',
+            'class' => 'hidden lg:table-cell', 'sortable' => false,
+        ],
     ];
 
     /** @var array<string, string> */
