@@ -3,49 +3,31 @@
 namespace App\Livewire\Tickets;
 
 use App\Livewire\Forms\TicketForm;
-use App\Mail\TicketCreated;
 use App\Models\Category;
 use App\Models\Label;
 use App\Models\Ticket;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
-use Livewire\Features\SupportRedirects\Redirector;
-use Mail;
+use Mary\Traits\Toast;
 
 class CreateTicket extends Component
 {
+    use Toast;
     use WithFileUploads;
 
-    // Properties (pint removes the empty line between trait and properties unless we comment)
     public TicketForm $form;
 
-    public function save(): Redirector|RedirectResponse
+    public function save(): void
     {
         $this->authorize('create', Ticket::class);
 
-        // Default to open status
-        $this->form->status = 'open';
+        $this->form->store();
 
-        $this->form->validate();
-
-        $properties = $this->form->only(['title', 'status', 'description', 'priority']);
-        $properties += ['user_id' => auth()->user()->id];
-
-        $ticket = Ticket::create($properties);
-        $ticket->categories()->sync($this->form->selectedCategories);
-        $ticket->labels()->sync($this->form->selectedLabels);
-
-        foreach ($this->form->attachments as $attachment) {
-            $path = $attachment->store('livewire', 'media');
-            $ticket->addMediaFromDisk($path, 'media')->toMediaCollection('attachments');
-        }
-
-        Mail::send(new TicketCreated($ticket));
-
-        return redirect()->route('tickets.show', $ticket)
-            ->with('status', 'Ticket created.');
+        $this->success(
+            'Ticket ' . $this->form->ticket->title . ' created.',
+            redirectTo: route('tickets.show', $this->form->ticket)
+        );
     }
 
     public function render(): View
@@ -53,6 +35,11 @@ class CreateTicket extends Component
         return view('livewire.tickets.create-ticket', [
             'categories' => Category::all(),
             'labels' => Label::all(),
+            'priorities' => [
+                ['id' => 'low', 'name' => 'Low'],
+                ['id' => 'medium', 'name' => 'Medium'],
+                ['id' => 'high', 'name' => 'High'],
+            ],
         ]);
     }
 }

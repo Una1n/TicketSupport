@@ -1,3 +1,44 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/** daisyUI */
+@plugin "daisyui" {
+    themes:
+        light --default,
+        dark --prefersdark;
+}
+
+/* maryUI */
+@source "../../vendor/robsontenorio/mary/src/View/Components/**/*.php";
+
+/* Theme toggle */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Pagination style */
+.mary-table-pagination {
+    button,
+    span {
+        @apply text-xs border-none text-base-content py-1;
+    }
+
+    button {
+        @apply cursor-pointer bg-base-200;
+    }
+
+    span[aria-current="page"] > span {
+        @apply bg-base-content/5;
+    }
+
+    button,
+    span[aria-current="page"] > span,
+    span[aria-disabled="true"] span {
+        @apply py-1 px-2;
+    }
+
+    span[aria-disabled="true"] span {
+        @apply bg-base-content/0;
+    }
+}
+
+.card {
+    @apply lg:p-5 pt-2 pb-2 shadow-sm;
+}

@@ -16,24 +16,76 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
-        {{-- @include('layouts.navigation') --}}
+<body class="min-h-screen font-sans antialiased bg-base-200">
 
-        <!-- Page Heading -->
-        @if (isset($header))
-            <header class="bg-white shadow">
-                <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
-        @endif
+    {{-- NAVBAR mobile only --}}
+    <x-mary-nav sticky class="lg:hidden">
+        <x-slot:brand>
+            <div class="ml-5 pt-5">Ticket Support</div>
+        </x-slot:brand>
+        <x-slot:actions>
+            <label for="main-drawer" class="lg:hidden mr-3">
+                <x-mary-icon name="o-bars-3" class="cursor-pointer" />
+            </label>
+        </x-slot:actions>
+    </x-mary-nav>
 
-        <!-- Page Content -->
-        <main>
+    {{-- MAIN --}}
+    <x-mary-main>
+        {{-- SIDEBAR --}}
+        <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-100 lg:bg-inherit">
+
+            {{-- BRAND --}}
+            <div class="ml-5 pt-5">Ticket Support</div>
+
+            {{-- MENU --}}
+            <x-mary-menu activate-by-route active-bg-color="bg-primary/30">
+
+                {{-- User --}}
+                @if ($user = auth()->user())
+                    <x-mary-menu-separator />
+
+                    <x-mary-list-item :item="$user" value="name" sub-value="email" no-separator no-hover
+                        class="-mx-2 !-my-2 rounded">
+                        <x-slot:actions>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+
+                                <x-mary-button icon="o-power" class="btn-circle btn-ghost btn-xs" tooltip-left="logoff"
+                                    no-wire-navigate type="submit" />
+                            </form>
+                        </x-slot:actions>
+                    </x-mary-list-item>
+
+                    <x-mary-menu-separator />
+                @endif
+
+                <x-mary-menu-item title="Home" icon="o-home" link="{{ route('dashboard') }}" />
+                <x-mary-menu-item title="Tickets" icon="o-ticket" link="{{ route('tickets.index') }}" />
+                @can('manage users')
+                    <x-mary-menu-item title="Users" icon="o-users" link="{{ route('users.index') }}" />
+                @endcan
+                @can('access logs')
+                    <x-mary-menu-item title="Ticket Logs" icon="o-envelope" link="{{ route('logs.index') }}" />
+                @endcan
+                @can('manage categories')
+                    <x-mary-menu-item title="Categories" icon="o-hashtag" link="{{ route('categories.index') }}" />
+                @endcan
+                @can('manage labels')
+                    <x-mary-menu-item title="Labels" icon="o-tag" link="{{ route('labels.index') }}" />
+                @endcan
+                <x-mary-menu-separator />
+            </x-mary-menu>
+            <div class="ml-5"><x-mary-theme-toggle /></div>
+        </x-slot:sidebar>
+
+        <x-slot:content>
             {{ $slot }}
-        </main>
-    </div>
+        </x-slot:content>
+    </x-mary-main>
+
+    {{-- Toast --}}
+    <x-mary-toast />
 </body>
 
 </html>

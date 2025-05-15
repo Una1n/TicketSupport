@@ -30,7 +30,7 @@ class TicketFactory extends Factory
         ];
     }
 
-    public function categories(array $categories = []): self
+    public function categories(array|Collection $categories = []): self
     {
         return $this->afterCreating(function (Ticket $ticket) use ($categories) {
             if (! $categories) {
@@ -41,7 +41,7 @@ class TicketFactory extends Factory
         });
     }
 
-    public function labels(array $labels = []): self
+    public function labels(array|Collection $labels = []): self
     {
         return $this->afterCreating(function (Ticket $ticket) use ($labels) {
             if (! $labels) {

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('label_ticket', function (Blueprint $table) {
-            $table->foreignId('label_id')->constrained();
-            $table->foreignId('ticket_id')->constrained();
+            $table->foreignId('label_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('ticket_id')->constrained()->cascadeOnDelete();
             $table->primary(['label_id', 'ticket_id']);
         });
     }
@@ -24,8 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('label_ticket', function (Blueprint $table) {
-            $table->dropForeign(['label_id']);
-            $table->dropForeign(['ticket_id']);
+            $table->dropForeign(['label_id', 'ticket_id']);
         });
 
         Schema::dropIfExists('label_ticket');

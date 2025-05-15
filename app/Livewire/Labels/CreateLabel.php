@@ -2,30 +2,35 @@
 
 namespace App\Livewire\Labels;
 
+use App\Livewire\Forms\LabelForm;
 use App\Models\Label;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\Features\SupportRedirects\Redirector;
+use Mary\Traits\Toast;
 
 class CreateLabel extends Component
 {
-    #[Validate(['required', 'unique:labels,name', 'min:3', 'max:255'])]
-    public string $name = '';
+    use Toast;
 
-    public function save(): Redirector|RedirectResponse
+    public LabelForm $form;
+
+    public function cancel(): Redirector|RedirectResponse
+    {
+        return redirect()->route('labels.index');
+    }
+
+    public function save(): void
     {
         $this->authorize('manage', Label::class);
 
-        $this->validate();
+        $this->form->store();
 
-        Label::create(
-            $this->only(['name'])
+        $this->success(
+            'Label ' . $this->form->name . ' created!',
+            redirectTo: route('labels.index')
         );
-
-        return redirect()->route('labels.index')
-            ->with('status', 'Label ' . $this->name . ' created.');
     }
 
     public function render(): View

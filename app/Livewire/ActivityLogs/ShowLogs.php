@@ -10,6 +10,7 @@ use Spatie\Activitylog\Models\Activity;
 class ShowLogs extends Component
 {
     public Ticket $ticket;
+    public string $causedBy = 'System';
 
     public function render(): View
     {

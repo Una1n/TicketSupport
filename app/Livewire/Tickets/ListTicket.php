@@ -5,8 +5,10 @@ namespace App\Livewire\Tickets;
 use App\Models\Category;
 use App\Models\Ticket;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Attributes\Url;
 use Livewire\Component;
+use Livewire\Features\SupportRedirects\Redirector;
 use Livewire\WithPagination;
 
 class ListTicket extends Component
@@ -16,20 +18,67 @@ class ListTicket extends Component
     #[Url()]
     public string $search = '';
 
+    /** @var array<array<string, string|bool>> */
+    public array $headers = [
+        [
+            'key' => 'status', 'label' => 'Status',
+            'class' => 'text-center max-w-10 hidden lg:table-cell',
+        ],
+        ['key' => 'title', 'label' => 'Title', 'class' => 'max-w-20 lg:max-w-40'],
+        [
+            'key' => 'priority', 'label' => 'Priority',
+            'class' => 'max-w-14 text-center hidden lg:table-cell',
+        ],
+        [
+            'key' => 'agent.name', 'label' => 'Assigned To',
+            'class' => 'max-w-26 hidden lg:table-cell', 'sortable' => false,
+        ],
+        [
+            'key' => 'customCategories', 'label' => 'Categories',
+            'class' => 'max-w-40 hidden lg:table-cell', 'sortable' => false,
+        ],
+    ];
+
+    /** @var array<string, string> */
+    public array $sortBy = ['column' => 'title', 'direction' => 'asc'];
+
     // Filters
+    public bool $showFilters = false;
+    public int $activeFilters = 0;
     public string $categoryFilter;
     public string $statusFilter;
     public string $priorityFilter;
 
-    public function deleteTicket(Ticket $ticket): void
+    public function filterTickets(): void
     {
-        $this->authorize('manage', $ticket);
+        $this->showFilters = true;
+    }
 
-        $title = $ticket->title;
+    public function resetFilters(): void
+    {
+        $this->categoryFilter = '';
+        $this->statusFilter = '';
+        $this->priorityFilter = '';
+        $this->showFilters = false;
+    }
 
-        $ticket->delete();
+    public function updateFilterCounter(): void
+    {
+        $this->activeFilters = 0;
+        if (! empty($this->statusFilter)) {
+            $this->activeFilters++;
+        }
+        if (! empty($this->priorityFilter)) {
+            $this->activeFilters++;
+        }
+        if (! empty($this->categoryFilter)) {
+            $this->activeFilters++;
+        }
+    }
 
-        session()->flash('status', 'Ticket ' . $title . ' Deleted!');
+    public function createTicket(): Redirector|RedirectResponse
+    {
+        return redirect()->route('tickets.create');
     }
 
     public function render(): View
@@ -52,9 +101,23 @@ class ListTicket extends Component
                 $query->byUser(auth()->user());
             });
 
+        $this->updateFilterCounter();
+
         return view('livewire.tickets.list-ticket', [
-            'tickets' => $filteredTickets->latest()->paginate(8),
-            'categories' => Category::all(),
+            'tickets' => $filteredTickets
+                ->orderBy(...array_values($this->sortBy))
+                ->latest()
+                ->paginate(8),
+            'categoryOptions' => Category::all(),
+            'statusOptions' => [
+                ['id' => 'open', 'name' => 'Open'],
+                ['id' => 'closed', 'name' => 'Closed'],
+            ],
+            'priorityOptions' => [
+                ['id' => 'low', 'name' => 'Low'],
+                ['id' => 'medium', 'name' => 'Medium'],
+                ['id' => 'high', 'name' => 'High'],
+            ],
         ]);
     }
 }

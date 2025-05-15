@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Mail\TicketCreated;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Mail;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
@@ -28,6 +30,13 @@ class Ticket extends Model implements HasMedia
         'agent_id',
         'user_id',
     ];
+
+    protected static function booted(): void
+    {
+        static::created(function (Ticket $ticket) {
+            Mail::send(new TicketCreated($ticket));
+        });
+    }
 
     public function categories(): BelongsToMany
     {

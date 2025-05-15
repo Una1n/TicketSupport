@@ -30,8 +30,8 @@ it('can edit a user', function () {
     $user = User::factory()->create();
 
     livewire(EditUser::class, ['user' => $user])
-        ->set('name', 'New Name')
-        ->set('role', $agentRole->id)
+        ->set('form.name', 'New Name')
+        ->set('form.role', $agentRole->id)
         ->call('save');
 
     $user->refresh();
@@ -49,9 +49,9 @@ it('validates required fields', function (string $name, string $value) {
         ->call('save')
         ->assertHasErrors($name);
 })->with([
-    'name' => ['name', ''],
-    'email' => ['email', ''],
-    'role' => ['role', ''],
+    ['form.name', ''],
+    ['form.email', ''],
+    ['form.role', ''],
 ]);
 
 it('validates email is unique', function () {
@@ -59,9 +59,9 @@ it('validates email is unique', function () {
     $user = User::factory()->create(['email' => 'a@b.com']);
 
     livewire(EditUser::class, ['user' => $user])
-        ->set('email', 'test@unique.com')
+        ->set('form.email', 'test@unique.com')
         ->call('save')
-        ->assertHasErrors('email');
+        ->assertHasErrors('form.email');
 });
 
 it('is only allowed to reach this endpoint when logged in as admin', function () {
@@ -73,7 +73,7 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
         ->assertForbidden();
 
     livewire(EditUser::class, ['user' => $user])
-        ->set('name', 'test')
+        ->set('form.name', 'test')
         ->call('save')
         ->assertForbidden();
 });

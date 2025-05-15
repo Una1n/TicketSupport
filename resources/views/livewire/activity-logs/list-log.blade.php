@@ -1,32 +1,50 @@
 <div>
-    <x-status />
-    <div class="mb-5 text-2xl font-bold">Ticket Activity Logs</div>
-    <div class="overflow-hidden rounded-lg border border-gray-200 shadow-md">
-        <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th scope="col" class="px-6 py-4 font-medium text-gray-400">Title</th>
-                    <th scope="col" class="px-6 py-4 font-medium text-gray-400">Description</th>
-                    <th scope="col" class="px-6 py-4 font-medium text-gray-400">Caused By</th>
-                    <th scope="col" class="px-6 py-4 font-medium text-gray-400">Created</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100 border-t border-gray-100">
-                @foreach ($logs as $log)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 font-medium text-gray-900">
-                            <a href="{{ route('logs.show', $log) }}" class="text-blue-700 hover:text-blue-900">
-                                {{ $log->subject->title }}
-                            </a>
-                        </td>
-                        <td class="px-6 py-4 font-medium text-gray-900">{{ $log->description }}</td>
-                        <td class="px-6 py-4 font-medium text-gray-900">{{ $log->causer?->name }}</td>
-                        <td class="px-6 py-4 font-medium text-gray-900">{{ $log->created_at->diffForHumans() }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <div class="bg-white p-4">{{ $logs->links() }}</div>
-    </div>
-
+    <x-mary-header title="Ticket Activity Logs" separator />
+    <x-mary-card>
+        <x-mary-table :headers="$headers" :rows="$logs" :sort-by="$sortBy" :link="route('logs.show', ['log' => '[id]'])" with-pagination>
+            @scope('cell_subject.title', $log)
+                @if ($log->description === 'deleted')
+                    <div class="flex flex-col">
+                        <div class="max-w-45 truncate lg:max-w-full lg:text-nowrap">
+                            {{ json_decode($log->properties, true)['old']['title'] }}</div>
+                        <div class="text-base-content/30 lg:hidden">{{ $log->created_at->diffForHumans() }}</div>
+                    </div>
+                @else
+                    <div class="flex flex-col">
+                        @if ($log->subject)
+                            <div class="max-w-45 lg:max-w-full truncate lg:text-nowrap">{{ $log->subject->title }}</div>
+                        @else
+                            @if ($log->description === 'updated')
+                                <span class="text-error">[Title Unavailable]</span>
+                            @else
+                                {{ ucfirst(json_decode($log->properties, true)['attributes']['title']) }}
+                            @endif
+                        @endif
+                        <div class="text-base-content/30 lg:hidden">{{ $log->created_at->diffForHumans() }}</div>
+                    </div>
+                @endif
+            @endscope
+            @scope('cell_icon', $log)
+                @if ($log->description === 'updated')
+                    <x-mary-icon name="o-pencil-square" class="text-warning" />
+                @elseif ($log->description === 'created')
+                    <x-mary-icon name="o-plus-circle" class="text-success" />
+                @elseif ($log->description === 'deleted')
+                    <x-mary-icon name="o-trash" class="text-error" />
+                @endif
+            @endscope
+            @scope('cell_description', $log)
+                @if ($log->description === 'updated')
+                    <x-mary-icon name="o-pencil-square" class="text-warning" />
+                @elseif ($log->description === 'created')
+                    <x-mary-icon name="o-plus-circle" class="text-success" />
+                @elseif ($log->description === 'deleted')
+                    <x-mary-icon name="o-trash" class="text-error" />
+                @endif
+            @endscope
+            @scope('cell_created_at', $log)
+                {{ $log->created_at->diffForHumans() }}
+            @endscope
+        </x-mary-table>
+    </x-mary-card>
 </div>

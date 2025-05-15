@@ -55,7 +55,7 @@ it('can edit a ticket', function () {
     expect($ticket->priority)->toEqual('high');
     expect($ticket->status)->toEqual('closed');
     expect($ticket->description)->toEqual('New Description for ticket!!!!!!');
-    expect($ticket->user->name)->toEqual($user->name);
+    expect($ticket->user->id)->toEqual($user->id);
     expect($ticket->categories->first()->name)->toEqual($newCategory->name);
     expect($ticket->labels->first()->name)->toEqual($newLabel->name);
 });
@@ -93,9 +93,9 @@ it('validates required fields', function (string $name, string $value) {
         ->call('save')
         ->assertHasErrors($name);
 })->with([
-    'title' => ['form.title', ''],
-    'priority' => ['form.priority', ''],
-    'description' => ['form.description', ''],
+    ['form.title', ''],
+    ['form.priority', ''],
+    ['form.description', ''],
 ]);
 
 it('is not allowed to reach this endpoint when logged in as default user', function () {
@@ -103,7 +103,7 @@ it('is not allowed to reach this endpoint when logged in as default user', funct
 
     $ticket = Ticket::factory()->create();
 
-    livewire(EditTicket::class, ['ticket' => $ticket])
+    get(route('tickets.edit', $ticket))
         ->assertForbidden();
 });
 
@@ -128,14 +128,35 @@ it('is not allowed to reach this endpoint as agent when not assigned to the tick
 });
 
 it('can assign an agent to the ticket as admin', function () {
-    $user = User::factory()->agent()->create();
+    $agent = User::factory()->agent()->create();
     $ticket = Ticket::factory()->create();
 
     livewire(EditTicket::class, ['ticket' => $ticket])
-        ->set('form.agentAssigned', $user->id)
+        ->set('form.agentAssigned', $agent->id)
         ->call('save');
 
     $ticket->refresh();
 
-    expect($ticket->agent->name)->toEqual($user->name);
+    expect($ticket->agent->id)->toEqual($agent->id);
+});
+
+it('can remove attachments from ticket', function () {
+    Storage::fake('media');
+
+    $ticket = Ticket::factory()->create();
+
+    $uploadedFile1 = UploadedFile::fake()->image('test.png');
+    $uploadedFile2 = UploadedFile::fake()->image('test2.png');
+
+    $ticket->addMedia($uploadedFile1)->toMediaCollection('attachments');
+    $ticket->addMedia($uploadedFile2)->toMediaCollection('attachments');
+
+    expect($ticket->getMedia('attachments'))->toHaveCount(2);
+
+    $firstMedia = $ticket->getFirstMedia('attachments');
+    livewire(EditTicket::class, ['ticket' => $ticket])
+        ->call('removeAttachment', $firstMedia);
+
+    $ticket->refresh();
+    expect($ticket->getMedia('attachments'))->toHaveCount(1);
 });

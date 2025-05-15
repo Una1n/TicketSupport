@@ -3,6 +3,7 @@
 namespace Tests\Feature\Label;
 
 use App\Livewire\Labels\EditLabel;
+use App\Livewire\Labels\ListLabel;
 use App\Models\Label;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
@@ -17,19 +18,28 @@ beforeEach(function () {
     login();
 });
 
-it('has component on edit page', function () {
+it('has visible edit component on index page', function () {
     $label = Label::factory()->create();
 
-    get(route('labels.edit', $label))
-        ->assertSeeLivewire(EditLabel::class)
+    get(route('labels.index'))
+        ->assertSee($label->name)
+        ->assertSeeHtml('openEditModal')
         ->assertOk();
+});
+
+it('has functioning edit modal on index page', function () {
+    $label = Label::factory()->create();
+
+    livewire(ListLabel::class)
+        ->call('openEditModal', $label)
+        ->assertSeeHtml('dialog');
 });
 
 it('can edit a category', function () {
     $label = Label::factory()->create();
 
     livewire(EditLabel::class, ['label' => $label])
-        ->set('name', 'New Name')
+        ->set('form.name', 'New Name')
         ->call('save');
 
     $label->refresh();
@@ -41,9 +51,9 @@ it('validates name is required', function () {
     $label = Label::factory()->create();
 
     livewire(EditLabel::class, ['label' => $label])
-        ->set('name', '')
+        ->set('form.name', '')
         ->call('save')
-        ->assertHasErrors('name');
+        ->assertHasErrors('form.name');
 });
 
 it('validates name is unique', function () {
@@ -51,9 +61,9 @@ it('validates name is unique', function () {
     $label = Label::factory()->create(['name' => 'labelname']);
 
     livewire(EditLabel::class, ['label' => $label])
-        ->set('name', 'test')
+        ->set('form.name', 'test')
         ->call('save')
-        ->assertHasErrors('name');
+        ->assertHasErrors('form.name');
 });
 
 it('is only allowed to reach this endpoint when logged in as admin', function () {
@@ -61,11 +71,11 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
 
     $label = Label::factory()->create();
 
-    get(route('labels.edit', $label))
+    get(route('labels.index'))
         ->assertForbidden();
 
     livewire(EditLabel::class, ['label' => $label])
-        ->set('name', 'test')
+        ->set('form.name', 'test')
         ->call('save')
         ->assertForbidden();
 });

@@ -1,7 +1,8 @@
-# Ticket Support System Example Project using Laravel 11 + Livewire 3
+# Ticket Support System Example Project
 
-This is an example project for a Ticket Support System.
-Laravel 11 is used as framework with Livewire 3 for the front-end.
+![Tickets List](/img/ticket-list-layout.png)
+
+This is an example project for a Ticket Support System. Laravel 12 is used as framework with Livewire 3 + MaryUI for the front-end.
 
 ## Glossary
 

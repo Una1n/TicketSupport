@@ -35,7 +35,7 @@ it('can show a ticket for an admin', function () {
         ->assertSee(ucfirst($ticket->status))
         ->assertSee(ucfirst($ticket->priority))
         ->assertSee($ticket->user->name)
-        ->assertSee($ticket->description)
+        ->assertSee(ucfirst($ticket->description))
         ->assertSee($category->name)
         ->assertSee($label->name);
 });
@@ -46,7 +46,7 @@ it('is not allowed to show tickets from other users', function () {
 
     $ticket = Ticket::factory()->create();
 
-    livewire(ShowTicket::class, ['ticket' => $ticket])
+    get(route('tickets.show', $ticket))
         ->assertForbidden();
 });
 
@@ -57,6 +57,6 @@ it('is not allowed to show tickets from other agents', function () {
     $otherAgent = User::factory()->agent()->create();
     $ticket = Ticket::factory()->agent($otherAgent)->create();
 
-    livewire(ShowTicket::class, ['ticket' => $ticket])
+    get(route('tickets.show', $ticket))
         ->assertForbidden();
 });

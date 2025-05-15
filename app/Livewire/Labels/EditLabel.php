@@ -2,51 +2,41 @@
 
 namespace App\Livewire\Labels;
 
+use App\Livewire\Forms\LabelForm;
 use App\Models\Label;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Validation\Rule;
 use Livewire\Component;
-use Livewire\Features\SupportRedirects\Redirector;
+use Mary\Traits\Toast;
 
 class EditLabel extends Component
 {
-    public Label $label;
-    public string $name = '';
+    use Toast;
+
+    public LabelForm $form;
 
     public function mount(Label $label): void
     {
-        $this->label = $label;
-        $this->name = $label->name;
+        $this->form->setLabel($label);
     }
 
-    /**
-     * @return array<string, array<string>>
-     */
-    public function rules(): array
+    public function cancel(): void
     {
-        return [
-            'name' => [
-                'required',
-                Rule::unique('labels')->ignore($this->label),
-                'min:3',
-                'max:255',
-            ],
-        ];
+        $this->dispatch('cancel')->to(ListLabel::class);
     }
 
-    public function save(): Redirector|RedirectResponse
+    public function save(): void
     {
-        $this->authorize('manage', $this->label);
+        $this->authorize('manage', $this->form->label);
 
-        $this->validate();
+        $oldName = $this->form->label->name;
+        $this->form->update();
 
-        $this->label->update([
-            'name' => $this->name,
-        ]);
+        $this->success(
+            'Label ' . $this->form->name . ' updated!',
+            description: $oldName . ' -> ' . $this->form->name,
+        );
 
-        return redirect()->route('labels.index')
-            ->with('status', 'Label ' . $this->name . ' updated.');
+        $this->cancel();
     }
 
     public function render(): View

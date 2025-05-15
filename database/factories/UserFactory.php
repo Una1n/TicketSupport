@@ -43,7 +43,7 @@ class UserFactory extends Factory
     {
         return $this->afterCreating(function (User $user) {
             $role = Role::whereName('Agent')->first();
-            $user->assignRole($role);
+            $user->syncRoles($role);
         });
     }
 
@@ -51,7 +51,7 @@ class UserFactory extends Factory
     {
         return $this->afterCreating(function (User $user) {
             $role = Role::whereName('Admin')->first();
-            $user->assignRole($role);
+            $user->syncRoles($role);
         });
     }
 

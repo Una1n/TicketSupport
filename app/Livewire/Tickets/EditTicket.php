@@ -12,60 +12,61 @@ use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Livewire\Features\SupportRedirects\Redirector;
+use Mary\Traits\Toast;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class EditTicket extends Component
 {
+    use Toast;
     use WithFileUploads;
 
-    // Properties
-    public Ticket $ticket;
     public TicketForm $form;
 
     public function mount(Ticket $ticket): void
     {
-        $this->ticket = $ticket;
-        $this->form->title = $ticket->title;
-        $this->form->description = $ticket->description;
-        $this->form->status = $ticket->status;
-        $this->form->priority = $ticket->priority;
-        $this->form->agentAssigned = $ticket->agent_id;
-
-        $this->form->selectedCategories = $ticket->categories()->pluck('id')->toArray();
-        $this->form->selectedLabels = $ticket->labels()->pluck('id')->toArray();
+        $this->form->setTicket($ticket);
     }
 
-    public function save(): Redirector|RedirectResponse
+    public function cancel(): Redirector|RedirectResponse
     {
-        $this->authorize('update', $this->ticket);
+        return redirect()->route('tickets.show', $this->form->ticket);
+    }
 
-        $this->form->validate();
-
-        $properties = $this->form->only(['title', 'status', 'description', 'priority']);
-        if (! empty($this->form->agentAssigned) && auth()->user()->hasRole('Admin')) {
-            $properties += ['agent_id' => $this->form->agentAssigned];
+    public function removeAttachment(Media $media): void
+    {
+        if ($media->delete()) {
+            $this->success('Attachment removed.');
+        } else {
+            $this->error('Attachment failed to remove!');
         }
 
-        $this->ticket->update($properties);
-        $this->ticket->categories()->sync($this->form->selectedCategories);
-        $this->ticket->labels()->sync($this->form->selectedLabels);
+        $this->form->oldAttachments = $this->form->ticket->getMedia('attachments');
+    }
 
-        foreach ($this->form->attachments as $attachment) {
-            $path = $attachment->store('livewire', 'media');
-            $this->ticket->addMediaFromDisk($path, 'media')->toMediaCollection('attachments');
-        }
+    public function save(): void
+    {
+        $this->authorize('update', $this->form->ticket);
 
-        return redirect()->route('tickets.show', $this->ticket)
-            ->with('status', 'Ticket updated.');
+        $this->form->update();
+
+        $this->success(
+            'Ticket ' . $this->form->ticket->title . ' Updated!',
+            redirectTo: route('tickets.show', $this->form->ticket)
+        );
     }
 
     public function render(): View
     {
-        $this->authorize('update', $this->ticket);
-
         return view('livewire.tickets.edit-ticket', [
             'categories' => Category::all(),
             'labels' => Label::all(),
             'agents' => User::role('Agent')->get(),
+            'priorities' => [
+                ['id' => 'low', 'name' => 'Low'],
+                ['id' => 'medium', 'name' => 'Medium'],
+                ['id' => 'high', 'name' => 'High'],
+            ],
+            'oldAttachments' => $this->form->oldAttachments,
         ]);
     }
 }

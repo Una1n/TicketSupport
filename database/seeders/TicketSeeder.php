@@ -13,11 +13,13 @@ class TicketSeeder extends Seeder
         $users = User::factory(10)->create();
         $agents = User::factory(5)->agent()->create();
 
-        Ticket::factory(25)
-            ->categories()
-            ->labels()
-            ->recycle($users)
-            ->agent($agents)
-            ->create();
+        Ticket::withoutEvents(function () use ($users, $agents) {
+            Ticket::factory(25)
+                ->categories()
+                ->labels()
+                ->recycle($users)
+                ->agent($agents)
+                ->create();
+        });
     }
 }

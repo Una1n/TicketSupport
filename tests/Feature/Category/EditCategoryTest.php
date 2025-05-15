@@ -3,6 +3,7 @@
 namespace Tests\Feature\Category;
 
 use App\Livewire\Categories\EditCategory;
+use App\Livewire\Categories\ListCategory;
 use App\Models\Category;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
@@ -17,19 +18,28 @@ beforeEach(function () {
     login();
 });
 
-it('has component on edit page', function () {
+it('has visible edit component on index page', function () {
     $category = Category::factory()->create();
 
-    get(route('categories.edit', $category))
-        ->assertSeeLivewire(EditCategory::class)
+    get(route('categories.index'))
+        ->assertSee($category->name)
+        ->assertSeeHtml('openEditModal')
         ->assertOk();
+});
+
+it('has functioning edit modal on index page', function () {
+    $category = Category::factory()->create();
+
+    livewire(ListCategory::class)
+        ->call('openEditModal', $category)
+        ->assertSeeHtml('dialog');
 });
 
 it('can edit a category', function () {
     $category = Category::factory()->create();
 
     livewire(EditCategory::class, ['category' => $category])
-        ->set('name', 'New Name')
+        ->set('form.name', 'New Name')
         ->call('save');
 
     $category->refresh();
@@ -41,9 +51,9 @@ it('validates name is required', function () {
     $category = Category::factory()->create();
 
     livewire(EditCategory::class, ['category' => $category])
-        ->set('name', '')
+        ->set('form.name', '')
         ->call('save')
-        ->assertHasErrors('name');
+        ->assertHasErrors('form.name');
 });
 
 it('validates name is unique', function () {
@@ -51,9 +61,9 @@ it('validates name is unique', function () {
     $category = Category::factory()->create(['name' => 'categoryname']);
 
     livewire(EditCategory::class, ['category' => $category])
-        ->set('name', 'test')
+        ->set('form.name', 'test')
         ->call('save')
-        ->assertHasErrors('name');
+        ->assertHasErrors('form.name');
 });
 
 it('is only allowed to reach this endpoint when logged in as admin', function () {
@@ -61,11 +71,11 @@ it('is only allowed to reach this endpoint when logged in as admin', function ()
 
     $category = Category::factory()->create();
 
-    get(route('categories.edit', $category))
+    get(route('categories.index'))
         ->assertForbidden();
 
     livewire(EditCategory::class, ['category' => $category])
-        ->set('name', 'test')
+        ->set('form.name', 'test')
         ->call('save')
         ->assertForbidden();
 });

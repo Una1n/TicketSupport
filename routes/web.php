@@ -8,7 +8,6 @@ use App\Livewire\Categories\EditCategory;
 use App\Livewire\Categories\ListCategory;
 use App\Livewire\DashboardHome;
 use App\Livewire\Labels\CreateLabel;
-use App\Livewire\Labels\EditLabel;
 use App\Livewire\Labels\ListLabel;
 use App\Livewire\Tickets\CreateTicket;
 use App\Livewire\Tickets\EditTicket;
@@ -47,7 +46,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->group(function () {
             Route::get('/', ListCategory::class)->name('index');
             Route::get('/create', CreateCategory::class)->name('create');
-            Route::get('/{category}/edit', EditCategory::class)->name('edit');
         });
 
     Route::middleware('can:manage,' . Label::class)
@@ -56,7 +54,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->group(function () {
             Route::get('/', ListLabel::class)->name('index');
             Route::get('/create', CreateLabel::class)->name('create');
-            Route::get('/{label}/edit', EditLabel::class)->name('edit');
         });
 
     Route::middleware('can:manage,' . User::class)
@@ -75,11 +72,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/create', CreateTicket::class)->name('create')
             ->can('create', Ticket::class);
 
-        // Authorization handled in livewire components, because
-        // route model binding doesn't work here through middleware
-        // (ex. ->can('update', 'ticket'))
-        Route::get('/{ticket}/show', ShowTicket::class)->name('show');
-        Route::get('/{ticket}/edit', EditTicket::class)->name('edit');
+        Route::get('/{ticket}/show', ShowTicket::class)->name('show')
+            ->can('view', 'ticket');
+
+        Route::get('/{ticket}/edit', EditTicket::class)->name('edit')
+            ->can('update', 'ticket');
     });
 
     Route::middleware('can:access logs')
